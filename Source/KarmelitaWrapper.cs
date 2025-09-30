@@ -16,8 +16,16 @@ public class KarmelitaWrapper : MonoBehaviour
     private Rigidbody2D rb;
     private tk2dSprite sprite;
     private AudioSource vocalSource;
-    
-    ////fsm.Fsm.StateChanged<FsmState> | EVENT FOR STATE CHANGE, FsmState is the new state that was transitioned into
+
+    private string[] statesToDealContactDamage = new[]
+    {
+        "Slash",
+        "Dash Grind",
+        "Spin Attack",
+        "Cyclone"
+    };
+
+    private int phaseIndex;
     private void Awake()
     {
         GetComponents();
@@ -25,6 +33,48 @@ public class KarmelitaWrapper : MonoBehaviour
         ChangeTextures();
         RerouteFirstRoarState();
         SetVocalAudioSource(false);
+    }
+
+    private void OnEnable()
+    {
+        fsm.Fsm.StateChanged += CheckStunState;
+        fsm.Fsm.StateChanged += CheckPhase2State;
+        fsm.Fsm.StateChanged += CheckPhase3State;
+    }
+
+    private void OnDisable()
+    {
+        fsm.Fsm.StateChanged -= CheckStunState;
+        fsm.Fsm.StateChanged -= CheckPhase2State;
+        fsm.Fsm.StateChanged -= CheckPhase3State;
+    }
+
+    private void CheckStunState(FsmState state)
+    {
+        if (state.Name.Contains("Stun") && phaseIndex != 0)
+        {
+            SetVocalAudioSource(true);
+            vocalSource.Play();
+        }
+    }
+    private void CheckPhase2State(FsmState state)
+    {
+        if (state.Name == "Set P2 Roar")
+        {
+            KarmelitaPrimeMain.Instance.Log("CHANGED TO PHASE 2");
+            SetVocalAudioSource(true);
+            vocalSource.Play();
+            phaseIndex = 1;
+        }
+    }
+    
+    private void CheckPhase3State(FsmState state)
+    {
+        if (state.Name == "Set P3 Roar")
+        {
+            KarmelitaPrimeMain.Instance.Log("CHANGED TO PHASE 3");
+            phaseIndex = 2;
+        }
     }
     
     private void GetComponents()
@@ -59,14 +109,7 @@ public class KarmelitaWrapper : MonoBehaviour
     }
     
     private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
-    
-    public bool ShouldDealContactDamage()
-    {
-        return fsm.ActiveStateName.Contains("Slash") || 
-               fsm.ActiveStateName.Contains("Dash Grind") || 
-               fsm.ActiveStateName.Contains("Spin Attack") || 
-               fsm.ActiveStateName.Contains("Cyclone");
-    }
+    public bool ShouldDealContactDamage() => statesToDealContactDamage.Any(state => fsm.ActiveStateName.Contains(state));
 
     private void OnDestroy()
     {

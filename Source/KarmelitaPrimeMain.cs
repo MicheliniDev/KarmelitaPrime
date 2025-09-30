@@ -34,7 +34,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
         
         StartCoroutine(WaitUntilGameManager());
-        LoadKarmelitaTextures(false);
+        LoadKarmelitaTextures(isWhatsapp.Value);
         
         isWhatsapp.SettingChanged += OnWhatsappSet;
         Instance = this;

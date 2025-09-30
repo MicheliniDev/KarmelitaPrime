@@ -36,3 +36,4 @@ C:\Users\Gregorio\Documents\Stuff\Silksong mods\KarmelitaPrime\obj\Debug\netstan
 C:\Users\Gregorio\Documents\Stuff\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1\Karmelit.A6C3B3BF.Up2Date
 C:\Users\Gregorio\Documents\Stuff\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1\KarmelitaPrime.dll
 C:\Users\Gregorio\Documents\Stuff\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1\KarmelitaPrime.pdb
+C:\Users\Gregorio\Documents\Stuff\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1\KarmelitaPrime.sourcelink.json
