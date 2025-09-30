@@ -121,53 +121,54 @@ public static class Constants
     public static int KarmelitaMaxHp => 2000;
     public static Vector3 PlayerSpawnPosition => new Vector3(181f, 21f, 0f);
     /*
-     ALL KARMELITA STATES!!!!
-      Init
- Movement 1
- Jump Antic
- Jump Launch
- Spin Antic
- Spin Attack
- Spin Attack Land
- Start Idle
- Attack Choice
- Movement 2
- Movement 3
- Movement 4
- Movement 5
- Slash Antic
- Slash 1
- Slash 2
- Slash 3
- Slash 4
- Slash 5
- Slash 6
- Slash 7
- Slash 8
- Slash 9
- Slash End
- Cyclone Antic
- Cyclone 1
- Cyclone 2
- Cyclone 3
- Cyclone 4
- Throw Antic
- Throw 1
- Throw Dir
- Throw L
- Throw R
- Block
- Set Jump Spin
- Move To
- Attack Move
- Set Slash Combo
- Set Cyclone Spin
- Set Throw
- Approach
- Dash
- Evade
- Long Approach
- Set Air Throw
+    ALL KARMELITA STATES!!!!
+    
+    Init
+    Movement 1
+    Jump Antic
+    Jump Launch
+    Spin Antic
+    Spin Attack
+    Spin Attack Land
+    Start Idle
+    Attack Choice
+    Movement 2
+    Movement 3
+    Movement 4
+    Movement 5
+    Slash Antic
+    Slash 1
+    Slash 2
+    Slash 3
+    Slash 4
+    Slash 5
+    Slash 6
+    Slash 7
+    Slash 8
+    Slash 9
+    Slash End
+    Cyclone Antic
+    Cyclone 1
+    Cyclone 2
+    Cyclone 3
+    Cyclone 4
+    Throw Antic
+    Throw 1
+    Throw Dir
+    Throw L
+    Throw R
+    Block
+    Set Jump Spin
+    Move To
+    Attack Move
+    Set Slash Combo
+    Set Cyclone Spin
+    Set Throw
+    Approach
+    Dash
+    Evade
+    Long Approach
+    Set Air Throw
  Launch Antic
  Launch Up
  Air Throw Antic
