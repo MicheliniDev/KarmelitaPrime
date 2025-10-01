@@ -34,16 +34,12 @@ public class DamagePatches
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
-    private static void ReduceThreadStormDamage(ref HealthManager __instance, ref HitInstance hitInstance)
+    private static void BoostDebugDamage(ref HealthManager __instance, ref HitInstance hitInstance)
     {
         if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
-            hitInstance.Source.name == "Ball" && hitInstance.IsHeroDamage)
-        {
-            int reducedDamage = Mathf.RoundToInt(hitInstance.DamageDealt * Constants.ThreadStormDamageReduction);
-            hitInstance.DamageDealt = reducedDamage;
-        }  
+            KarmelitaPrimeMain.Instance.IsDebug.Value)
+            hitInstance.DamageDealt = 75;
     }
-    
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
     private static void AutoHealOnDamageDebugPatch(ref HeroController __instance)

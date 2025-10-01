@@ -39,7 +39,15 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         isWhatsapp.SettingChanged += OnWhatsappSet;
         Instance = this;
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G) && CheatManager.ForceStun)
+            CheatManager.ForceStun = false;
+        else if (Input.GetKeyDown(KeyCode.G) && !CheatManager.ForceStun)
+            CheatManager.ForceStun = true;
+    }
+
     private IEnumerator WaitUntilGameManager()
     {
         yield return new WaitUntil(() => GameManager.instance);

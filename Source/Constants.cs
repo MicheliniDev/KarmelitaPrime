@@ -1,4 +1,5 @@
-﻿using TeamCherry.Localization;
+﻿using InControl.NativeDeviceProfiles;
+using TeamCherry.Localization;
 using UnityEngine;
 
 namespace KarmelitaPrime;
@@ -120,8 +121,9 @@ public static class Constants
 
     #region Miscellaneous
     public static int KarmelitaMaxHp => 2000;
+    public static float KarmelitaPhase2HpThreshold => KarmelitaMaxHp * 0.80f;
+    public static float KarmelitaPhase3HpThreshold => KarmelitaMaxHp * 0.50f;
     public static Vector3 PlayerSpawnPosition => new Vector3(181f, 21f, 0f);
-    public static float ThreadStormDamageReduction => 0.85f;
     #endregion
     
 

@@ -9,7 +9,7 @@ public class AnimationSpeedPatches
     [HarmonyPrefix]
     [HarmonyPatch(typeof(tk2dSpriteAnimator), nameof(tk2dSpriteAnimator.Play),
         [typeof(tk2dSpriteAnimationClip), typeof(float), typeof(float)])]
-    private static void OverrideFpsPatch(ref tk2dSpriteAnimator __instance, ref tk2dSpriteAnimationClip clip,
+    private static void OverrideKarmelitaFpsPatch(ref tk2dSpriteAnimator __instance, ref tk2dSpriteAnimationClip clip,
         ref float clipStartTime, ref float overrideFps)
     {
         if (KarmelitaPrimeMain.Instance && KarmelitaPrimeMain.Instance.wrapper && SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&

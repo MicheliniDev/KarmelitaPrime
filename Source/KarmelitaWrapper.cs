@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GenericVariableExtension;
 using HutongGames.PlayMaker;
 using HutongGames;
+using HutongGames.PlayMaker.Actions;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -12,13 +14,14 @@ namespace KarmelitaPrime;
 public class KarmelitaWrapper : MonoBehaviour
 {
     private PlayMakerFSM fsm;
+    private PlayMakerFSM stunFsm;
     private HealthManager health;
     private Rigidbody2D rb;
     private tk2dSprite sprite;
     private AudioSource vocalSource;
     public StateModifierController ModifierController;
     public tk2dSpriteAnimator animator;
-    
+
     private string[] statesToDealContactDamage = new[]
     {
         "Slash",
@@ -28,7 +31,7 @@ public class KarmelitaWrapper : MonoBehaviour
     };
 
     private int phaseIndex;
-    
+
     private void Awake()
     {
         GetComponents();
@@ -42,7 +45,7 @@ public class KarmelitaWrapper : MonoBehaviour
 
     private void OnEnable() => SetupEventListeners();
     private void OnDisable() => RemoveEventListeners();
-    
+
     private void GetComponents()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -50,12 +53,19 @@ public class KarmelitaWrapper : MonoBehaviour
         sprite = GetComponent<tk2dSprite>();
         animator = GetComponent<tk2dSpriteAnimator>();
         fsm = gameObject.LocateMyFSM("Control");
+        stunFsm = gameObject.LocateMyFSM("Stun Control");
         vocalSource = AudioManager.Instance.MusicSources[3];
     }
 
-    private void ChangeHealth() => HealthChanger.Initialize(health, Constants.KarmelitaMaxHp);
-    
-    public void ChangeTextures() {
+    private void ChangeHealth()
+    {
+        HealthChanger.Initialize(health, Constants.KarmelitaMaxHp);
+        fsm.FsmVariables.FindFsmInt("P2 HP").Value = (int)Constants.KarmelitaPhase2HpThreshold;
+        fsm.FsmVariables.FindFsmInt("P3 HP").Value = (int)Constants.KarmelitaPhase3HpThreshold;
+    }
+
+    public void ChangeTextures()
+    {
         var collection = sprite.Collection;
         collection.materials[0].mainTexture = KarmelitaPrimeMain.Instance.KarmelitaTextures[0];
         collection.materials[1].mainTexture = KarmelitaPrimeMain.Instance.KarmelitaTextures[1];
@@ -71,17 +81,17 @@ public class KarmelitaWrapper : MonoBehaviour
             {
                 challengePauseState.Transitions[i].ToFsmState = jumpInAnticState;
                 challengePauseState.Transitions[i].ToState = jumpInAnticState.Name;
-            }    
+            }
         }
     }
 
     private void InitializeStateModifiers() => ModifierController = StateModifierController.Initialize(animator, fsm);
-    
+
     private void SetVocalAudioSource(bool active)
     {
         vocalSource.gameObject.SetActive(active);
     }
-    
+
     private void SetupEventListeners()
     {
         fsm.Fsm.StateChanged += CheckStunState;
@@ -104,8 +114,9 @@ public class KarmelitaWrapper : MonoBehaviour
     {
         if (!state.Name.Contains("Stun")) return;
         KarmelitaPrimeMain.Instance.Log("STUNNED");
+        InstantGetOutOfStunCheck();
     }
-    
+
     private void CheckPhase2State(FsmState state)
     {
         if (state.Name != "Set P2 Roar") return;
@@ -115,15 +126,32 @@ public class KarmelitaWrapper : MonoBehaviour
         vocalSource.Play();
         phaseIndex = 1;
     }
-    
+
     private void CheckPhase3State(FsmState state)
     {
         if (state.Name != "Set P3 Roar") return;
-        
         KarmelitaPrimeMain.Instance.Log("CHANGED TO PHASE 3");
         phaseIndex = 2;
+        RemoveDazedEffect();
+    }
+
+    private void InstantGetOutOfStunCheck()
+    {
+        if (phaseIndex == 2)
+        {
+            fsm.SendEvent("FINISHED");
+        }
     }
     
+    private void RemoveDazedEffect()
+    {
+        var dazeState = stunFsm.FsmStates.FirstOrDefault(state => state.Name == "Dazed Effect");
+        FsmStateAction actionToRemove = dazeState.Actions.FirstOrDefault(action => action is SpawnObjectFromGlobalPool);
+        List<FsmStateAction> actions = dazeState.Actions.ToList();
+        actions.Remove(actionToRemove);
+        dazeState.Actions = actions.ToArray();
+    }
+
     private void OnDestroy()
     {
         SetVocalAudioSource(true);
