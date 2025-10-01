@@ -118,11 +118,22 @@ public static class Constants
     }
     #endregion
 
+    #region Miscellaneous
     public static int KarmelitaMaxHp => 2000;
     public static Vector3 PlayerSpawnPosition => new Vector3(181f, 21f, 0f);
+    public static float ThreadStormDamageReduction => 0.85f;
+    #endregion
+    
+
+    #region State Speed Multipliers
+    public static float Slash1Speed => 6f;
+    public static float Slash2Speed => 6f;
+    public static float Slash3Speed => 6f;
+    #endregion
+
     /*
     ALL KARMELITA STATES!!!!
-    
+
     Init
     Movement 1
     Jump Antic

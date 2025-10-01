@@ -128,7 +128,12 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     private void StoreBackerCredits() => backerCredits = GameManager.instance.gameSettings.backerCredits;
     private void ForceCredits() => GameManager.instance.gameSettings.backerCredits = 1;
     private void DisableBackgroundGoons() => GameObject.Find("Boss Scene/Battle Scene/Wave 4").SetActive(false);
-    public void Log(string message) => Logger.LogInfo(message);
+
+    public void Log(string message)
+    {
+        if (IsDebug.Value)
+            Logger.LogInfo(message);
+    }
 
     public void OnWhatsappSet(object sender, EventArgs args)
     {

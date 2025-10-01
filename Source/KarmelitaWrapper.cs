@@ -16,7 +16,7 @@ public class KarmelitaWrapper : MonoBehaviour
     private Rigidbody2D rb;
     private tk2dSprite sprite;
     private AudioSource vocalSource;
-    private StateModifierController modifierController;
+    public StateModifierController ModifierController;
     public tk2dSpriteAnimator animator;
     
     private string[] statesToDealContactDamage = new[]
@@ -75,13 +75,11 @@ public class KarmelitaWrapper : MonoBehaviour
         }
     }
 
-    private void InitializeStateModifiers() => modifierController = StateModifierController.Initialize(animator, fsm);
+    private void InitializeStateModifiers() => ModifierController = StateModifierController.Initialize(animator, fsm);
     
     private void SetVocalAudioSource(bool active)
     {
         vocalSource.gameObject.SetActive(active);
-        if (active)
-            vocalSource.Play();
     }
     
     private void SetupEventListeners()
@@ -91,7 +89,7 @@ public class KarmelitaWrapper : MonoBehaviour
         fsm.Fsm.StateChanged += CheckPhase3State;
         fsm.Fsm.StateChanged += (FsmState state) =>
         {
-            modifierController.ApplyStateModifier(state.Name, phaseIndex);
+            ModifierController.ApplyStateModifier(state.Name, phaseIndex);
         };
     }
 
@@ -114,6 +112,7 @@ public class KarmelitaWrapper : MonoBehaviour
 
         KarmelitaPrimeMain.Instance.Log("CHANGED TO PHASE 2");
         SetVocalAudioSource(true);
+        vocalSource.Play();
         phaseIndex = 1;
     }
     
