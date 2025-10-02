@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KarmelitaPrime")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a42cf764a4adddf094bb95366f8aecfc9905e4d2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53048332cabd32218d3678405e86271363f1047a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Karmelita Prime")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KarmelitaPrime")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

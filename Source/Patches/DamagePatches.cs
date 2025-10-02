@@ -31,15 +31,7 @@ public class DamagePatches
             return;
         }
     }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
-    private static void BoostDebugDamage(ref HealthManager __instance, ref HitInstance hitInstance)
-    {
-        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
-            KarmelitaPrimeMain.Instance.IsDebug.Value)
-            hitInstance.DamageDealt = 75;
-    }
+    
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
     private static void AutoHealOnDamageDebugPatch(ref HeroController __instance)

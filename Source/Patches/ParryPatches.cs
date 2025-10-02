@@ -9,7 +9,7 @@ public class ParryPatches
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.NailParry))]
     private static void NailClashGiveSilkPatch(ref HeroController __instance)
     {
-        __instance.AddSilk(3, true, SilkSpool.SilkAddSource.Normal, false);
+        __instance.AddSilk(1, true, SilkSpool.SilkAddSource.Normal, false);
     }
 
     [HarmonyPostfix]
