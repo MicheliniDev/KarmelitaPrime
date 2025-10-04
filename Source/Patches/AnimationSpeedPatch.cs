@@ -15,7 +15,7 @@ public class AnimationSpeedPatch
         if (KarmelitaPrimeMain.Instance && KarmelitaPrimeMain.Instance.wrapper && SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
             __instance.gameObject.name == "Hunter Queen Boss")
         {
-            overrideFps = clip.fps * KarmelitaPrimeMain.Instance.wrapper.GetSpeedModifier();
+            overrideFps = clip.fps * KarmelitaPrimeMain.Instance.wrapper.GetAnimationSpeedModifier(clip.name);
         }
     }
 }

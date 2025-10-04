@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -116,10 +118,10 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         DisableBackgroundGoons();
         AddWrapper();
         ForceCredits();
-        AdjustHeroPosition();
+        SetupHeroAwake();
     }
 
-    private void AdjustHeroPosition()
+    private void SetupHeroAwake()
     {
         HeroController.instance.transform.position = Constants.PlayerSpawnPosition;
         HeroController.instance.FaceLeft();

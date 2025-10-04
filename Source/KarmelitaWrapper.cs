@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static KarmelitaPrime.Constants;
 
 namespace KarmelitaPrime;
 
@@ -18,7 +22,7 @@ public class KarmelitaWrapper : MonoBehaviour
     private HealthManager health;
     private KarmelitaFsmController fsmController;
 
-    private Dictionary<string, float> stateSpeedCollection;
+    private Dictionary<string, float> animationSpeedCollection;
 
     private readonly string[] statesToDealContactDamage =
     [
@@ -30,6 +34,7 @@ public class KarmelitaWrapper : MonoBehaviour
 
     public int PhaseIndex;
 
+    private GameObject MotherSilkJudgementCut;
     private void Awake()
     {
         GetComponents();
@@ -38,7 +43,7 @@ public class KarmelitaWrapper : MonoBehaviour
         ChangeTextures();
         SetVocalAudioSource(false);
         SetPhaseIndex(0);
-        InitializeStateSpeedModifiers();
+        InitializeAnimationSpeedModifiers();
     }
 
     private void GetComponents()
@@ -54,15 +59,14 @@ public class KarmelitaWrapper : MonoBehaviour
 
     private void ChangeHealth()
     {
-        HealthChanger.Initialize(health, Constants.KarmelitaMaxHp, (int)Constants.KarmelitaPhase2HpThreshold,
-            (int)Constants.KarmelitaPhase3HpThreshold);
+        HealthChanger.Initialize(health, KarmelitaMaxHp, (int)KarmelitaPhase2HpThreshold, 
+            (int)KarmelitaPhase3HpThreshold);
     }
 
     private void SetupFsmController()
     {
         fsmController = new KarmelitaFsmController(fsm, stunFsm, this);
-        fsmController.RerouteFirstRoarState();
-        fsmController.SubscribeStateChangedEvent();
+        fsmController.Initialize();
     }
 
     public void ChangeTextures()
@@ -89,13 +93,33 @@ public class KarmelitaWrapper : MonoBehaviour
         }
     }
 
-    private void InitializeStateSpeedModifiers()
+    private void InitializeAnimationSpeedModifiers()
     {
-        stateSpeedCollection = new Dictionary<string, float>()
+        animationSpeedCollection = new Dictionary<string, float>()
         {
-            {"Slash 1", Constants.Slash1Speed},
-            {"Slash 2", Constants.Slash2Speed},
-            {"Slash 3", Constants.Slash3Speed},
+            {"Slash Antic", SlashAnticSpeed}, //SLASH START
+            {"Slash 1", Slash1Speed}, //FIRST TWO SLASHES
+            {"Slash 2", Slash2Speed},
+            {"Slash End", SlashEndSpeed},
+            {"Spin Attack Antic", SpinAttackAnticSpeed}, //SPIN ATTACK
+            {"Spin Attack Recoil", SpinAttackRecoilSpeed},
+            {"Throw", ThrowSpeed}, //SICKLE THROW GROUND
+            {"Throw Antic", ThrowAnticSpeed}, //SICKLE THROW AIR
+            {"Air Throw", AirThrowSpeed},
+            {"Air Rethrow", AirRethrowSpeed},
+            {"Rethrow Antic 1", RethrowAntic1Speed},
+            {"Rethrow Antic 2", RethrowAntic2Speed},
+            {"Launch Antic", LaunchAnticSpeed}, //SCREW ATTACK
+            {"Launch", LaunchSpeed},
+            {"Jump Antic", JumpAnticSpeed},
+            {"Jump", JumpSpeed}, 
+            {"JumpSpin Antic", JumpSpinAnticSpeed}, 
+            {"JumpSpin", JumpSpinSpeed}, 
+            {"Jump Attack Land", JumpAttackLandSpeed},   
+            {"Wall Land", WallLandSpeed}, //DASH GRIND  
+            {"Wall Dive", WallDiveSpeed},  
+            {"Dash Grind", DashGrindSpeed},  
+            {"Dash Grind Spin", DashGrindSpinSpeed},  
         };
     }
 
@@ -109,12 +133,11 @@ public class KarmelitaWrapper : MonoBehaviour
     }
     
     private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
-    public float GetSpeedModifier() => stateSpeedCollection.GetValueOrDefault(fsm.ActiveStateName, 1f);
+    public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
     public bool ShouldDealContactDamage() => statesToDealContactDamage.Any(state => fsm.ActiveStateName.Contains(state));
-
+    
     private void OnDestroy()
     {
         SetVocalAudioSource(true);
-        fsmController.UnsubscribeStateChangedEvent();
     }
 }

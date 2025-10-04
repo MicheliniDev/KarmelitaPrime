@@ -24,10 +24,6 @@ public class DamagePatches
         if (go.layer == 11 && !KarmelitaPrimeMain.Instance.wrapper.ShouldDealContactDamage())
         {
             damageAmount = 0;
-            __instance.AnimCtrl.StartControl();
-            __instance.CancelAttack();
-            __instance.RegainControl();
-            __instance.StartAnimationControl();
             return;
         }
     }
