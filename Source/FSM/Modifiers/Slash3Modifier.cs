@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using UnityEngine.UIElements.Experimental;
 
 namespace KarmelitaPrime;
 
@@ -13,12 +14,22 @@ public class Slash3Modifier(
     KarmelitaFsmController fsmController)
     : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
-    protected override string BindState => "Slash 3";
+    public override string BindState => "Slash 3";
+    private FsmState transitioner;
+    private FsmEvent toSlash3OnlyState => FsmEvent.GetFsmEvent("SLASH COMBO");
+    private FsmEvent toDashGrindEvent => FsmEvent.GetFsmEvent("DASH GRIND");
+    public override void OnCreateModifier()
+    {
+        CreateTransitionerState();
+    }
+
     public override void SetupPhase1Modifiers()
     {
-        TestTransition();
+        //SetTransitionToTransitionerState();
+        SetBindStateToTransitionerStateTransition();
+        SetTransitionerStateTransitions();
     }
-    
+
     public override void SetupPhase2Modifiers()
     {
     }
@@ -26,20 +37,57 @@ public class Slash3Modifier(
     public override void SetupPhase3Modifiers()
     {
     }
-    
-    private void TestTransition()
+
+    private void CreateTransitionerState()
     {
-        //TRANSITION TO PHASE 2 TEST TRANSITION DO NOT SHIP ON PRODUCTION
-        //PLEASE DON'T DO IT OH GOD NO PLEASE NO NO NOOOOOOOOOOOOOOOOO
-        List<FsmTransition> BindFsmStateTransitions = BindFsmState.Transitions.ToList();
-        BindFsmStateTransitions.Clear();
-        FsmTransition transition = new FsmTransition()
+        transitioner = new FsmState(fsm.Fsm)
         {
-            FsmEvent = fsm.FsmEvents.FirstOrDefault(fsmEvent => fsmEvent.Name == "FINISHED"),
-            ToState = "Set Dash Grind",
-            ToFsmState = fsm.Fsm.GetState("Set Dash Grind"),
+            Name = "Slash 3 Transitioner",
+            Actions =
+            [
+                new WeightedRandomEventAction()
+                {
+                    events = [toDashGrindEvent, toSlash3OnlyState],
+                    weights = [0.4f, 0.6f],
+                }
+            ]
         };
-        BindFsmStateTransitions.Add(transition);
-        BindFsmState.Transitions = BindFsmStateTransitions.ToArray();
+        fsm.Fsm.States = fsm.FsmStates.Append(transitioner).ToArray();
     }
+    
+    
+     private void SetBindStateToTransitionerStateTransition()
+     {
+        //CLEARING OLD TRANSITIONS
+        var transitions = BindFsmState.Transitions.ToList();
+        transitions.Clear();
+
+        //ADD NEW STATE TO OLD STATE TRANSITIONS
+        transitions.Add(new FsmTransition()
+        {
+            FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+            ToState = transitioner.Name,
+            ToFsmState = transitioner
+        });
+        BindFsmState.Transitions = transitions.ToArray();
+    }
+
+     private void SetTransitionerStateTransitions()
+     {
+         transitioner.Transitions =
+         [
+             new FsmTransition()
+             {
+                 FsmEvent = toDashGrindEvent,
+                 ToState = "Set Dash Grind",
+                 ToFsmState = fsm.Fsm.GetState("Set Dash Grind"),
+             },
+             new FsmTransition()
+             {
+                 FsmEvent = toSlash3OnlyState,
+                 ToState = "Slash3OnlyState",
+                 ToFsmState = fsm.Fsm.GetState("Slash3OnlyState"),
+             }
+         ];
+     }
 }

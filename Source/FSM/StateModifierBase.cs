@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
+using UnityEngine;
 
 namespace KarmelitaPrime;
 
 public abstract class StateModifierBase
 {
-    protected abstract string BindState { get; }
+    public abstract string BindState { get; }
+    public virtual float AnimationStartTime => 0f;
     
     protected KarmelitaPrimeMain Main => KarmelitaPrimeMain.Instance;
     
@@ -28,7 +32,8 @@ public abstract class StateModifierBase
         this.fsmController = fsmController;
         MakeEventTarget();
     }
-    
+
+    public abstract void OnCreateModifier();
     public abstract void SetupPhase1Modifiers();
     public abstract void SetupPhase2Modifiers();
     public abstract void SetupPhase3Modifiers();

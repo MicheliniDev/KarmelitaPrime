@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static KarmelitaPrime.Constants;
@@ -17,7 +18,7 @@ public class KarmelitaWrapper : MonoBehaviour
     private Rigidbody2D rb;
     private tk2dSprite sprite;
     private AudioSource vocalSource;
-    private tk2dSpriteAnimator animator;
+    public tk2dSpriteAnimator animator;
 
     private HealthManager health;
     private KarmelitaFsmController fsmController;
@@ -122,7 +123,7 @@ public class KarmelitaWrapper : MonoBehaviour
             {"Dash Grind Spin", DashGrindSpinSpeed},  
         };
     }
-
+    
     private void RemoveDazedEffect()
     {
         var dazeState = stunFsm.FsmStates.FirstOrDefault(state => state.Name == "Dazed Effect");
@@ -133,9 +134,12 @@ public class KarmelitaWrapper : MonoBehaviour
     }
     
     private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
-    public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
-    public bool ShouldDealContactDamage() => statesToDealContactDamage.Any(state => fsm.ActiveStateName.Contains(state));
     
+    public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
+    public float GetAnimationStartTime() => fsmController.GetStateStartTime();
+    
+    public bool ShouldDealContactDamage() => statesToDealContactDamage.Any(state => fsm.ActiveStateName.Contains(state));
+
     private void OnDestroy()
     {
         SetVocalAudioSource(true);

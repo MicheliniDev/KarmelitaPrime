@@ -15,7 +15,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     private KarmelitaWrapper wrapper = wrapper;
     
     private List<StateModifierBase> stateModifiers;
-    
+    private Dictionary<string, StateModifierBase> stateModifierCollection = new();
     public string NextMove
     {
         get => fsm.FsmVariables.FindFsmString("Next Move").Value;
@@ -27,8 +27,14 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         RerouteFirstRoarState();
         SubscribeStateChangedEvent();
         stateModifiers = [
+            new Slash3OnlyState(fsm, stunFsm, wrapper, this),
             new Slash3Modifier(fsm, stunFsm, wrapper, this)
         ];
+        foreach (var modifier in stateModifiers)
+        {
+            modifier?.OnCreateModifier();
+            stateModifierCollection.Add(modifier!.BindState, modifier);
+        }
         ApplyPhase1Modifiers();
     }
     
@@ -108,5 +114,11 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             modifier?.SetupPhase3Modifiers();
         }
         main.Log("PHASE 3 MODIFIERS APPLIED");
+    }
+
+    public float GetStateStartTime()
+    {
+        if (!stateModifierCollection.TryGetValue(fsm.ActiveStateName, out var value)) return 0f;
+        return value.AnimationStartTime;
     }
 }

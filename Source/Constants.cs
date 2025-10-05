@@ -26,7 +26,7 @@ public static class Constants
                     case LanguageCode.EN:
                         value = "Whatsapp Karmelita";
                         break;
-                    case LanguageCode.PT_BR:
+                    case LanguageCode.PT:
                         value = "Karmelita Whatsapp";
                         break;
                 }
@@ -38,7 +38,7 @@ public static class Constants
                     case LanguageCode.EN:
                         value = "Karmelita Prime";
                         break;
-                    case LanguageCode.PT_BR:
+                    case LanguageCode.PT:
                         value = "Karmelita Auge";
                         break;
                 }
@@ -57,7 +57,7 @@ public static class Constants
                 case LanguageCode.EN:
                     value = $"The Skarr's most skilled warrior and singer, at the peak of her abilities.";
                     break;
-                case LanguageCode.PT_BR:
+                case LanguageCode.PT:
                     value = $"A guerreira e cantora mais habilidosa dos Skarr, no auge de suas habilidades.";
                     break;
             }
@@ -77,7 +77,7 @@ public static class Constants
                     case LanguageCode.EN:
                         value = "The Messenger";
                         break;
-                    case LanguageCode.PT_BR:
+                    case LanguageCode.PT:
                         value = "Olha a mensagem";
                         break;
                 }
@@ -89,7 +89,7 @@ public static class Constants
                     case LanguageCode.EN:
                         value = "The Hunter Queen";
                         break;
-                    case LanguageCode.PT_BR:
+                    case LanguageCode.PT:
                         value = "A Caçadora Rainha";
                         break;
                 }
@@ -110,7 +110,7 @@ public static class Constants
                 case LanguageCode.EN:
                     value = "By MicheliniDev";
                     break;
-                case LanguageCode.PT_BR:
+                case LanguageCode.PT:
                     value = "Por MicheliniDev";
                     break;
             }
@@ -128,33 +128,33 @@ public static class Constants
     #region Attack Speed Multipliers
     
     #region Slash Speed Multipliers
-    public static float SlashAnticSpeed => 6f;
-    public static float Slash1Speed => 6f;
-    public static float Slash2Speed => 6f;
-    public static float SlashEndSpeed => 6f;
+    public static float SlashAnticSpeed => 1.2f;
+    public static float Slash1Speed => 1.5f;
+    public static float Slash2Speed => 1.2f;
+    public static float SlashEndSpeed => 1f;
     #endregion
     
     #region Spin Attack Speed Multipliers
-    public static float SpinAttackAnticSpeed => 6f;
-    public static float SpinAttackRecoilSpeed => 6f;
+    public static float SpinAttackAnticSpeed => 1f;
+    public static float SpinAttackRecoilSpeed => 1.2f;
     #endregion
     
     #region Sickle Throw Speed Multipliers
-    public static float ThrowSpeed => 6f;
-    public static float ThrowAnticSpeed => 6f;
-    public static float AirThrowSpeed => 6f;
-    public static float AirRethrowSpeed => 6f;
-    public static float RethrowAntic1Speed => 6f;
-    public static float RethrowAntic2Speed => 6f;
+    public static float ThrowSpeed => 1.5f;
+    public static float ThrowAnticSpeed => 1.5f;
+    public static float AirThrowSpeed => 1.5f;
+    public static float AirRethrowSpeed => 1.5f;
+    public static float RethrowAntic1Speed => 1.5f;
+    public static float RethrowAntic2Speed => 1.5f;
     #endregion
 
     #region Jump Attack Speed Multipliers
-    public static float LaunchAnticSpeed => 6f;
-    public static float LaunchSpeed => 6f;
-    public static float JumpAnticSpeed => 6f;
-    public static float JumpSpeed => 6f;
-    public static float JumpSpinAnticSpeed => 6f;
-    public static float JumpSpinSpeed => 6f;
+    public static float LaunchAnticSpeed => 1f;
+    public static float LaunchSpeed => 1.2f;
+    public static float JumpAnticSpeed => 1f;
+    public static float JumpSpeed => 1.2f;
+    public static float JumpSpinAnticSpeed => 1.2f;
+    public static float JumpSpinSpeed => 1.2f;
     public static float JumpAttackLandSpeed => 1f;
     #endregion
     
