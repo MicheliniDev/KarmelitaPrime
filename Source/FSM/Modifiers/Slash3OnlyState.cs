@@ -12,7 +12,7 @@ public class Slash3OnlyState(
     : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
     public override string BindState => "Slash3OnlyState";
-    public override float AnimationStartTime => 0.3f;
+    public override float AnimationStartTime => 0.8f;
     FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
     public override void OnCreateModifier()
     {
@@ -26,8 +26,8 @@ public class Slash3OnlyState(
             new FsmTransition()
             {
                 FsmEvent = finishedEvent,
-                ToState = "Set Dash Grind",
-                ToFsmState = fsm.Fsm.GetState("Set Dash Grind")
+                ToState = "Set Jump Spin",
+                ToFsmState = fsm.Fsm.GetState("Set Jump Spin")
             }
         ];
     }

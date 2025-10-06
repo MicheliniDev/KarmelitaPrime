@@ -8,11 +8,15 @@ namespace KarmelitaPrime;
 
 public static class PreloadManager
 {
-    public static async Task<GameObject> PreloadObject(string assetBundleName, string sceneName, 
+    
+    
+    public static async Task<GameObject> PreloadObject(string assetBundlePath, string sceneName, 
         string objectName, 
         Action<GameObject> onComplete)
     {
-        KarmelitaPrimeMain.Instance.Log($"Preload called for {objectName} in scene {sceneName}");
+        AssetBundleCreateRequest assetBundleLoadRequest = AssetBundle.LoadFromFileAsync(assetBundlePath);
+        await assetBundleLoadRequest;
+        
         await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
         Scene scene = SceneManager.GetSceneByName(sceneName);
@@ -35,8 +39,6 @@ public static class PreloadManager
         if (result != null)
         {
             GameObject instance = Object.Instantiate(result, null);
-            Object.DontDestroyOnLoad(instance);
-            instance.SetActive(false);
             result = instance;
             KarmelitaPrimeMain.Instance.Log($"Successfully preloaded {result.name}");
         }

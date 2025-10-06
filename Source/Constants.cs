@@ -167,7 +167,10 @@ public static class Constants
     
     #endregion
     
+    #region Spawn Positions
     public static Vector3 PlayerSpawnPosition => new Vector3(181f, 21f, 0f);
+    public static Vector3 BenchSpawnPosition => new Vector3(178f, 20.5f, 0f);
+    #endregion
     
     /*ALL KARMELITA STATES!!!!
     Init

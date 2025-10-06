@@ -25,29 +25,27 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     
     private int backerCredits;
     
+    private ConfigEntry<bool> fightBoss;
     public ConfigEntry<bool> IsDebug;
     public ConfigEntry<bool> isWhatsapp;
+
+    private string benchBundlePath => $"{Application.streamingAssetsPath}/aa/StandaloneWindows64/scenes_scenes_scenes/slab_06.bundle";
     public void Awake()
     {
         harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} is loaded");
 
+        fightBoss = Config.Bind("General", "Fight Karmelita Prime", false, "Click here to immediately teleport you to the boss scene");
         IsDebug = Config.Bind("General", "IsDebug", false, "Activates certain debug functionality");
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
         
         StartCoroutine(WaitUntilGameManager());
-        LoadKarmelitaTextures(isWhatsapp.Value);
         
+        LoadKarmelitaTextures(isWhatsapp.Value);
+
+        fightBoss.SettingChanged += TeleportToKarmelitaScene;
         isWhatsapp.SettingChanged += OnWhatsappSet;
         Instance = this;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G) && CheatManager.ForceStun)
-            CheatManager.ForceStun = false;
-        else if (Input.GetKeyDown(KeyCode.G) && !CheatManager.ForceStun)
-            CheatManager.ForceStun = true;
     }
 
     private IEnumerator WaitUntilGameManager()
@@ -125,15 +123,34 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     {
         HeroController.instance.transform.position = Constants.PlayerSpawnPosition;
         HeroController.instance.FaceLeft();
+        void OnComplete(GameObject obj)
+        {
+            obj.transform.position = Constants.BenchSpawnPosition;
+        }
+        PreloadManager.PreloadObject(benchBundlePath, "Slab_06", "RestBench", OnComplete);
     }
     
     private void AddWrapper()
     {
-        GameObject bossGo = GameObject.Find("Boss Scene/Hunter Queen Boss");
-        wrapper = bossGo.AddComponent<KarmelitaWrapper>();
+        wrapper = GameObject.Find("Boss Scene/Hunter Queen Boss").AddComponent<KarmelitaWrapper>();
         Log("Wrapper added");
     }
 
+    private void TeleportToKarmelitaScene(object sender, EventArgs e)
+    {
+        if (GameManager.instance == null || HeroController.instance == null) return;
+        
+        GameManager.instance.playerData.defeatedAntQueen = false;
+        var karmelitaSceneInfo = new GameManager.SceneLoadInfo()
+        {
+            SceneName = "Memory_Ant_Queen",
+            EntryGateName = "door_wakeInMemory",
+            Visualization = GameManager.SceneLoadVisualizations.Default
+        };
+        GameManager.instance.BeginSceneTransition(karmelitaSceneInfo);
+        fightBoss.Value = false;
+    }
+    
     private void SubscribeSceneLoadEvent() => GameManager.instance.OnFinishedSceneTransition += CheckKarmelitaSceneLoad;
     private void StoreBackerCredits() => backerCredits = GameManager.instance.gameSettings.backerCredits;
     private void ForceCredits() => GameManager.instance.gameSettings.backerCredits = 1;
@@ -147,15 +164,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 
     public void OnWhatsappSet(object sender, EventArgs args)
     {
-        switch (isWhatsapp.Value)
-        {
-            case true:
-                LoadKarmelitaTextures(true);
-                break;
-            case false:
-                LoadKarmelitaTextures(false);
-                break;
-        }
+        LoadKarmelitaTextures(isWhatsapp.Value);
         wrapper?.ChangeTextures();
         harmony?.PatchAll(typeof(LocalizationPatches));
     }
@@ -165,5 +174,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         harmony?.UnpatchSelf();
         GameManager.instance.OnFinishedSceneTransition -= CheckKarmelitaSceneLoad;
         isWhatsapp.SettingChanged -= OnWhatsappSet;
+        fightBoss.SettingChanged -= TeleportToKarmelitaScene;
     }
 }
