@@ -12,7 +12,7 @@ public class Slash3OnlyState(
     : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
     public override string BindState => "Slash3OnlyState";
-    public override float AnimationStartTime => 0.8f;
+    public override float AnimationStartTime => 0f;
     FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
     public override void OnCreateModifier()
     {

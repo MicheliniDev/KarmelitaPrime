@@ -74,6 +74,8 @@ public class Slash3Modifier(
 
      private void SetTransitionerStateTransitions()
      {
+         FsmEvent toSlash3OnlyState = FsmEvent.GetFsmEvent("SLASH COMBO");
+         FsmEvent toDashGrindEvent = FsmEvent.GetFsmEvent("DASH GRIND");
          transitioner.Transitions =
          [
              new FsmTransition()

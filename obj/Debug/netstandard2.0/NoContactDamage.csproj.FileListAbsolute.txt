@@ -1,6 +1,0 @@
-C:\Users\Gregorio\Documents\Stuff\NoContactDamage\obj\Debug\netstandard2.0\NoContactDamage.csproj.AssemblyReference.cache
-C:\Users\Gregorio\Documents\Stuff\NoContactDamage\obj\Debug\netstandard2.0\MyPluginInfo.cs
-C:\Users\Gregorio\Documents\Stuff\NoContactDamage\obj\Debug\netstandard2.0\NoContactDamage.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Gregorio\Documents\Stuff\NoContactDamage\obj\Debug\netstandard2.0\NoContactDamage.AssemblyInfoInputs.cache
-C:\Users\Gregorio\Documents\Stuff\NoContactDamage\obj\Debug\netstandard2.0\NoContactDamage.AssemblyInfo.cs
-C:\Users\Gregorio\Documents\Stuff\NoContactDamage\obj\Debug\netstandard2.0\NoContactDamage.csproj.CoreCompileInputs.cache

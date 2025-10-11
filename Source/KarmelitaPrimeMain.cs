@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using TMProOld;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,6 +18,8 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public static KarmelitaPrimeMain Instance;
     
     public Texture2D[] KarmelitaTextures = new Texture2D[2];
+    public string Karmelita100SaveFilePath;
+    public int CurrentSaveSlotNumber;
     
     private Harmony harmony;
     public KarmelitaWrapper wrapper;
@@ -29,22 +30,39 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public ConfigEntry<bool> IsDebug;
     public ConfigEntry<bool> isWhatsapp;
 
-    private string benchBundlePath => $"{Application.streamingAssetsPath}/aa/StandaloneWindows64/scenes_scenes_scenes/slab_06.bundle";
+    public Font MenuFont;
+    
+    private string benchBundlePath => $"{Application.streamingAssetsPath}/aa/StandaloneWindows64/scenes_scenes_scenes/bone_east_27.bundle";
     public void Awake()
     {
         harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} is loaded");
 
-        fightBoss = Config.Bind("General", "Fight Karmelita Prime", false, "Click here to immediately teleport you to the boss scene");
-        IsDebug = Config.Bind("General", "IsDebug", false, "Activates certain debug functionality");
+        fightBoss = Config.Bind("", "Fight the Boss", false,
+            new ConfigDescription(
+                "Click here to fight the boss.",
+                null,
+                new ConfigurationManagerAttributes
+                {
+                    CustomDrawer = BossButtonDrawer.DrawButton,
+                    HideDefaultButton = true, 
+                    ReadOnly = true,    
+                    HideSettingName = true
+                }
+            ));
+        IsDebug = Config.Bind("Settings", "IsDebug", false, "Activates certain debug functionality");
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
         
         StartCoroutine(WaitUntilGameManager());
+        StartCoroutine(StoreFont());
+        
+        FindFont();
         
         LoadKarmelitaTextures(isWhatsapp.Value);
-
-        fightBoss.SettingChanged += TeleportToKarmelitaScene;
+        
+        BossButtonDrawer.OnButtonPressed += TeleportToKarmelitaScene;
         isWhatsapp.SettingChanged += OnWhatsappSet;
+        
         Instance = this;
     }
 
@@ -55,6 +73,27 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         StoreBackerCredits();
         SubscribeSceneLoadEvent();
         yield return null;
+    }
+
+    private IEnumerator StoreFont()
+    {
+        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Menu_Title");
+        yield return null;
+        FindFont();
+        yield return null;
+    }
+
+    private void FindFont()
+    {
+        foreach (var font in Resources.FindObjectsOfTypeAll<Font>())
+        {
+            if (font.name.Contains("Trajan"))
+            {
+                MenuFont = font;
+                break;
+            }
+        }
+        Logger.LogWarning("PLEASE REMOVE THE FONT FIND ON RELEASE AND PUT IT BACK ON THE COROUTINE");
     }
 
     private void LoadKarmelitaTextures(bool whatsapp) {
@@ -123,20 +162,15 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     {
         HeroController.instance.transform.position = Constants.PlayerSpawnPosition;
         HeroController.instance.FaceLeft();
-        void OnComplete(GameObject obj)
-        {
-            obj.transform.position = Constants.BenchSpawnPosition;
-        }
-        PreloadManager.PreloadObject(benchBundlePath, "Slab_06", "RestBench", OnComplete);
     }
-    
+
     private void AddWrapper()
     {
         wrapper = GameObject.Find("Boss Scene/Hunter Queen Boss").AddComponent<KarmelitaWrapper>();
         Log("Wrapper added");
     }
 
-    private void TeleportToKarmelitaScene(object sender, EventArgs e)
+    private void TeleportToKarmelitaScene()
     {
         if (GameManager.instance == null || HeroController.instance == null) return;
         
@@ -145,10 +179,8 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         {
             SceneName = "Memory_Ant_Queen",
             EntryGateName = "door_wakeInMemory",
-            Visualization = GameManager.SceneLoadVisualizations.Default
         };
         GameManager.instance.BeginSceneTransition(karmelitaSceneInfo);
-        fightBoss.Value = false;
     }
     
     private void SubscribeSceneLoadEvent() => GameManager.instance.OnFinishedSceneTransition += CheckKarmelitaSceneLoad;
@@ -173,7 +205,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     {
         harmony?.UnpatchSelf();
         GameManager.instance.OnFinishedSceneTransition -= CheckKarmelitaSceneLoad;
+        BossButtonDrawer.OnButtonPressed -= TeleportToKarmelitaScene;
         isWhatsapp.SettingChanged -= OnWhatsappSet;
-        fightBoss.SettingChanged -= TeleportToKarmelitaScene;
     }
 }

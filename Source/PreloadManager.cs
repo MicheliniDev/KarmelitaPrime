@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,8 +9,6 @@ namespace KarmelitaPrime;
 
 public static class PreloadManager
 {
-    
-    
     public static async Task<GameObject> PreloadObject(string assetBundlePath, string sceneName, 
         string objectName, 
         Action<GameObject> onComplete)

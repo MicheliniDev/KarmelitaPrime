@@ -129,13 +129,13 @@ public static class Constants
     
     #region Slash Speed Multipliers
     public static float SlashAnticSpeed => 1.2f;
-    public static float Slash1Speed => 1.5f;
-    public static float Slash2Speed => 1.2f;
+    public static float Slash1Speed => 1.8f;
+    public static float Slash2Speed => 1.5f;
     public static float SlashEndSpeed => 1f;
     #endregion
     
     #region Spin Attack Speed Multipliers
-    public static float SpinAttackAnticSpeed => 1f;
+    public static float SpinAttackAnticSpeed => 1.5f;
     public static float SpinAttackRecoilSpeed => 1.2f;
     #endregion
     
@@ -159,17 +159,17 @@ public static class Constants
     #endregion
     
     #region Dash Grind Speed Multipliers
-    public static float WallLandSpeed => 6f;
-    public static float WallDiveSpeed => 6f;
-    public static float DashGrindSpeed => 6f;
-    public static float DashGrindSpinSpeed => 6f;
+    public static float WallLandSpeed => 12f;
+    public static float WallDiveSpeed => 12f;
+    public static float DashGrindSpeed => 12f;
+    public static float DashGrindSpinSpeed => 12f;
     #endregion
     
     #endregion
     
     #region Spawn Positions
     public static Vector3 PlayerSpawnPosition => new Vector3(181f, 21f, 0f);
-    public static Vector3 BenchSpawnPosition => new Vector3(178f, 20.5f, 0f);
+    public static Vector3 BenchSpawnPosition => new Vector3(178f, 21f, 0.019f);
     #endregion
     
     /*ALL KARMELITA STATES!!!!
