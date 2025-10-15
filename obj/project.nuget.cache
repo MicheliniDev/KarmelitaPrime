@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kbZCGGlss0Y=",
+  "dgSpecHash": "kD3E35d9S5k=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Gregorio\\Documents\\Stuff\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj",
+  "projectFilePath": "C:\\_Stuff\\Coding\\Game Mods\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Gregorio\\.nuget\\packages\\bepinex.analyzers\\1.0.8\\bepinex.analyzers.1.0.8.nupkg.sha512",
     "C:\\Users\\Gregorio\\.nuget\\packages\\bepinex.baselib\\5.4.20\\bepinex.baselib.5.4.20.nupkg.sha512",

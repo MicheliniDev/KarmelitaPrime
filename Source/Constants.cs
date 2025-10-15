@@ -128,7 +128,7 @@ public static class Constants
     #region Attack Speed Multipliers
     
     #region Slash Speed Multipliers
-    public static float SlashAnticSpeed => 1.2f;
+    public static float SlashAnticSpeed => 1.4f;
     public static float Slash1Speed => 1.8f;
     public static float Slash2Speed => 1.5f;
     public static float SlashEndSpeed => 1f;
@@ -136,7 +136,7 @@ public static class Constants
     
     #region Spin Attack Speed Multipliers
     public static float SpinAttackAnticSpeed => 1.5f;
-    public static float SpinAttackRecoilSpeed => 1.2f;
+    public static float SpinAttackRecoilSpeed => 1.5f;
     #endregion
     
     #region Sickle Throw Speed Multipliers
@@ -151,7 +151,7 @@ public static class Constants
     #region Jump Attack Speed Multipliers
     public static float LaunchAnticSpeed => 1f;
     public static float LaunchSpeed => 1.2f;
-    public static float JumpAnticSpeed => 1f;
+    public static float JumpAnticSpeed => 1.5f;
     public static float JumpSpeed => 1.2f;
     public static float JumpSpinAnticSpeed => 1.2f;
     public static float JumpSpinSpeed => 1.2f;
@@ -159,10 +159,10 @@ public static class Constants
     #endregion
     
     #region Dash Grind Speed Multipliers
-    public static float WallLandSpeed => 12f;
-    public static float WallDiveSpeed => 12f;
-    public static float DashGrindSpeed => 12f;
-    public static float DashGrindSpinSpeed => 12f;
+    public static float WallLandSpeed => 1.8f;
+    public static float WallDiveSpeed => 1.5f;
+    public static float DashGrindSpeed => 1.5f;
+    public static float DashGrindSpinSpeed => 1f;
     #endregion
     
     #endregion
@@ -171,7 +171,13 @@ public static class Constants
     public static Vector3 PlayerSpawnPosition => new Vector3(181f, 21f, 0f);
     public static Vector3 BenchSpawnPosition => new Vector3(178f, 21f, 0.019f);
     #endregion
-    
+
+    public static string[] BundleNames => [
+        "localpoolprefabs_assets_areahangareasong",
+    ];
+    public static string[] AssetNames => [
+        "Song Knight Projectile",
+    ];
     /*ALL KARMELITA STATES!!!!
     Init
     Movement 1

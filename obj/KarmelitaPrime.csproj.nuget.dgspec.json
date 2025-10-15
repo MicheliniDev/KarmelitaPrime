@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gregorio\\Documents\\Stuff\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj": {}
+    "C:\\_Stuff\\Coding\\Game Mods\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gregorio\\Documents\\Stuff\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj": {
+    "C:\\_Stuff\\Coding\\Game Mods\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gregorio\\Documents\\Stuff\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj",
+        "projectUniqueName": "C:\\_Stuff\\Coding\\Game Mods\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj",
         "projectName": "KarmelitaPrime",
-        "projectPath": "C:\\Users\\Gregorio\\Documents\\Stuff\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj",
+        "projectPath": "C:\\_Stuff\\Coding\\Game Mods\\Silksong mods\\KarmelitaPrime\\KarmelitaPrime.csproj",
         "packagesPath": "C:\\Users\\Gregorio\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gregorio\\Documents\\Stuff\\Silksong mods\\KarmelitaPrime\\obj\\",
+        "outputPath": "C:\\_Stuff\\Coding\\Game Mods\\Silksong mods\\KarmelitaPrime\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gregorio\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -82,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }

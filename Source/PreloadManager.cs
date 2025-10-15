@@ -1,68 +1,37 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using HutongGames.PlayMaker.Actions;
+using static KarmelitaPrime.Constants;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace KarmelitaPrime;
 
 public static class PreloadManager
 {
-    public static async Task<GameObject> PreloadObject(string assetBundlePath, string sceneName, 
-        string objectName, 
-        Action<GameObject> onComplete)
+    private static string platformPath => Application.platform switch
     {
-        AssetBundleCreateRequest assetBundleLoadRequest = AssetBundle.LoadFromFileAsync(assetBundlePath);
-        await assetBundleLoadRequest;
-        
-        await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        RuntimePlatform.WindowsPlayer => "StandaloneWindows64",
+        RuntimePlatform.OSXPlayer => "StandaloneOSX",
+        RuntimePlatform.LinuxPlayer => "StandaloneLinux64",
+        _ => ""
+    };
 
-        Scene scene = SceneManager.GetSceneByName(sceneName);
-        if (!scene.IsValid())
-        {
-            KarmelitaPrimeMain.Instance.Log($"Failed to load scene: {sceneName}");
-            onComplete?.Invoke(null);
-            return null;
-        }
-
-        GameObject result = null;
-        GameObject[] rootGameObjects = scene.GetRootGameObjects();
-        foreach (GameObject go in rootGameObjects)
-        {
-            result = FindInChildren(go, objectName);
-            if (result != null)
-                break;
-        }
-
-        if (result != null)
-        {
-            GameObject instance = Object.Instantiate(result, null);
-            result = instance;
-            KarmelitaPrimeMain.Instance.Log($"Successfully preloaded {result.name}");
-        }
-        else
-        {
-            KarmelitaPrimeMain.Instance.Log($"Warning: Could not find GameObject named '{objectName}' in scene '{sceneName}'.");
-        }
-
-        await SceneManager.UnloadSceneAsync(sceneName);
-
-        onComplete?.Invoke(result);
-        return result;
-    }
-
-    private static GameObject FindInChildren(GameObject parent, string targetName)
+    private static Dictionary<string, AssetBundle> loadedBundles = new();
+    public static IEnumerator Initialize()
     {
-        if (parent.name == targetName)
-            return parent;
+        foreach (var bundle in AssetBundle.GetAllLoadedAssetBundles()) {
+            foreach (var assetPath in bundle.GetAllAssetNames())
+            {
+                if (!AssetNames.Any(objName => assetPath.Contains(objName))) continue;
+                
+                var assetLoadHandle = bundle.LoadAssetAsync(assetPath);
+                yield return assetLoadHandle;
 
-        foreach (Transform child in parent.transform)
-        {
-            GameObject found = FindInChildren(child.gameObject, targetName);
-            if (found != null)
-                return found;
+                var loadedAsset = assetLoadHandle.asset;
+            }
         }
-        return null;
     }
 }

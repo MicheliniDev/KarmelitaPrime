@@ -1,2 +1,2 @@
 # KarmelitaPrime
-Mods the Skarrsinger Karmelita boss in Silksong to be more difficult
+A brutal rework for the Skarrsinger Karmelita boss fight in Hollow Knight Silksong

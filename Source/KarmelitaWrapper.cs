@@ -25,17 +25,18 @@ public class KarmelitaWrapper : MonoBehaviour
 
     private Dictionary<string, float> animationSpeedCollection;
 
-    private readonly string[] statesToDealContactDamage =
+    private readonly string[] statesToCancelContactDamage =
     [
-        "Slash",
-        "Dash Grind",
-        "Spin Attack",
-        "Cyclone"
+        "Idle",
+        "Movement",
+        "Stun",
+        "Evade",
+        "Dash"
     ];
 
     public int PhaseIndex;
-
-    private GameObject MotherSilkJudgementCut;
+    
+    // ReSharper disable once IteratorMethodResultIsIgnored
     private void Awake()
     {
         GetComponents();
@@ -45,6 +46,7 @@ public class KarmelitaWrapper : MonoBehaviour
         SetVocalAudioSource(false);
         SetPhaseIndex(0);
         InitializeAnimationSpeedModifiers();
+        PreloadManager.Initialize();
     }
 
     private void GetComponents()
@@ -86,6 +88,7 @@ public class KarmelitaWrapper : MonoBehaviour
                 KarmelitaPrimeMain.Instance.Log("CHANGED TO PHASE 2");
                 SetVocalAudioSource(true);
                 vocalSource.Play();
+                RemoveVocalStopStun();
                 break;
             case 2:
                 KarmelitaPrimeMain.Instance.Log("CHANGED TO PHASE 3");
@@ -132,13 +135,21 @@ public class KarmelitaWrapper : MonoBehaviour
         actions.Remove(actionToRemove);
         dazeState.Actions = actions.ToArray();
     }
+
+    private void RemoveVocalStopStun()
+    {
+        var actionsList = fsm.Fsm.GetState("Stun Start").Actions.ToList();
+        var audioStopAction = actionsList.FirstOrDefault(action => action is TransitionToAudioSnapshot);
+        actionsList.Remove(audioStopAction);
+        fsm.Fsm.GetState("Stun Start").Actions = actionsList.ToArray();
+    }
     
     private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
     
     public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
     public float GetAnimationStartTime() => fsmController.GetStateStartTime();
     
-    public bool ShouldDealContactDamage() => statesToDealContactDamage.Any(state => fsm.ActiveStateName.Contains(state));
+    public bool ShouldDealContactDamage() => !statesToCancelContactDamage.Any(state => fsm.ActiveStateName.Contains(state));
 
     private void OnDestroy()
     {

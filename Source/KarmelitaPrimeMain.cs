@@ -8,6 +8,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using TMProOld;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace KarmelitaPrime;
@@ -32,7 +33,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 
     public Font MenuFont;
     
-    private string benchBundlePath => $"{Application.streamingAssetsPath}/aa/StandaloneWindows64/scenes_scenes_scenes/bone_east_27.bundle";
     public void Awake()
     {
         harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
