@@ -18,6 +18,7 @@ public class Slash3Modifier(
     private FsmState transitioner;
     private FsmEvent toSlash3OnlyState => FsmEvent.GetFsmEvent("SLASH COMBO");
     private FsmEvent toDashGrindEvent => FsmEvent.GetFsmEvent("DASH GRIND");
+    private FsmEvent toSlash4State => FsmEvent.GetFsmEvent("ATTACK");
     public override void OnCreateModifier()
     {
         CreateTransitionerState();
@@ -25,7 +26,6 @@ public class Slash3Modifier(
 
     public override void SetupPhase1Modifiers()
     {
-        //SetTransitionToTransitionerState();
         SetBindStateToTransitionerStateTransition();
         SetTransitionerStateTransitions();
     }
@@ -47,8 +47,8 @@ public class Slash3Modifier(
             [
                 new WeightedRandomEventAction()
                 {
-                    events = [toDashGrindEvent, toSlash3OnlyState],
-                    weights = [0.4f, 0.6f],
+                    events = [toDashGrindEvent, toSlash3OnlyState, toSlash4State],
+                    weights = [0.2f, 0.3f, 0.5f],
                 }
             ]
         };
@@ -85,9 +85,9 @@ public class Slash3Modifier(
              },
              new FsmTransition()
              {
-                 FsmEvent = toSlash3OnlyState,
-                 ToState = "Slash3OnlyState",
-                 ToFsmState = fsm.Fsm.GetState("Slash3OnlyState"),
+                 FsmEvent = toSlash4State,
+                 ToState = "Slash 4",
+                 ToFsmState = fsm.Fsm.GetState("Slash 4"),
              }
          ];
      }

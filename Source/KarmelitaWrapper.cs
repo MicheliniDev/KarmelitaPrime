@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,22 +21,33 @@ public class KarmelitaWrapper : MonoBehaviour
     private AudioSource vocalSource;
     public tk2dSpriteAnimator animator;
 
-    private HealthManager health;
+    public HealthManager health;
     private KarmelitaFsmController fsmController;
 
     private Dictionary<string, float> animationSpeedCollection;
 
     private readonly string[] statesToCancelContactDamage =
     [
-        "Idle",
-        "Movement",
-        "Stun",
+        "Start Idle",
+        "Movement 1",
+        "Movement 2",
+        "Movement 3",
+        "Movement 4",
+        "Movement 5",
         "Evade",
-        "Dash"
+        "Dash",
+        "Long Evade",
+        "Stun Start",
+        "Stun Air",
+        "Stun Land",
+        "Stunned",
+        "Stun Damage",
+        "Damage Recover",
+        "Stun Recover",
     ];
 
     public int PhaseIndex;
-    
+    private float auraLevel;
     // ReSharper disable once IteratorMethodResultIsIgnored
     private void Awake()
     {
@@ -47,6 +59,7 @@ public class KarmelitaWrapper : MonoBehaviour
         SetPhaseIndex(0);
         InitializeAnimationSpeedModifiers();
         PreloadManager.Initialize();
+        auraLevel = 0f;
     }
 
     private void GetComponents()
@@ -149,8 +162,40 @@ public class KarmelitaWrapper : MonoBehaviour
     public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
     public float GetAnimationStartTime() => fsmController.GetStateStartTime();
     
-    public bool ShouldDealContactDamage() => !statesToCancelContactDamage.Any(state => fsm.ActiveStateName.Contains(state));
+    public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
 
+    public void FarmAura(float amount, bool instantTrigger = false)
+    {
+        auraLevel += amount;
+        if (instantTrigger)
+        {
+            StartCoroutine(WaitForForcePhase3(0.4f));
+            if (auraLevel >= 1000f)
+            {
+                health.Die(0, AttackTypes.Generic, false);
+            }  
+            return;
+        }
+        if (auraLevel >= 100f)
+        {
+            fsmController.TryForcePhase3();
+        }    
+        
+        if (auraLevel >= 600f)
+        {
+            health.Die(0, AttackTypes.Generic, false);
+        }  
+    }
+
+    private IEnumerator WaitForForcePhase3(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        fsmController.TryForcePhase3();
+        yield return null;
+    }
+
+    public void LoseAura(float amount) => auraLevel -= amount;
+    
     private void OnDestroy()
     {
         SetVocalAudioSource(true);

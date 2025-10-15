@@ -129,8 +129,8 @@ public static class Constants
     
     #region Slash Speed Multipliers
     public static float SlashAnticSpeed => 1.4f;
-    public static float Slash1Speed => 1.8f;
-    public static float Slash2Speed => 1.5f;
+    public static float Slash1Speed => 1.5f;
+    public static float Slash2Speed => 1.35f;
     public static float SlashEndSpeed => 1f;
     #endregion
     

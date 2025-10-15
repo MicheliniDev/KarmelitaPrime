@@ -4,10 +4,10 @@ namespace KarmelitaPrime;
 
 public class LogAction : FsmStateAction
 {
-    public string log;
+    public string Message;
     public override void OnEnter()
     {
         base.OnEnter();
-        KarmelitaPrimeMain.Instance.Log(log);
+        KarmelitaPrimeMain.Instance.Log(Message);
     }
 }

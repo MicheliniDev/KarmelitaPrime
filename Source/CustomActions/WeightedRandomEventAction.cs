@@ -15,7 +15,7 @@ public class WeightedRandomEventAction : FsmStateAction
             total += weights[i];
         
         float roll = UnityEngine.Random.value * total;
-        float cumulative = 0;
+        float cumulative = 0f;
         for (int i = 0; i < events.Length; i++)
         {
             cumulative += weights[i];

@@ -11,6 +11,7 @@
       https://nuget.bepinex.dev/v3/index.json;
       https://nuget.samboy.dev/v3/index.json
     </RestoreAdditionalProjectSources>
+    <RootNamespace>KarmelitaPrime</RootNamespace>
     <PackageId>KarmelitaPrime</PackageId>
       <!--C:\Users\Gregorio\Documents\Stuff\Games\Hollow Knight Silksong -->
       <!-- C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong-->
@@ -52,12 +53,6 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Unity.Addressables.dll</HintPath>
     </Reference>
 </ItemGroup>
-    
-  <ItemGroup>
-    <Folder Include="Source\FSM\Modifiers\Cyclone\" />
-    <Folder Include="Source\FSM\Modifiers\DashGrind\" />
-    <Folder Include="Source\FSM\Modifiers\JumpSpin\" />
-  </ItemGroup>
 
   <Target Name="CopyMod" AfterTargets="PostBuildEvent" Condition="'$(CopyDir)' != ''">
     <Message Importance="high" Text="copying $(TargetPath) to $(CopyDir) ..." />

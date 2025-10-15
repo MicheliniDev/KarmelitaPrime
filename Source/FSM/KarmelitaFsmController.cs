@@ -3,6 +3,7 @@ using System.Linq;
 using GenericVariableExtension;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using UnityEngine;
 
 namespace KarmelitaPrime;
 
@@ -16,6 +17,8 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     
     private List<StateModifierBase> stateModifiers;
     private Dictionary<string, StateModifierBase> stateModifierCollection = new();
+    
+    private bool hasForcedP3;
     public string NextMove
     {
         get => fsm.FsmVariables.FindFsmString("Next Move").Value;
@@ -27,8 +30,15 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         RerouteFirstRoarState();
         SubscribeStateChangedEvent();
         stateModifiers = [
-            new Slash3OnlyState(fsm, stunFsm, wrapper, this),
-            new Slash3Modifier(fsm, stunFsm, wrapper, this)
+            new NewSlash1State(fsm, stunFsm, wrapper, this),
+            new NewSlash2State(fsm, stunFsm, wrapper, this),
+            new Slash3Modifier(fsm, stunFsm, wrapper, this),
+            new Slash9Modifier(fsm, stunFsm, wrapper, this),
+            new CycloneAnticModifier(fsm, stunFsm, wrapper, this),
+            new Cyclone4Modifier(fsm, stunFsm, wrapper, this),
+            new SpinAttackLandModifier(fsm, stunFsm, wrapper, this),
+            new DashGrindTransitionerState(fsm, stunFsm, wrapper, this),
+            new DashGrindModifier(fsm, stunFsm, wrapper, this),
         ];
         foreach (var modifier in stateModifiers)
         {
@@ -36,6 +46,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             stateModifierCollection.Add(modifier!.BindState, modifier);
         }
         ApplyPhase1Modifiers();
+        hasForcedP3 = false;
     }
     
     private void RerouteFirstRoarState()
@@ -120,5 +131,37 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     {
         if (!stateModifierCollection.TryGetValue(fsm.ActiveStateName, out var value)) return 0f;
         return value.AnimationStartTime;
+    }
+
+    public void TryForcePhase3()
+    {
+        if (fsm.Fsm.GetFsmBool("Phase 3").Value) return;
+
+        fsm.Fsm.GetFsmBool("Phase 2").Value = true;
+        
+        float groundedHeight = 21.4353f;
+        var attackChoiceState = fsm.Fsm.GetState("Attack Choice");
+        var currentState = fsm.Fsm.GetState(fsm.ActiveStateName);
+        
+        if (currentState != attackChoiceState)
+        {
+            if (fsm.transform.position.y > groundedHeight)
+            {
+                fsm.transform.position = new Vector3(fsm.transform.position.x, groundedHeight, fsm.transform.position.z);
+            }
+            var toP3Event = FsmEvent.GetFsmEvent("TO P3");
+            currentState.Transitions = currentState.Transitions.Append(new FsmTransition()
+            {
+                FsmEvent = toP3Event,
+                ToState = "Set P3 Roar",
+                ToFsmState = fsm.Fsm.GetState("Set P3 Roar")
+            }).ToArray();
+            fsm.SendEvent("TO P3");
+        }
+        else
+        {
+            NextMove = "TO P3";
+            fsm.SendEvent(NextMove);
+        }
     }
 }

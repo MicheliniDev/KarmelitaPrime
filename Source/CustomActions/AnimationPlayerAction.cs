@@ -8,6 +8,7 @@ public class AnimationPlayerAction : FsmStateAction
     public FsmEvent AnimationFinishedEvent;
     public string ClipName;
     public tk2dSpriteAnimator animator;
+    public float shortenEventTIme;
     
     private tk2dSpriteAnimationClip clip;
     private bool hasSentEvent;
@@ -25,9 +26,8 @@ public class AnimationPlayerAction : FsmStateAction
     {
         base.OnUpdate();
         deltaTime += UnityEngine.Time.deltaTime;
-        if (deltaTime >= clip.Duration && !hasSentEvent)
+        if (deltaTime >= (clip.Duration - shortenEventTIme) && !hasSentEvent)
         {
-            KarmelitaPrimeMain.Instance.Log($"EVENT SENT {AnimationFinishedEvent.Name}");
             Fsm.Event(AnimationFinishedEvent);
             hasSentEvent = true;
         }

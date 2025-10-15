@@ -173,13 +173,19 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     private void TeleportToKarmelitaScene()
     {
         if (GameManager.instance == null || HeroController.instance == null) return;
-        
+
         GameManager.instance.playerData.defeatedAntQueen = false;
+        if (GameManager.instance.isPaused)
+        {
+            StartCoroutine(GameManager.instance.PauseGameToggle(false));
+        }
         var karmelitaSceneInfo = new GameManager.SceneLoadInfo()
         {
             SceneName = "Memory_Ant_Queen",
             EntryGateName = "door_wakeInMemory",
         };
+        AudioManager.Instance.StopAndClearMusic();
+        AudioManager.Instance.StopAndClearAtmos();
         GameManager.instance.BeginSceneTransition(karmelitaSceneInfo);
     }
     
