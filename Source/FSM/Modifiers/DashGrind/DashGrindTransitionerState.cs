@@ -45,14 +45,14 @@ public class DashGrindTransitionerState(
             new FsmTransition()
             {
                 FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                ToState = "Start Idle",
-                ToFsmState = fsm.Fsm.GetState("Start Idle")
+                ToState = "Jump Launch",
+                ToFsmState = fsm.Fsm.GetState("Jump Launch")
             },
             new FsmTransition()
             {
                 FsmEvent = FsmEvent.GetFsmEvent("THROW"),
-                ToState = "Set Air Throw",
-                ToFsmState = fsm.Fsm.GetState("Set Air Throw")
+                ToState = "Throw Antic",
+                ToFsmState = fsm.Fsm.GetState("Throw Antic")
             }
         ];
     }

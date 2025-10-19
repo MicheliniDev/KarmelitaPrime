@@ -3,12 +3,13 @@ using HutongGames.PlayMaker;
 
 namespace KarmelitaPrime;
 
-public class SickleRethrow2Modifier : StateModifierBase
+public class SickleRethrow2Modifier(
+    PlayMakerFSM fsm,
+    PlayMakerFSM stunFsm,
+    KarmelitaWrapper wrapper,
+    KarmelitaFsmController fsmController)
+    : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
-    public SickleRethrow2Modifier(PlayMakerFSM fsm, PlayMakerFSM stunFsm, KarmelitaWrapper wrapper, KarmelitaFsmController fsmController) : base(fsm, stunFsm, wrapper, fsmController)
-    {
-    }
-
     public override string BindState => "Rethrow 2";
     private FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
     public override void OnCreateModifier()

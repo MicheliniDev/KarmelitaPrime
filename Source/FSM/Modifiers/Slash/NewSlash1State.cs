@@ -11,7 +11,7 @@ public class NewSlash1State(
     KarmelitaFsmController fsmController)
     : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
-    public override string BindState => "NewSlash1State";
+    public override string BindState => "New Slash 1 State";
     public override float AnimationStartTime => 0f;
     FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
     
@@ -45,7 +45,7 @@ public class NewSlash1State(
     {
         FsmState bindState = new FsmState(fsm.Fsm)
         {
-            Name = "NewSlash1State",
+            Name = "New Slash 1 State",
             Actions = [new AnimationPlayerAction()
             {
                 ClipName = "Slash 1",

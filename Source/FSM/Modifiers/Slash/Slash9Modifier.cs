@@ -55,8 +55,8 @@ public class Slash9Modifier(
         transitions.Add(new FsmTransition()
         {
             FsmEvent = toSlash2OnlyState,
-            ToState = "NewSlash2State",
-            ToFsmState = fsm.Fsm.GetState("NewSlash2State"),
+            ToState = "New Slash 2 State",
+            ToFsmState = fsm.Fsm.GetState("New Slash 2 State"),
         });
         transitions.Add(new FsmTransition()
         {

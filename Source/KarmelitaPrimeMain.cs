@@ -32,7 +32,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public ConfigEntry<bool> isWhatsapp;
 
     public Font MenuFont;
-    
     public void Awake()
     {
         harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
@@ -56,8 +55,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         StartCoroutine(WaitUntilGameManager());
         StartCoroutine(StoreFont());
         
-        FindFont();
-        
         LoadKarmelitaTextures(isWhatsapp.Value);
         
         BossButtonDrawer.OnButtonPressed += TeleportToKarmelitaScene;
@@ -79,12 +76,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     {
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Menu_Title");
         yield return null;
-        FindFont();
-        yield return null;
-    }
-
-    private void FindFont()
-    {
         foreach (var font in Resources.FindObjectsOfTypeAll<Font>())
         {
             if (font.name.Contains("Trajan"))
@@ -93,7 +84,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
                 break;
             }
         }
-        Logger.LogWarning("PLEASE REMOVE THE FONT FIND ON RELEASE AND PUT IT BACK ON THE COROUTINE");
+        yield return null;
     }
 
     private void LoadKarmelitaTextures(bool whatsapp) {

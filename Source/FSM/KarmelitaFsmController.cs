@@ -18,7 +18,6 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     private List<StateModifierBase> stateModifiers;
     private Dictionary<string, StateModifierBase> stateModifierCollection = new();
     
-    private bool hasForcedP3;
     public string NextMove
     {
         get => fsm.FsmVariables.FindFsmString("Next Move").Value;
@@ -30,12 +29,16 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         RerouteFirstRoarState();
         SubscribeStateChangedEvent();
         stateModifiers = [
+            new BlockModifier(fsm, stunFsm, wrapper, this),
             new NewSlash1State(fsm, stunFsm, wrapper, this),
             new NewSlash2State(fsm, stunFsm, wrapper, this),
+            new Slash3TransitionerState(fsm, stunFsm, wrapper, this),
             new Slash3Modifier(fsm, stunFsm, wrapper, this),
             new Slash9Modifier(fsm, stunFsm, wrapper, this),
+            new CycloneAnticTransitionerState(fsm, stunFsm, wrapper, this),
             new CycloneAnticModifier(fsm, stunFsm, wrapper, this),
             new Cyclone4Modifier(fsm, stunFsm, wrapper, this),
+            new JumpLaunchModifier(fsm, stunFsm, wrapper, this),
             new SpinAttackLandModifier(fsm, stunFsm, wrapper, this),
             new DashGrindTransitionerState(fsm, stunFsm, wrapper, this),
             new DashGrindModifier(fsm, stunFsm, wrapper, this),
@@ -46,7 +49,6 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             stateModifierCollection.Add(modifier!.BindState, modifier);
         }
         ApplyPhase1Modifiers();
-        hasForcedP3 = false;
     }
     
     private void RerouteFirstRoarState()
@@ -135,7 +137,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 
     public void TryForcePhase3()
     {
-        if (fsm.Fsm.GetFsmBool("Phase 3").Value) return;
+        if (fsm.Fsm.GetFsmBool("Phase 3").Value || fsm.ActiveStateName == "BG Dance") return;
 
         fsm.Fsm.GetFsmBool("Phase 2").Value = true;
         

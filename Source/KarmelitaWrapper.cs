@@ -44,11 +44,13 @@ public class KarmelitaWrapper : MonoBehaviour
         "Stun Damage",
         "Damage Recover",
         "Stun Recover",
+        "Jump Antic",
+        "Spin Attack Land",
+        "Throw Land"
     ];
 
     public int PhaseIndex;
     private float auraLevel;
-    // ReSharper disable once IteratorMethodResultIsIgnored
     private void Awake()
     {
         GetComponents();

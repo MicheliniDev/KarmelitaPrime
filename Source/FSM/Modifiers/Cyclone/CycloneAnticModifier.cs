@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using HarmonyLib;
 using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
 using UnityEngine.UIElements.UIR;
 
 namespace KarmelitaPrime;
@@ -33,6 +34,13 @@ public class CycloneAnticModifier(
         };
         BindFsmState.Actions = BindFsmState.Actions.Append(checkHeroCloneAction).ToArray();
         BindFsmState.Transitions = BindFsmState.Transitions.Append(toBlockTransition).ToArray();
+        
+        foreach (var transition in BindFsmState.Transitions)
+        {
+            if (transition.ToState != "Cyclone 1") continue;
+            transition.ToFsmState = fsm.Fsm.GetState("Cyclone Antic Transitioner State");
+            transition.ToState = "Cyclone Antic Transitioner State";
+        }
     }
 
     public override void SetupPhase2Modifiers()

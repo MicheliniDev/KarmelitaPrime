@@ -1,11 +1,12 @@
 ﻿namespace KarmelitaPrime;
 
-public class SickleThrowModifier : StateModifierBase
+public class SickleThrowModifier(
+    PlayMakerFSM fsm,
+    PlayMakerFSM stunFsm,
+    KarmelitaWrapper wrapper,
+    KarmelitaFsmController fsmController)
+    : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
-    public SickleThrowModifier(PlayMakerFSM fsm, PlayMakerFSM stunFsm, KarmelitaWrapper wrapper, KarmelitaFsmController fsmController) : base(fsm, stunFsm, wrapper, fsmController)
-    {
-    }
-
     public override string BindState { get; }
     public override void OnCreateModifier()
     {

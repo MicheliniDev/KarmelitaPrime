@@ -6,7 +6,6 @@ public class WeightedRandomEventAction : FsmStateAction
 {
     public FsmEvent[] events;
     public float[] weights;
-    
     public override void OnEnter()
     {
         float total = 0;
