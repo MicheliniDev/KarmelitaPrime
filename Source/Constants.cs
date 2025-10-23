@@ -1,6 +1,7 @@
 ﻿using InControl.NativeDeviceProfiles;
 using TeamCherry.Localization;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace KarmelitaPrime;
 
@@ -130,7 +131,7 @@ public static class Constants
     #region Slash Speed Multipliers
     public static float SlashAnticSpeed => 1.4f;
     public static float Slash1Speed => 1.35f;
-    public static float Slash2Speed => 1.25f;
+    public static float Slash2Speed => 1.15f;
     public static float SlashEndSpeed => 1f;
     #endregion
     
@@ -172,12 +173,18 @@ public static class Constants
     public static Vector3 BenchSpawnPosition => new Vector3(178f, 21f, 0.019f);
     #endregion
 
+    #region Asset Bundles
     public static string[] BundleNames => [
         "localpoolprefabs_assets_areahangareasong",
     ];
     public static string[] AssetNames => [
         "Song Knight Projectile",
     ];
+    #endregion
+    
+    public static bool IsBlackWhiteHighlight => SceneManager.GetActiveScene().name == KarmelitaSceneName 
+                                                && KarmelitaPrimeMain.Instance.wrapper &&
+                                                KarmelitaPrimeMain.Instance.wrapper.IsInHighlightMode;
     /*ALL KARMELITA STATES!!!!
     Init
     Movement 1

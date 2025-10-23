@@ -34,4 +34,9 @@ public static class PreloadManager
             }
         }
     }
+
+    /*public static T GetAsset<T>(T assetName, string bundleName) 
+    {
+           
+    }*/
 }

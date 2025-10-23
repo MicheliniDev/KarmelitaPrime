@@ -29,6 +29,7 @@ public class AnimationPlayerAction : FsmStateAction
         deltaTime += UnityEngine.Time.deltaTime;
         if (deltaTime >= (clip.Duration - shortenEventTIme) && !hasSentEvent)
         {
+            if (AnimationFinishedEvent == null) return;
             Fsm.Event(AnimationFinishedEvent);
             hasSentEvent = true;
         }

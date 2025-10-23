@@ -17,7 +17,8 @@
           "PlayMaker": "1.6.0.0",
           "TeamCherry.Localization": "0.0.0.0",
           "TeamCherry.TK2D": "0.0.0.0",
-          "Unity.Addressables": "0.0.0.0"
+          "Unity.Addressables": "0.0.0.0",
+          "Unity.ResourceManager": "0.0.0.0"
         },
         "runtime": {
           "KarmelitaPrime.dll": {}
@@ -397,6 +398,14 @@
           }
         }
       },
+      "Unity.ResourceManager/0.0.0.0": {
+        "runtime": {
+          "Unity.ResourceManager.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
       "TeamCherry.SharedUtils/0.0.0.0": {
         "runtime": {
           "TeamCherry.SharedUtils.dll": {
@@ -410,14 +419,6 @@
           "UnityEngine.UI.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Unity.ResourceManager/0.0.0.0": {
-        "runtime": {
-          "Unity.ResourceManager.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -864,17 +865,17 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Unity.ResourceManager/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
     "TeamCherry.SharedUtils/0.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
     "UnityEngine.UI/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Unity.ResourceManager/0.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

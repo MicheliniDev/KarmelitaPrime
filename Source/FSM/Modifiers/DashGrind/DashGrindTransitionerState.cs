@@ -52,7 +52,7 @@ public class DashGrindTransitionerState(
             {
                 FsmEvent = FsmEvent.GetFsmEvent("THROW"),
                 ToState = "Throw Antic",
-                ToFsmState = fsm.Fsm.GetState("Throw Antic")
+                ToFsmState = fsm.Fsm.GetState("Throw Antic") 
             }
         ];
     }

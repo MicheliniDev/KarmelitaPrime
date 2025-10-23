@@ -1,4 +1,5 @@
 ﻿using HutongGames.PlayMaker;
+using UnityEngine;
 using UnityEngine.PlayerLoop;
 
 namespace KarmelitaPrime;
@@ -8,11 +9,15 @@ public class EnemyHitAction : FsmStateAction
     public HealthManager Owner;
     public FsmEvent OnHitEvent;
     public bool isInvincibleOnEnter;
+    public float IgnoreHitStartDuration;
+    private float elapsedTime;
     private float hpOnEnter;
+    private bool hasSentEvent;
     public override void OnEnter()
     {
-        Owner.IsInvincible = false;
         base.OnEnter();
+        elapsedTime = 0f;
+        hasSentEvent = false;
         hpOnEnter = Owner.hp;
         Owner.IsInvincible = isInvincibleOnEnter;
     }
@@ -20,9 +25,11 @@ public class EnemyHitAction : FsmStateAction
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (Owner.hp < hpOnEnter)
+        elapsedTime += Time.deltaTime;
+        if (Owner.hp < hpOnEnter && !hasSentEvent && OnHitEvent != null && elapsedTime >= IgnoreHitStartDuration)
         {
             Fsm.Event(OnHitEvent);
+            hasSentEvent = true;
         }
     }
 

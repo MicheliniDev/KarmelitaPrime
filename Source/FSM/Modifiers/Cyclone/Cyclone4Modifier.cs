@@ -4,12 +4,13 @@ using HutongGames.PlayMaker.Actions;
 
 namespace KarmelitaPrime;
 
-public class Cyclone4Modifier : StateModifierBase
+public class Cyclone4Modifier(
+    PlayMakerFSM fsm,
+    PlayMakerFSM stunFsm,
+    KarmelitaWrapper wrapper,
+    KarmelitaFsmController fsmController)
+    : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
-    public Cyclone4Modifier(PlayMakerFSM fsm, PlayMakerFSM stunFsm, KarmelitaWrapper wrapper, KarmelitaFsmController fsmController) : base(fsm, stunFsm, wrapper, fsmController)
-    {
-    }
-
     public override string BindState => "Cyclone 4";
     public override void OnCreateModifier()
     {

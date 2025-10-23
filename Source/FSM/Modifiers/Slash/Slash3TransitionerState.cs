@@ -35,17 +35,18 @@ public class Slash3TransitionerState(
                 ToState = "Slash 4",
                 ToFsmState = fsm.Fsm.GetState("Slash 4"),
             },
-            new FsmTransition()
-            {
-                FsmEvent = toNewSlash2State,
-                ToState = "New Slash 2 State",
-                ToFsmState = fsm.Fsm.GetState("New Slash 2 State"),
-            }
         ];
     }
 
     public override void SetupPhase2Modifiers()
     {
+        BindFsmState.Transitions = BindFsmState.Transitions.Append(
+            new FsmTransition()
+            {
+                FsmEvent = toNewSlash2State,
+                ToState = "New Slash 2 State",
+                ToFsmState = fsm.Fsm.GetState("New Slash 2 State"),
+            }).ToArray();
     }
 
     public override void SetupPhase3Modifiers()
@@ -61,8 +62,8 @@ public class Slash3TransitionerState(
             [
                 new WeightedRandomEventAction()
                 {
-                    events = [toDashGrindEvent, toNewSlash2State, toSlash4State],
-                    weights = [0.2f, 0.3f, 0.5f],
+                    events = [toNewSlash2State, toSlash4State],
+                    weights = [0f, 1f],
                 }
             ]
         };

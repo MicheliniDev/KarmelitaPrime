@@ -46,12 +46,34 @@ public class NewSlash1State(
         FsmState bindState = new FsmState(fsm.Fsm)
         {
             Name = "New Slash 1 State",
-            Actions = [new AnimationPlayerAction()
-            {
-                ClipName = "Slash 1",
-                animator = wrapper.animator,
-                AnimationFinishedEvent = finishedEvent
-            }],
+            Actions = [
+                new AnimationPlayerAction()
+                {
+                    ClipName = "Slash 1",
+                    animator = wrapper.animator,
+                    AnimationFinishedEvent = finishedEvent
+                },
+                new SetVelocityToPlayer()
+                {
+                    Rb = wrapper.rb,
+                    velocity = 50f
+                },
+                new DecelerateXY()
+                {
+                    decelerationX = 0.9f,
+                    decelerationY = 0.9f
+                },
+                new PlayRandomClipAction()
+                {
+                    Table = wrapper.AttackQuickTable,
+                    Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value
+                },
+                new PlayClipAction()
+                {
+                    Clip = wrapper.SwordClip,
+                    Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value
+                }
+            ],
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
     }

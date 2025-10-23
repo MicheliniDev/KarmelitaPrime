@@ -11,6 +11,17 @@ namespace KarmelitaPrime;
 [HarmonyPatch]
 public class DamagePatches
 {
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
+    private static void ClawlineAuraPatch(ref HealthManager __instance, ref HitInstance hitInstance)
+    {
+        if (SceneManager.GetActiveScene().name != Constants.KarmelitaSceneName
+            || !KarmelitaPrimeMain.Instance.wrapper) return;
+
+        if (__instance.hp <= Constants.KarmelitaPhase3HpThreshold)
+            KarmelitaPrimeMain.Instance.wrapper.TriggerPhase3();
+    }
+    
     [HarmonyPrefix]
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
     private static void CancelContactDamageOnKarmelita(ref HeroController __instance, ref GameObject go, ref int damageAmount)

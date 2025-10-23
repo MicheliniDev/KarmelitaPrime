@@ -9,6 +9,7 @@ using HarmonyLib;
 using TMProOld;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 namespace KarmelitaPrime;
@@ -32,6 +33,8 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public ConfigEntry<bool> isWhatsapp;
 
     public Font MenuFont;
+    public Shader FlashShader;
+    
     public void Awake()
     {
         harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
@@ -44,31 +47,42 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
                 new ConfigurationManagerAttributes
                 {
                     CustomDrawer = BossButtonDrawer.DrawButton,
-                    HideDefaultButton = true, 
-                    ReadOnly = true,    
+                    HideDefaultButton = true,
+                    ReadOnly = true,
                     HideSettingName = true
                 }
             ));
-        IsDebug = Config.Bind("Settings", "IsDebug", false, "Activates certain debug functionality");
+        IsDebug = Config.Bind("Settings", "IsDebug", false, "PLAY EDUARDO'S AWAKENING :D");
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
-        
-        StartCoroutine(WaitUntilGameManager());
-        StartCoroutine(StoreFont());
-        
+
         LoadKarmelitaTextures(isWhatsapp.Value);
-        
+
         BossButtonDrawer.OnButtonPressed += TeleportToKarmelitaScene;
+        SceneManager.sceneLoaded += CheckMainMenuScene;
         isWhatsapp.SettingChanged += OnWhatsappSet;
         
+        foreach (var shader in Resources.FindObjectsOfTypeAll<Shader>())
+        {
+            if (!shader.name.Contains("Sprites/Default-ColorFlash")) continue;
+            FlashShader = shader;
+            break;
+        }
         Instance = this;
     }
 
+    private void CheckMainMenuScene(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "Menu_Title") return;
+        StartCoroutine(WaitUntilGameManager());
+        StartCoroutine(StoreFont());
+    }
+    
     private IEnumerator WaitUntilGameManager()
     {
         yield return new WaitUntil(() => GameManager.instance);
         yield return null;
+        GameManager.instance.OnFinishedSceneTransition += CheckKarmelitaSceneLoad;
         StoreBackerCredits();
-        SubscribeSceneLoadEvent();
         yield return null;
     }
 
@@ -132,12 +146,18 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     }
     
     public void CheckKarmelitaSceneLoad()
-    {
-        GameManager.instance.gameSettings.backerCredits = backerCredits;
+    {   
         if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName)
         {
             Log("Karmelita scene loaded");
             OnKarmelitaSceneLoad();
+        }
+        else if (GameManager.instance.lastSceneName == Constants.KarmelitaSceneName)
+        {
+            GameManager.instance.gameSettings.backerCredits = backerCredits;
+            HeroController.instance.SpriteFlash.IsBlocked = false;
+            HeroController.instance.heroLight.Alpha = 1f;
+            GameCameras.instance.hudCamera.gameObject.SetActive(true);
         }
     }
     
@@ -180,7 +200,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         GameManager.instance.BeginSceneTransition(karmelitaSceneInfo);
     }
     
-    private void SubscribeSceneLoadEvent() => GameManager.instance.OnFinishedSceneTransition += CheckKarmelitaSceneLoad;
     private void StoreBackerCredits() => backerCredits = GameManager.instance.gameSettings.backerCredits;
     private void ForceCredits() => GameManager.instance.gameSettings.backerCredits = 1;
     private void DisableBackgroundGoons() => GameObject.Find("Boss Scene/Battle Scene/Wave 4").SetActive(false);
@@ -203,6 +222,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         harmony?.UnpatchSelf();
         GameManager.instance.OnFinishedSceneTransition -= CheckKarmelitaSceneLoad;
         BossButtonDrawer.OnButtonPressed -= TeleportToKarmelitaScene;
+        SceneManager.sceneLoaded -= CheckMainMenuScene;
         isWhatsapp.SettingChanged -= OnWhatsappSet;
     }
 }

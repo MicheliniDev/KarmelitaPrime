@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
-using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static KarmelitaPrime.Constants;
@@ -16,16 +13,18 @@ public class KarmelitaWrapper : MonoBehaviour
 {
     private PlayMakerFSM fsm;
     private PlayMakerFSM stunFsm;
-    private Rigidbody2D rb;
     private tk2dSprite sprite;
     private AudioSource vocalSource;
+    
     public tk2dSpriteAnimator animator;
-
     public HealthManager health;
+    public Rigidbody2D rb;
+    public SpriteFlash SpriteFlash;
+    public Shader FlashShader;
+    public int PhaseIndex;
+        
     private KarmelitaFsmController fsmController;
-
     private Dictionary<string, float> animationSpeedCollection;
-
     private readonly string[] statesToCancelContactDamage =
     [
         "Start Idle",
@@ -35,8 +34,8 @@ public class KarmelitaWrapper : MonoBehaviour
         "Movement 4",
         "Movement 5",
         "Evade",
-        "Dash",
         "Long Evade",
+        "Dash",
         "Stun Start",
         "Stun Air",
         "Stun Land",
@@ -46,11 +45,25 @@ public class KarmelitaWrapper : MonoBehaviour
         "Stun Recover",
         "Jump Antic",
         "Spin Attack Land",
-        "Throw Land"
+        "Throw Fall",
+        "Throw Land",
+        "P2 Roar Antic",
+        "Phase 3 Knocked",
+        "Phase 3 Recovering State",
+        "P3 Roar Antic"
     ];
-
-    public int PhaseIndex;
     private float auraLevel;
+
+    public GameObject BlackScreen;
+    public bool IsInHighlightMode;
+
+    public RandomAudioClipTable StunTable;
+    public RandomAudioClipTable AttackQuickTable;
+    public RandomAudioClipTable AttackLongTable;
+    public AudioClip SwordClip;
+    public AudioClip LandClip;
+    public AudioClip BossGenericDeathAudio;
+    public AudioClip KarmelitaDeathAudio;
     private void Awake()
     {
         GetComponents();
@@ -60,8 +73,10 @@ public class KarmelitaWrapper : MonoBehaviour
         SetVocalAudioSource(false);
         SetPhaseIndex(0);
         InitializeAnimationSpeedModifiers();
+        SetupBlackScreen();
         PreloadManager.Initialize();
         auraLevel = 0f;
+        IsInHighlightMode = false;
     }
 
     private void GetComponents()
@@ -70,9 +85,47 @@ public class KarmelitaWrapper : MonoBehaviour
         health = GetComponent<HealthManager>();
         sprite = GetComponent<tk2dSprite>();
         animator = GetComponent<tk2dSpriteAnimator>();
+        SpriteFlash = GetComponent<SpriteFlash>();
+        FlashShader = GetComponent<MeshRenderer>().material.shader;
         fsm = gameObject.LocateMyFSM("Control");
         stunFsm = gameObject.LocateMyFSM("Stun Control");
         vocalSource = AudioManager.Instance.MusicSources[3];
+        
+        foreach (var audioClip in Resources.FindObjectsOfTypeAll<AudioClip>())
+        {
+            if (audioClip.name.Contains("Karmelita-Death-Hit-003"))
+            {
+                KarmelitaDeathAudio = audioClip;
+            }
+            if (audioClip.name.Contains("boss_death_pt_1"))
+            {
+                BossGenericDeathAudio = audioClip;
+            }
+            if (audioClip.name.Contains("ruin_sentry_sword_1"))
+            {
+                SwordClip = audioClip;
+            }
+            if (audioClip.name.Contains("carmelita_spin_land"))
+            {
+                LandClip = audioClip;
+            }
+        }
+        
+        foreach (var table in Resources.FindObjectsOfTypeAll<RandomAudioClipTable>())
+        {
+            if (table.name.Contains("Karmelita-Stun"))
+            {
+                StunTable = table;
+            }
+            if (table.name.Contains("Karmelita-Attack-Quick"))
+            {
+                AttackQuickTable = table;
+            }
+            if (table.name.Contains("Karmelita-Attack-Long"))
+            {
+                AttackLongTable = table;
+            }
+        }
     }
 
     private void ChangeHealth()
@@ -141,6 +194,32 @@ public class KarmelitaWrapper : MonoBehaviour
             {"Dash Grind Spin", DashGrindSpinSpeed},  
         };
     }
+
+    private void SetupBlackScreen()
+    {
+        BlackScreen = new GameObject("Black Screen", typeof(SpriteRenderer));
+        var position = BlackScreen.transform.position;
+        position.z = 0.1f;
+        position.x = transform.position.x;
+        position.y = transform.position.y;
+        BlackScreen.transform.position = position;
+        BlackScreen.transform.localScale *= 100f;
+        SpriteRenderer sr = BlackScreen.GetComponent<SpriteRenderer>();
+
+        Texture2D tex = new Texture2D(1, 1);
+        tex.SetPixel(0, 0, new Color(0f, 0f, 0f, 1f));
+        tex.Apply();
+
+        Sprite blackSprite = Sprite.Create(
+            tex,
+            new Rect(0, 0, 1, 1),
+            new Vector2(0.5f, 0.5f),
+            1f 
+        );
+
+        sr.sprite = blackSprite;
+        sr.color = new Color(0f, 0f, 0f, 0f);
+    }
     
     private void RemoveDazedEffect()
     {
@@ -166,24 +245,69 @@ public class KarmelitaWrapper : MonoBehaviour
     
     public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
 
+    public void TriggerPhase3()
+    {
+        fsmController.DoPhase3();
+    }
+
+    public void DoHighlightEffects()
+    {
+        vocalSource.gameObject.SetActive(true);
+        
+        GameCameras.instance.hudCamera.gameObject.SetActive(false);
+        
+        transform.Find("HeroLight").gameObject.SetActive(false);
+        HeroController.instance.heroLight.Alpha = 0f;
+        
+        RecolorNonKarmelitaSprites();
+        BlackScreen.GetComponent<SpriteRenderer>().color = Color.black;
+        
+        HeroController.instance.SpriteFlash.Flash(Color.white, 1f, 0f, 9999f, 1f, 1f);
+        SpriteFlash.Flash(Color.white, 1f, 0f, 9999f, 1f, 1f);
+        
+        IsInHighlightMode = true;
+    }
+
+    private void RecolorNonKarmelitaSprites()
+    {
+        var flashShader = FlashShader;
+        foreach (var gameobject in SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            if (gameobject.TryGetComponent<SpriteRenderer>(out var rootRenderer))
+                rootRenderer.color = Color.black;
+
+            foreach (var childRenderer in gameobject.GetComponentsInChildren<Renderer>(true))
+            {
+                if (childRenderer.name.Contains("Hunter Queen Boss")) continue;
+        
+                if (childRenderer.name == "spear")
+                {
+                    var material = new Material(flashShader);
+                    childRenderer.material = material;
+                    childRenderer.material.SetFloat(Shader.PropertyToID("_FlashAmount"), 1f);
+                    childRenderer.material.SetColor(Shader.PropertyToID("_FlashColor"), Color.white);
+                }
+                else
+                {
+                    childRenderer.material.color = Color.black;
+                }
+            }
+        }
+    }
+
     public void FarmAura(float amount, bool instantTrigger = false)
     {
         auraLevel += amount;
         if (instantTrigger)
         {
             StartCoroutine(WaitForForcePhase3(0.4f));
-            if (auraLevel >= 1000f)
-            {
-                health.Die(0, AttackTypes.Generic, false);
-            }  
-            return;
         }
-        if (auraLevel >= 100f)
+        else if (auraLevel >= 100f)
         {
-            fsmController.TryForcePhase3();
+            TriggerPhase3();
         }    
         
-        if (auraLevel >= 600f)
+        if (auraLevel >= 1000f)
         {
             health.Die(0, AttackTypes.Generic, false);
         }  
@@ -192,7 +316,7 @@ public class KarmelitaWrapper : MonoBehaviour
     private IEnumerator WaitForForcePhase3(float duration)
     {
         yield return new WaitForSeconds(duration);
-        fsmController.TryForcePhase3();
+        TriggerPhase3();
         yield return null;
     }
 
@@ -201,5 +325,6 @@ public class KarmelitaWrapper : MonoBehaviour
     private void OnDestroy()
     {
         SetVocalAudioSource(true);
+        IsInHighlightMode = false;
     }
 }

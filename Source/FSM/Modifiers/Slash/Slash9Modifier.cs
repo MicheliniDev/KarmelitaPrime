@@ -26,6 +26,23 @@ public class Slash9Modifier(
 
     public override void SetupPhase2Modifiers()
     {
+        BindFsmState.Transitions = BindFsmState.Transitions.Append(new FsmTransition()
+        {
+            FsmEvent = toSlash2OnlyState,
+            ToState = "New Slash 2 State",
+            ToFsmState = fsm.Fsm.GetState("New Slash 2 State"),
+        }).ToArray();
+        foreach (var action in BindFsmState.Actions)
+        {
+            if (action is not AnimEndSendRandomEventAction animEnd) continue;
+            animEnd = new AnimEndSendRandomEventAction()
+            {
+                animator = wrapper.animator,
+                events = [toSlash2OnlyState, finishedEvent],
+                weights = [.6f, .4f],
+                shortenEventTIme = 0.25f
+            };
+        }
     }
 
     public override void SetupPhase3Modifiers()
@@ -40,8 +57,8 @@ public class Slash9Modifier(
         newActions.Add(new AnimEndSendRandomEventAction()
         {
             animator = wrapper.animator,
-            events = [toSlash2OnlyState, finishedEvent],
-            weights = [.6f, .4f],
+            events = [finishedEvent],
+            weights = [1f],
             shortenEventTIme = 0.25f
         });
         BindFsmState.Actions = newActions.ToArray();
@@ -49,21 +66,13 @@ public class Slash9Modifier(
     
     private void AlterTransitions()
     {
-        var transitions = BindFsmState.Transitions.ToList();
-        transitions.Clear();
-
-        transitions.Add(new FsmTransition()
-        {
-            FsmEvent = toSlash2OnlyState,
-            ToState = "New Slash 2 State",
-            ToFsmState = fsm.Fsm.GetState("New Slash 2 State"),
-        });
-        transitions.Add(new FsmTransition()
-        {
-            FsmEvent = finishedEvent,
-            ToState = "Slash End",
-            ToFsmState = fsm.Fsm.GetState("Slash End"),
-        });
-        BindFsmState.Transitions = transitions.ToArray();
+        BindFsmState.Transitions = [
+            new FsmTransition()
+            {
+                FsmEvent = finishedEvent,
+                ToState = "Slash End",
+                ToFsmState = fsm.Fsm.GetState("Slash End"),
+            }
+        ];
     }
 }
