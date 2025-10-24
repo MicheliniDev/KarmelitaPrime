@@ -55,7 +55,7 @@ public class NewSlash2State(
                 }, 
                 new SetVelocityToPlayer()
                 {
-                    Rb = wrapper.rb,
+                    Rb = wrapper.rb,    
                     velocity = 30f
                 },
                 new DecelerateXY()

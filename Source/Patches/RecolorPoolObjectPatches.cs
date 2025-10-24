@@ -13,16 +13,23 @@ public class RecolorPoolObjectPatches
     [HarmonyPatch(typeof(SpawnObjectFromGlobalPool), nameof(SpawnObjectFromGlobalPool.OnEnter))]
     private static void RecolorPoolObjects(ref SpawnObjectFromGlobalPool __instance)
     {
-        if (!Constants.IsBlackWhiteHighlight || __instance.storeObject.Value.layer == 5) return;
+        //For some reason checking the UI layer isn't working so I gotta write all exceptions :D
+        if (!Constants.IsBlackWhiteHighlight 
+            || __instance.storeObject.Value.layer == LayerMask.NameToLayer("UI")
+            || __instance.storeObject.Value.name.Contains("health")
+            || __instance.storeObject.Value.name.Contains("Silk Chunk")) return;
 
         if (__instance.storeObject.Value.name.Contains("Sickle"))
         {
             HandleKarmelitaSickle(__instance.storeObject.Value);
             return;
         }
-        HandleGeneralRecolor(__instance.storeObject.Value);
+        
+        if (!__instance.storeObject.Value.TryGetComponent<HighlightTracker>(out var tracker))
+            tracker = __instance.storeObject.Value.AddComponent<HighlightTracker>();
+        tracker.ApplyHighlightEffect();
     }
-
+    
     private static void HandleKarmelitaSickle(GameObject sickle)
     {
         var renderer = sickle.TryGetComponent<SpriteFlash>(out var flasher)
@@ -35,35 +42,6 @@ public class RecolorPoolObjectPatches
                 ? childFlasher
                 : meshRenderer.gameObject.AddComponent<SpriteFlash>();
             childSpriteFlasher.Flash(Color.white, 1f, 0f, 9999f, 0f);
-        }
-    }
-    
-    private static void HandleGeneralRecolor(GameObject storeObject)
-    {
-        var flashShader = KarmelitaPrimeMain.Instance.FlashShader;
-        
-        var renderers = storeObject.GetComponentsInChildren<Renderer>(true);
-        if (storeObject.TryGetComponent<Renderer>(out var mainRenderer))
-            renderers = renderers.Append(mainRenderer).ToArray();
-        
-        foreach (var renderer in renderers)
-        {
-            if (renderer is ParticleSystemRenderer)
-            {
-                var particleSystem = renderer.GetComponent<ParticleSystem>();
-                var colorLifetime = particleSystem.colorOverLifetime;
-                colorLifetime.color = Color.white;
-                continue;
-            }
-
-            if (renderer is MeshRenderer or SpriteRenderer)
-            {
-                renderer.material = new Material(flashShader);
-                var flash = renderer.TryGetComponent<SpriteFlash>(out var flasher) 
-                    ? flasher 
-                    : renderer.gameObject.AddComponent<SpriteFlash>();
-                flash.Flash(Color.white, 1f, 0f, 999f, 0f);
-            }
         }
     }
 }

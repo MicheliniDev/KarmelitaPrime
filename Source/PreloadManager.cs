@@ -3,7 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using HutongGames.PlayMaker.Actions;
+using JetBrains.Annotations;
 using static KarmelitaPrime.Constants;
 using UnityEngine;
 
@@ -20,7 +24,8 @@ public static class PreloadManager
     };
 
     private static Dictionary<string, AssetBundle> loadedBundles = new();
-    public static IEnumerator Initialize()
+    
+    public static IEnumerator LoadAssetBundles()
     {
         foreach (var bundle in AssetBundle.GetAllLoadedAssetBundles()) {
             foreach (var assetPath in bundle.GetAllAssetNames())
@@ -34,7 +39,7 @@ public static class PreloadManager
             }
         }
     }
-
+    
     /*public static T GetAsset<T>(T assetName, string bundleName) 
     {
            

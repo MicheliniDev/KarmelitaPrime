@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using HutongGames.PlayMaker;
@@ -74,9 +75,10 @@ public class KarmelitaWrapper : MonoBehaviour
         SetPhaseIndex(0);
         InitializeAnimationSpeedModifiers();
         SetupBlackScreen();
-        PreloadManager.Initialize();
+        PreloadManager.LoadAssetBundles();
         auraLevel = 0f;
         IsInHighlightMode = false;
+        HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
     }
 
     private void GetComponents()
@@ -143,8 +145,8 @@ public class KarmelitaWrapper : MonoBehaviour
     public void ChangeTextures()
     {
         var collection = sprite.Collection;
-        collection.materials[0].mainTexture = KarmelitaPrimeMain.Instance.KarmelitaTextures[0];
-        collection.materials[1].mainTexture = KarmelitaPrimeMain.Instance.KarmelitaTextures[1];
+        collection.materials[0].mainTexture = KarmelitaPrimeMain.Instance.CurrentTextures[0];
+        collection.materials[1].mainTexture = KarmelitaPrimeMain.Instance.CurrentTextures[1];
     }
 
     public void SetPhaseIndex(int index)

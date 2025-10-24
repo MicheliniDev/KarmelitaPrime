@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using TMProOld;
+using HutongGames.PlayMaker.Actions;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 namespace KarmelitaPrime;
@@ -19,9 +17,9 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 {
     public static KarmelitaPrimeMain Instance;
     
+    public Texture2D[] CurrentTextures = new Texture2D[2];
+    public Texture2D[] WhatsappTextures = new Texture2D[2];
     public Texture2D[] KarmelitaTextures = new Texture2D[2];
-    public string Karmelita100SaveFilePath;
-    public int CurrentSaveSlotNumber;
     
     private Harmony harmony;
     public KarmelitaWrapper wrapper;
@@ -54,53 +52,45 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
             ));
         IsDebug = Config.Bind("Settings", "IsDebug", false, "PLAY EDUARDO'S AWAKENING :D");
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
-
-        LoadKarmelitaTextures(isWhatsapp.Value);
-
+        
+        StartCoroutine(WaitUntilGameManager());
+        
         BossButtonDrawer.OnButtonPressed += TeleportToKarmelitaScene;
-        SceneManager.sceneLoaded += CheckMainMenuScene;
         isWhatsapp.SettingChanged += OnWhatsappSet;
         
-        foreach (var shader in Resources.FindObjectsOfTypeAll<Shader>())
-        {
-            if (!shader.name.Contains("Sprites/Default-ColorFlash")) continue;
-            FlashShader = shader;
-            break;
-        }
+        LoadKarmelitaTextures(isWhatsapp.Value);
+        //GetResources();
+        
         Instance = this;
     }
 
-    private void CheckMainMenuScene(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name != "Menu_Title") return;
-        StartCoroutine(WaitUntilGameManager());
-        StartCoroutine(StoreFont());
-    }
-    
     private IEnumerator WaitUntilGameManager()
     {
         yield return new WaitUntil(() => GameManager.instance);
         yield return null;
         GameManager.instance.OnFinishedSceneTransition += CheckKarmelitaSceneLoad;
         StoreBackerCredits();
+        GetResources();
         yield return null;
     }
 
-    private IEnumerator StoreFont()
+    private void GetResources()
     {
-        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Menu_Title");
-        yield return null;
+        //GETTING RESOURCES
         foreach (var font in Resources.FindObjectsOfTypeAll<Font>())
         {
-            if (font.name.Contains("Trajan"))
-            {
-                MenuFont = font;
-                break;
-            }
+            if (!font.name.Contains("Trajan")) continue;
+            MenuFont = font;
+            break;
         }
-        yield return null;
+        foreach (var shader in Resources.FindObjectsOfTypeAll<Shader>())
+        {
+            if (!shader.name.Contains("Sprites/Default-ColorFlash")) continue;
+            FlashShader = shader;
+            break;
+        }
     }
-
+    
     private void LoadKarmelitaTextures(bool whatsapp) {
         //Code yoinked from Jngo :P
         var assembly = Assembly.GetExecutingAssembly();
@@ -108,42 +98,39 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
             using Stream stream = assembly.GetManifestResourceStream(resourceName);
             if (stream == null) continue;
 
-            if (whatsapp)
-            {
-                if (resourceName.Contains("atlas0_whatsapp")) {
-                    var buffer = new byte[stream.Length];
-                    stream.Read(buffer, 0, buffer.Length);
-                    var atlasTex = new Texture2D(2, 2);
-                    atlasTex.LoadImage(buffer);
-                    KarmelitaTextures[0] = atlasTex;
-                } 
-                else if (resourceName.Contains("atlas1_whatsapp")) {
-                    var buffer = new byte[stream.Length];
-                    stream.Read(buffer, 0, buffer.Length);
-                    var atlasTex = new Texture2D(2, 2);
-                    atlasTex.LoadImage(buffer);
-                    KarmelitaTextures[1] = atlasTex;
-                }
+            if (resourceName.Contains("atlas0_whatsapp")) {
+                var buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                var atlasTex = new Texture2D(2, 2);
+                atlasTex.LoadImage(buffer);
+                WhatsappTextures[0] = atlasTex;
+            } 
+            else if (resourceName.Contains("atlas1_whatsapp")) {
+                var buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                var atlasTex = new Texture2D(2, 2);
+                atlasTex.LoadImage(buffer);
+                WhatsappTextures[1] = atlasTex;
             }
-            else
-            {
-                if (resourceName.Contains("atlas0_modified")) {
-                    var buffer = new byte[stream.Length];
-                    stream.Read(buffer, 0, buffer.Length);
-                    var atlasTex = new Texture2D(2, 2);
-                    atlasTex.LoadImage(buffer);
-                    KarmelitaTextures[0] = atlasTex;
-                } 
-                else if (resourceName.Contains("atlas1_modified")) {
-                    var buffer = new byte[stream.Length];
-                    stream.Read(buffer, 0, buffer.Length);
-                    var atlasTex = new Texture2D(2, 2);
-                    atlasTex.LoadImage(buffer);
-                    KarmelitaTextures[1] = atlasTex;
-                }
+            else if (resourceName.Contains("atlas0_modified")) {
+                var buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                var atlasTex = new Texture2D(2, 2);
+                atlasTex.LoadImage(buffer);
+                KarmelitaTextures[0] = atlasTex;
+            } 
+            else if (resourceName.Contains("atlas1_modified")) {
+                var buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                var atlasTex = new Texture2D(2, 2);
+                atlasTex.LoadImage(buffer);
+                KarmelitaTextures[1] = atlasTex;
             }
         }
+        UpdateTextures();
     }
+    
+    private void UpdateTextures() => CurrentTextures = isWhatsapp.Value ? WhatsappTextures : KarmelitaTextures; 
     
     public void CheckKarmelitaSceneLoad()
     {   
@@ -154,11 +141,18 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         }
         else if (GameManager.instance.lastSceneName == Constants.KarmelitaSceneName)
         {
-            GameManager.instance.gameSettings.backerCredits = backerCredits;
-            HeroController.instance.SpriteFlash.IsBlocked = false;
-            HeroController.instance.heroLight.Alpha = 1f;
-            GameCameras.instance.hudCamera.gameObject.SetActive(true);
+            ResetFlags();
         }
+    }
+
+    public void ResetFlags()
+    {
+        foreach (var tracker in FindObjectsByType<HighlightTracker>(FindObjectsSortMode.None))
+            tracker.ResetMaterial();
+        GameManager.instance.gameSettings.backerCredits = backerCredits;
+        HeroController.instance.SpriteFlash.IsBlocked = false;
+        HeroController.instance.heroLight.Alpha = 1f;
+        GameCameras.instance.hudCamera.gameObject.SetActive(true);
     }
     
     public void OnKarmelitaSceneLoad()
@@ -185,6 +179,8 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     {
         if (GameManager.instance == null || HeroController.instance == null) return;
 
+        ResetFlags();
+        
         GameManager.instance.playerData.defeatedAntQueen = false;
         if (GameManager.instance.isPaused)
         {
@@ -204,7 +200,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     private void ForceCredits() => GameManager.instance.gameSettings.backerCredits = 1;
     private void DisableBackgroundGoons() => GameObject.Find("Boss Scene/Battle Scene/Wave 4").SetActive(false);
 
-    public void Log(string message)
+    public void Log(object message)
     {
         if (IsDebug.Value)
             Logger.LogInfo(message);
@@ -212,7 +208,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 
     public void OnWhatsappSet(object sender, EventArgs args)
     {
-        LoadKarmelitaTextures(isWhatsapp.Value);
+        UpdateTextures();
         wrapper?.ChangeTextures();
         harmony?.PatchAll(typeof(LocalizationPatches));
     }
@@ -222,7 +218,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         harmony?.UnpatchSelf();
         GameManager.instance.OnFinishedSceneTransition -= CheckKarmelitaSceneLoad;
         BossButtonDrawer.OnButtonPressed -= TeleportToKarmelitaScene;
-        SceneManager.sceneLoaded -= CheckMainMenuScene;
         isWhatsapp.SettingChanged -= OnWhatsappSet;
     }
 }

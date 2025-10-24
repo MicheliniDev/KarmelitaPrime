@@ -56,11 +56,11 @@ public class NewSlash1State(
                 new SetVelocityToPlayer()
                 {
                     Rb = wrapper.rb,
-                    velocity = 50f
+                    velocity = 55f
                 },
                 new DecelerateXY()
                 {
-                    decelerationX = 0.9f,
+                    decelerationX = 0.3f,
                     decelerationY = 0.9f
                 },
                 new PlayRandomClipAction()

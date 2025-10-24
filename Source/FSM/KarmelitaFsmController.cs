@@ -3,6 +3,7 @@ using System.Linq;
 using GenericVariableExtension;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using KarmelitaPrime.TripleTeleportSlash;
 using Mono.Cecil;
 using UnityEngine;
 
@@ -12,9 +13,9 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 {
     private KarmelitaPrimeMain main => KarmelitaPrimeMain.Instance;
     
-    private PlayMakerFSM fsm = fsm;
-    private PlayMakerFSM stunFsm = stunFsm;
-    private KarmelitaWrapper wrapper = wrapper;
+    private readonly PlayMakerFSM fsm = fsm;
+    private readonly PlayMakerFSM stunFsm = stunFsm;
+    private readonly KarmelitaWrapper wrapper = wrapper;
     
     private List<StateModifierBase> stateModifiers;
     private Dictionary<string, StateModifierBase> stateModifierCollection = new();
@@ -38,6 +39,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new Slash1Modifier(fsm, stunFsm, wrapper, this),
             new Slash3TransitionerState(fsm, stunFsm, wrapper, this),
             new Slash3Modifier(fsm, stunFsm, wrapper, this),
+            new Slash6Modifier(fsm, stunFsm, wrapper, this),
             new Slash9Modifier(fsm, stunFsm, wrapper, this),
             new CycloneAnticTransitionerState(fsm, stunFsm, wrapper, this),
             new CycloneAnticModifier(fsm, stunFsm, wrapper, this),
@@ -48,6 +50,13 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new DashGrindModifier(fsm, stunFsm, wrapper, this),
             new Phase3RecoveringState(fsm, stunFsm, wrapper, this),
             new Phase3KnockedState(fsm, stunFsm, wrapper, this),
+            new TeleportFinalState(fsm, stunFsm, wrapper, this),
+            new TripleTeleportSlash3State(fsm, stunFsm, wrapper, this),
+            new Teleport3State(fsm, stunFsm, wrapper, this),
+            new TripleTeleportSlash2State(fsm, stunFsm, wrapper, this),
+            new Teleport2State(fsm, stunFsm, wrapper, this),
+            new TripleTeleportSlash1State(fsm, stunFsm, wrapper, this),
+            new Teleport1State(fsm, stunFsm, wrapper, this),
         ];
         foreach (var modifier in stateModifiers)
         {
