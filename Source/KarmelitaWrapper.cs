@@ -51,7 +51,10 @@ public class KarmelitaWrapper : MonoBehaviour
         "P2 Roar Antic",
         "Phase 3 Knocked",
         "Phase 3 Recovering State",
-        "P3 Roar Antic"
+        "P2 Roar Antic",
+        "P2 Roar",
+        "P3 Roar Antic",
+        "P3 Roar"
     ];
     private float auraLevel;
 
@@ -63,9 +66,10 @@ public class KarmelitaWrapper : MonoBehaviour
     public RandomAudioClipTable AttackLongTable;
     public AudioClip SwordClip;
     public AudioClip LandClip;
+    public AudioClip CycloneClip;
     public AudioClip BossGenericDeathAudio;
     public AudioClip KarmelitaDeathAudio;
-    private void Awake()
+    public void Awake()
     {
         GetComponents();
         ChangeHealth();
@@ -75,10 +79,22 @@ public class KarmelitaWrapper : MonoBehaviour
         SetPhaseIndex(0);
         InitializeAnimationSpeedModifiers();
         SetupBlackScreen();
-        PreloadManager.LoadAssetBundles();
+        StartCoroutine(PreloadManager.LoadAllAssets());
         auraLevel = 0f;
         IsInHighlightMode = false;
         HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            GameObject swordPrefab = PreloadManager.Get<GameObject>("Song Knight Projectile", (projectile) =>
+            {
+                var instance = Instantiate(projectile, HeroController.instance.transform.position, Quaternion.identity);
+                instance.GetComponent<Rigidbody2D>().linearVelocityX = 20f;
+            });
+        }
     }
 
     private void GetComponents()
@@ -110,6 +126,10 @@ public class KarmelitaWrapper : MonoBehaviour
             if (audioClip.name.Contains("carmelita_spin_land"))
             {
                 LandClip = audioClip;
+            }
+            if (audioClip.name.Contains("carmelita_cyclone"))
+            {
+                CycloneClip = audioClip;
             }
         }
         
@@ -239,18 +259,6 @@ public class KarmelitaWrapper : MonoBehaviour
         actionsList.Remove(audioStopAction);
         fsm.Fsm.GetState("Stun Start").Actions = actionsList.ToArray();
     }
-    
-    private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
-    
-    public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
-    public float GetAnimationStartTime() => fsmController.GetStateStartTime();
-    
-    public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
-
-    public void TriggerPhase3()
-    {
-        fsmController.DoPhase3();
-    }
 
     public void DoHighlightEffects()
     {
@@ -322,11 +330,22 @@ public class KarmelitaWrapper : MonoBehaviour
         yield return null;
     }
 
+    public void EnableInvincible(bool invincible)
+    {
+        health.IsInvincible = invincible;
+    }
+    
+    private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
+    public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
+    public float GetAnimationStartTime() => fsmController.GetStateStartTime();
+    public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
+    public void TriggerPhase3() => fsmController.DoPhase3();
     public void LoseAura(float amount) => auraLevel -= amount;
     
     private void OnDestroy()
     {
         SetVocalAudioSource(true);
         IsInHighlightMode = false;
+        PreloadManager.UnloadAll();
     }
 }

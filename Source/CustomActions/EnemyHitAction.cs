@@ -26,9 +26,10 @@ public class EnemyHitAction : FsmStateAction
     {
         base.OnUpdate();
         elapsedTime += Time.deltaTime;
-        if (Owner.hp < hpOnEnter && !hasSentEvent && OnHitEvent != null && elapsedTime >= IgnoreHitStartDuration)
+        if (Owner.hp < hpOnEnter && !hasSentEvent && elapsedTime > IgnoreHitStartDuration)
         {
-            Fsm.Event(OnHitEvent);
+            if (OnHitEvent != null)
+                Fsm.Event(OnHitEvent);
             hasSentEvent = true;
         }
     }

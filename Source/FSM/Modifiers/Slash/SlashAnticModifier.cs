@@ -32,7 +32,7 @@ public class SlashAnticModifier(
         {
             FsmEvent = FsmEvent.GetFsmEvent("BLOCKED HIT"),
             ToState = "Counter Attack",
-            ToFsmState = fsm.Fsm.GetState("Counter Attack")
+            ToFsmState = fsm.Fsm.GetState("Counter Attack Pre")
         }).ToArray();
     }
 

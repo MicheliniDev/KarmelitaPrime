@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace KarmelitaPrime;
@@ -9,6 +10,9 @@ public class HighlightTracker : MonoBehaviour
     private Material[] originalMaterials;
     private Color[] originalColors;
     private ParticleSystem.MinMaxGradient[] originalGradients;
+
+    public bool IsSickle;
+    private List<SpriteFlash> flashers = new();
     private void Awake()
     {
         renderers = GetComponentsInChildren<Renderer>(true);
@@ -38,13 +42,39 @@ public class HighlightTracker : MonoBehaviour
 
     public void OnDisable()
     {
-        ResetMaterial();
+        if (IsSickle)
+        {
+            foreach (var flasher in flashers)
+            {
+                flasher.IsBlocked = false;
+                flasher.CancelFlash();
+            }
+        }
+        else
+            ResetMaterial();
     }
     
     public void ApplyHighlightEffect()
     {
+        if (IsSickle)
+        {
+            var renderer = TryGetComponent<SpriteFlash>(out var flasher)
+                ? flasher
+                : gameObject.AddComponent<SpriteFlash>();
+            renderer.Flash(Color.white, 1f, 0f, 9999f, 0f);
+            flashers.Add(renderer);
+            foreach (var meshRenderer in GetComponentsInChildren<MeshRenderer>(true))
+            {
+                var childSpriteFlasher = meshRenderer.TryGetComponent<SpriteFlash>(out var childFlasher)
+                    ? childFlasher
+                    : meshRenderer.gameObject.AddComponent<SpriteFlash>();
+                childSpriteFlasher.Flash(Color.white, 1f, 0f, 9999f, 0f);
+                flashers.Add(childSpriteFlasher);
+            }
+            return;
+        }
+        
         var flashShader = KarmelitaPrimeMain.Instance.FlashShader;
-
         foreach (var renderer in renderers)
         {
             if (renderer is ParticleSystemRenderer psRenderer)
@@ -68,8 +98,8 @@ public class HighlightTracker : MonoBehaviour
         for (int i = 0; i < renderers.Length; i++)
         {
             var renderer = renderers[i];
-            renderer.sharedMaterial = originalMaterials[i];
-            renderer.sharedMaterial.color = originalColors[i];
+            renderer.material = originalMaterials[i];
+            renderer.material.color = originalColors[i];
 
             if (renderer is ParticleSystemRenderer psRenderer)
             {

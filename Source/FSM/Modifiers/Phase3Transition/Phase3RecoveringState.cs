@@ -36,6 +36,16 @@ public class Phase3RecoveringState(
         {
             Name = "Phase 3 Recovering State",
             Actions = [
+                new FadeVelocityAction()
+                {
+                    Rb = wrapper.rb,
+                    Duration = 0.2f
+                },
+                new EnemyHitAction()
+                {
+                    Owner = wrapper.health,
+                    isInvincibleOnEnter = true,
+                },
                 new PlayClipAction()
                 {
                     Clip = wrapper.LandClip,

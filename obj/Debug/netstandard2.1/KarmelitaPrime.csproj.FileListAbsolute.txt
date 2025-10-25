@@ -76,3 +76,5 @@ C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1\Karmelit.A6C3B3BF.Up2Date
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1\KarmelitaPrime.dll
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\obj\Debug\netstandard2.1\KarmelitaPrime.pdb
+C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\CinematicUnityExplorer.BIE5.Mono.dll
+C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\UniverseLib.Mono.dll

@@ -20,6 +20,14 @@ public class Teleport1State(
             Actions = [new SendEventByName()
             {
                 sendEvent = "FINISHED",
+            },
+            new SetGravity2dScale()
+            {
+                gameObject = new FsmOwnerDefault()
+                {
+                    GameObject = wrapper.gameObject
+                },
+                gravityScale = 0f,
             }],
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();

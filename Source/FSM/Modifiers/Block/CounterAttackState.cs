@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using UnityEngine;
 
 namespace KarmelitaPrime;
 
@@ -35,16 +37,20 @@ public class CounterAttackState(
         {
             Name = "Counter Attack",
             Actions = [
-                new SetVelocityToPlayer()
+                /*new SetVelocityToPlayer()
                 {
                     Rb = wrapper.rb,
                     velocity = 80f,
-                },
-                new DecelerateXY()
+                },*/
+                new StartCoroutineAction()
                 {
-                    decelerationX = 0.6f,
-                    decelerationY = 0.9f
+                    Coroutine = LerpVelocity
                 },
+                /*new DecelerateXY()
+                {
+                    decelerationX = 0.9f,
+                    decelerationY = 0.9f
+                },*/
                 new AnimationPlayerAction()
                 {
                     animator = wrapper.animator,
@@ -62,19 +68,57 @@ public class CounterAttackState(
                 },
                 new PlayClipAction()
                 {
-                    Clip = wrapper.SwordClip,
+                    Clip = wrapper.CycloneClip,
                     Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value
+                },
+                new EnableGameObjectAction()
+                {
+                    GameObject = fsm.Fsm.GetFsmGameObject("SpinSlash 1").Value,
+                    ResetOnExit = true
                 }
             ],
             Transitions = [
                 new FsmTransition()
                 {
                     FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                    ToState = "Throw Antic",
-                    ToFsmState = fsm.Fsm.GetState("Throw Antic")
+                    ToState = "Cyclone Recoil",
+                    ToFsmState = fsm.Fsm.GetState("Cyclone Recoil")
                 }
             ]
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
+    }
+    
+    private IEnumerator LerpVelocity()
+    {
+        var rb = wrapper.rb;
+        Vector2 direction = Vector2.right * -wrapper.transform.localScale.x;
+        
+        float maxSpeed = 80f;                
+        float duration = 0.4f;                 
+    
+        float halfDuration = duration / 2f;
+        float accelerateDuration = halfDuration + (duration * 0.10f);
+        float decelerateDuration = halfDuration + (duration * 0.90f);
+        float elapsed = 0f;
+
+        while (elapsed < accelerateDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / accelerateDuration;
+            rb.linearVelocity = direction.normalized * Mathf.Lerp(0f, maxSpeed, t);
+            yield return null;
+        }
+
+        elapsed = 0f;
+        while (elapsed < decelerateDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / decelerateDuration;
+            rb.linearVelocity = direction.normalized * Mathf.Lerp(maxSpeed, 0f, t);
+            yield return null;
+        }
+
+        rb.linearVelocity = Vector3.zero;
     }
 }

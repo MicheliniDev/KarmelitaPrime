@@ -11,30 +11,28 @@ public class SickleRethrow2Modifier(
     : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
     public override string BindState => "Rethrow 2";
-    private FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
     public override void OnCreateModifier()
     {
+        BindFsmState.Transitions = [
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                ToState = "Rethrow 2 Transitioner",
+                ToFsmState = fsm.Fsm.GetState("Rethrow 2 Transitioner")
+            }
+        ];
     }
 
     public override void SetupPhase1Modifiers()
     {
-        var transitions = BindFsmState.Transitions.ToList();
-        transitions.Clear();
-        transitions.Add(new FsmTransition()
-        {
-            FsmEvent = finishedEvent,
-            ToFsmState = fsm.Fsm.GetState("Cyclone Antic"),
-            ToState = "Cycle Antic"
-        });
     }
 
     public override void SetupPhase2Modifiers()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void SetupPhase3Modifiers()
     {
-        throw new System.NotImplementedException();
     }
 }

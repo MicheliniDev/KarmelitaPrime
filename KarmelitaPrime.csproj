@@ -40,6 +40,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="CinematicUnityExplorer.BIE5.Mono">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\CinematicUnityExplorer\CinematicUnityExplorer.BIE5.Mono.dll</HintPath>
+    </Reference>
     <Reference Include="PlayMaker">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\PlayMaker.dll</HintPath>
     </Reference>
@@ -54,6 +57,9 @@
     </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\Hollow Knight Silksong_Data\Managed\Unity.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="UniverseLib.Mono">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\CinematicUnityExplorer\UniverseLib.Mono.dll</HintPath>
     </Reference>
 </ItemGroup>
 

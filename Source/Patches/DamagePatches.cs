@@ -11,6 +11,13 @@ namespace KarmelitaPrime;
 [HarmonyPatch]
 public class DamagePatches
 {
+    /*[HarmonyPrefix]
+    [HarmonyPatch(typeof(HeroController), "StartInvulnerable")]
+    private static void AlterIFrameDuration(ref HeroController __instance, ref float duration)
+    {
+        duration /= 2f;
+    }*/
+    
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
     private static void ClawlineAuraPatch(ref HealthManager __instance, ref HitInstance hitInstance)
@@ -26,13 +33,10 @@ public class DamagePatches
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
     private static void CancelContactDamageOnKarmelita(ref HeroController __instance, ref GameObject go, ref int damageAmount)
     {
-        if (SceneManager.GetActiveScene().name != Constants.KarmelitaSceneName || 
-            !go || !__instance || !KarmelitaPrimeMain.Instance.wrapper)
-        {
-            return;
-        }
-
-        if (go.layer == 11 && !KarmelitaPrimeMain.Instance.wrapper.ShouldDealContactDamage())
+        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
+            go.name == "Hunter Queen Boss" && go.layer == 11 && 
+            KarmelitaPrimeMain.Instance.wrapper &&
+            !KarmelitaPrimeMain.Instance.wrapper.ShouldDealContactDamage())
         {
             damageAmount = 0;
             return;

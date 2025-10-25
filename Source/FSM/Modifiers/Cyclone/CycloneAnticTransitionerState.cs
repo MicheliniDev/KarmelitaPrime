@@ -23,6 +23,12 @@ public class CycloneAnticTransitionerState(
 
     public override void SetupPhase2Modifiers()
     {
+        var newWeights = new WeightedRandomEventAction()
+        {
+            events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")],
+            weights = [.65f, .35f],//COULD BE A NICE INTRODUCTION TOT HE TELEPORT COMBO
+        };
+        BindFsmState.Actions[0] = newWeights;
     }
 
     public override void SetupPhase3Modifiers()

@@ -66,7 +66,7 @@ public class Slash9Modifier(
                 {
                     animator = wrapper.animator,
                     events = [toSlash2OnlyState, finishedEvent],
-                    weights = [.6f, .4f],
+                    weights = [.1f, .0f],
                     shortenEventTIme = 0.25f
                 };
             }

@@ -27,6 +27,7 @@ public class Slash1Modifier(
             Target = HeroController.instance.transform,
             Base = wrapper.transform,
             IsTeleportToBack = true,
+            AllowY = true,
             MinX = 135f,
             MaxX = 163f,
             MaxAttempts = 5,

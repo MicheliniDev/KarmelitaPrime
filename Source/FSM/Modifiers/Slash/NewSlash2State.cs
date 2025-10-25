@@ -13,7 +13,8 @@ public class NewSlash2State(
 {
     public override string BindState => "New Slash 2 State";
     public override float AnimationStartTime => 0f;
-    FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
+    private FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
+    private FsmEvent throwEvent => FsmEvent.GetFsmEvent("THROW");
     
     public override void OnCreateModifier()
     {
@@ -29,12 +30,27 @@ public class NewSlash2State(
                 FsmEvent = finishedEvent,
                 ToState = "Jump Antic",
                 ToFsmState = fsm.Fsm.GetState("Jump Antic")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = throwEvent,
+                ToState = "Throw Antic",
+                ToFsmState = fsm.Fsm.GetState("Throw Antic")
             }
         ];
     }
 
     public override void SetupPhase2Modifiers()
     {
+        for (int i = 0; i < BindFsmState.Actions.Length; i++)
+        {
+            if (BindFsmState.Actions[i] is AnimEndSendRandomEventAction animEnd)
+            {
+                animEnd.events = [finishedEvent, throwEvent];
+                animEnd.weights = [0.5f, 0.5f];
+                BindFsmState.Actions[i] = animEnd;
+            }
+        }
     }
 
     public override void SetupPhase3Modifiers()
@@ -53,15 +69,21 @@ public class NewSlash2State(
                     animator = wrapper.animator,
                     AnimationFinishedEvent = finishedEvent,
                 }, 
+                new AnimEndSendRandomEventAction()
+                {
+                    animator = wrapper.animator,
+                    events = [finishedEvent],
+                    weights = [1f]
+                },
                 new SetVelocityToPlayer()
                 {
                     Rb = wrapper.rb,    
-                    velocity = 30f
+                    velocity = 50f
                 },
-                new DecelerateXY()
+                new FadeVelocityAction()
                 {
-                    decelerationX = 0.9f,
-                    decelerationY = 0.9f
+                    Rb = wrapper.rb,
+                    Duration = .8f,
                 },
                 new PlayRandomClipAction()
                 {
@@ -72,6 +94,12 @@ public class NewSlash2State(
                 {
                     Clip = wrapper.SwordClip,
                     Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value
+                },
+                new EnableGameObjectAction()
+                {
+                    GameObject = fsm.Fsm.GetFsmGameObject("Slash 2").Value,
+                    Enable = true,
+                    ResetOnExit = true
                 }
             ],
         };

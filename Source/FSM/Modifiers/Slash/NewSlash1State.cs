@@ -56,11 +56,11 @@ public class NewSlash1State(
                 new SetVelocityToPlayer()
                 {
                     Rb = wrapper.rb,
-                    velocity = 55f
+                    velocity = 45f
                 },
                 new DecelerateXY()
                 {
-                    decelerationX = 0.3f,
+                    decelerationX = 0.9f,
                     decelerationY = 0.9f
                 },
                 new PlayRandomClipAction()
@@ -72,6 +72,12 @@ public class NewSlash1State(
                 {
                     Clip = wrapper.SwordClip,
                     Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value
+                },
+                new EnableGameObjectAction()
+                {
+                    GameObject = fsm.Fsm.GetFsmGameObject("Slash 1").Value,
+                    Enable = true,
+                    ResetOnExit = true
                 }
             ],
         };

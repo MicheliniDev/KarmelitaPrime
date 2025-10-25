@@ -25,22 +25,50 @@ public class Cyclone4Modifier(
         newActions.Add(new AnimEndSendRandomEventAction()
         {
             animator = wrapper.animator,
-            events = [FsmEvent.GetFsmEvent("DASH GRIND"), FsmEvent.GetFsmEvent("FINISHED")],
-            weights = [.5f, .5f],
+            events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
+            weights = [0.5f, 0.5f],
             shortenEventTIme = 0.4f
         });
         BindFsmState.Actions = newActions.ToArray();
+        var newTransitions = BindFsmState.Transitions.ToList();
+        newTransitions.AddRange([
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("DASH GRIND"),
+                ToState = "Set Dash Grind",
+                ToFsmState = fsm.Fsm.GetState("Set Dash Grind")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("THROW"),
+                ToState = "Throw Antic",
+                ToFsmState = fsm.Fsm.GetState("Throw Antic")
+            }
+        ]);
         BindFsmState.Transitions = BindFsmState.Transitions.Append(new FsmTransition()
         {
             FsmEvent = FsmEvent.GetFsmEvent("DASH GRIND"),
             ToState = "Set Dash Grind",
             ToFsmState = fsm.Fsm.GetState("Set Dash Grind")
-            
         }).ToArray();
     }
 
     public override void SetupPhase2Modifiers()
     {
+        for (int i = 0; i < BindFsmState.Actions.Length; i++)
+        {
+            if (BindFsmState.Actions[i] is AnimEndSendRandomEventAction animEnd)
+            {
+                animEnd = new AnimEndSendRandomEventAction()
+                {
+                    animator = wrapper.animator,
+                    events = [FsmEvent.GetFsmEvent("DASH GRIND"), FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
+                    weights = [.3f, .3f, .4f],
+                    shortenEventTIme = 0.4f
+                };
+                BindFsmState.Actions[i] = animEnd;
+            }
+        }
     }
 
     public override void SetupPhase3Modifiers()

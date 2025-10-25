@@ -25,7 +25,7 @@ public class CycloneAnticModifier(
             Owner = wrapper.health,
             OnHitEvent = FsmEvent.GetFsmEvent("BLOCKED HIT"),
             isInvincibleOnEnter = true,
-            IgnoreHitStartDuration = 0.45f
+            IgnoreHitStartDuration = 1f
         };
         var toBlockTransition = new FsmTransition()
         {

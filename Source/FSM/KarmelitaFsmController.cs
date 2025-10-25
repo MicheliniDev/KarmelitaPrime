@@ -32,6 +32,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         SubscribeStateChangedEvent();
         stateModifiers = [
             new CounterAttackState(fsm, stunFsm, wrapper, this),
+            new CounterAttackPreState(fsm, stunFsm, wrapper, this),
             new ApproachBlockModifier(fsm, stunFsm, wrapper, this),
             new SlashAnticModifier(fsm, stunFsm, wrapper, this),
             new NewSlash1State(fsm, stunFsm, wrapper, this),
@@ -39,7 +40,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new Slash1Modifier(fsm, stunFsm, wrapper, this),
             new Slash3TransitionerState(fsm, stunFsm, wrapper, this),
             new Slash3Modifier(fsm, stunFsm, wrapper, this),
-            new Slash6Modifier(fsm, stunFsm, wrapper, this),
+            new Slash4Modifier(fsm, stunFsm, wrapper, this),
             new Slash9Modifier(fsm, stunFsm, wrapper, this),
             new CycloneAnticTransitionerState(fsm, stunFsm, wrapper, this),
             new CycloneAnticModifier(fsm, stunFsm, wrapper, this),
@@ -48,8 +49,6 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new SpinAttackLandModifier(fsm, stunFsm, wrapper, this),
             new DashGrindTransitionerState(fsm, stunFsm, wrapper, this),
             new DashGrindModifier(fsm, stunFsm, wrapper, this),
-            new Phase3RecoveringState(fsm, stunFsm, wrapper, this),
-            new Phase3KnockedState(fsm, stunFsm, wrapper, this),
             new TeleportFinalState(fsm, stunFsm, wrapper, this),
             new TripleTeleportSlash3State(fsm, stunFsm, wrapper, this),
             new Teleport3State(fsm, stunFsm, wrapper, this),
@@ -57,6 +56,13 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new Teleport2State(fsm, stunFsm, wrapper, this),
             new TripleTeleportSlash1State(fsm, stunFsm, wrapper, this),
             new Teleport1State(fsm, stunFsm, wrapper, this),
+            new Phase3RecoveringState(fsm, stunFsm, wrapper, this),
+            new Phase3KnockedState(fsm, stunFsm, wrapper, this),
+            new Rethrow3State(fsm, stunFsm, wrapper, this),
+            new ThrowAnticTransitionerState(fsm, stunFsm, wrapper, this),
+            new ThrowAnticModifier(fsm, stunFsm, wrapper, this),
+            new Rethrow2TransitionerState(fsm, stunFsm, wrapper, this),
+            new SickleRethrow2Modifier(fsm, stunFsm, wrapper, this),
         ];
         foreach (var modifier in stateModifiers)
         {
@@ -97,7 +103,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 
     private void CheckPhase2State(FsmState state)
     {
-        if (state.Name != "Set P2 Roar") return;
+        if (state.Name != "P2 Roar Antic") return;
         wrapper.SetPhaseIndex(1);
         ApplyPhase2Modifiers();
     }

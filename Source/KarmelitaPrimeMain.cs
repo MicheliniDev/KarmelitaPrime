@@ -52,18 +52,17 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
             ));
         IsDebug = Config.Bind("Settings", "IsDebug", false, "PLAY EDUARDO'S AWAKENING :D");
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
-        
+
         StartCoroutine(WaitUntilGameManager());
         
         BossButtonDrawer.OnButtonPressed += TeleportToKarmelitaScene;
         isWhatsapp.SettingChanged += OnWhatsappSet;
         
         LoadKarmelitaTextures(isWhatsapp.Value);
-        //GetResources();
         
         Instance = this;
     }
-
+    
     private IEnumerator WaitUntilGameManager()
     {
         yield return new WaitUntil(() => GameManager.instance);
@@ -151,6 +150,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
             tracker.ResetMaterial();
         GameManager.instance.gameSettings.backerCredits = backerCredits;
         HeroController.instance.SpriteFlash.IsBlocked = false;
+        HeroController.instance.SpriteFlash.CancelFlash();
         HeroController.instance.heroLight.Alpha = 1f;
         GameCameras.instance.hudCamera.gameObject.SetActive(true);
     }

@@ -7,7 +7,7 @@ public class AirSickleThrowModifier(
     KarmelitaFsmController fsmController)
     : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
-    public override string BindState { get; }
+    public override string BindState => "";
     public override void OnCreateModifier()
     {
         

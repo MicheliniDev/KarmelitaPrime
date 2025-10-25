@@ -9,6 +9,7 @@ public class TeleportAction : FsmStateAction
     public Transform Target;
     public Transform Base;
     public bool IsTeleportToBack;
+    public bool AllowY;
     public float MinX;
     public float MaxX;  
     public int MaxAttempts;
@@ -41,7 +42,9 @@ public class TeleportAction : FsmStateAction
             if (candidatePosition.x < MinX || candidatePosition.x > MaxX)
                 continue;
             
-            Vector3 finalPosition = new Vector3(candidatePosition.x, Base.position.y, Base.position.z);
+            Vector3 finalPosition = new Vector3(candidatePosition.x, 
+                AllowY ? candidatePosition.y : Base.position.y, 
+                Base.position.z);
             Base.position = finalPosition;
             return; 
         }
