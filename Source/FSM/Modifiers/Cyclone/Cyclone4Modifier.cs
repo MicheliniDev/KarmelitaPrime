@@ -45,12 +45,7 @@ public class Cyclone4Modifier(
                 ToFsmState = fsm.Fsm.GetState("Throw Antic")
             }
         ]);
-        BindFsmState.Transitions = BindFsmState.Transitions.Append(new FsmTransition()
-        {
-            FsmEvent = FsmEvent.GetFsmEvent("DASH GRIND"),
-            ToState = "Set Dash Grind",
-            ToFsmState = fsm.Fsm.GetState("Set Dash Grind")
-        }).ToArray();
+        BindFsmState.Transitions = newTransitions.ToArray();
     }
 
     public override void SetupPhase2Modifiers()

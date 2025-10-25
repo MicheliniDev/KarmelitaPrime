@@ -38,6 +38,7 @@ public class ThrowAnticTransitionerState(
                 animator = wrapper.animator,
                 events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")],
                 weights = [.65f, .35f],
+                shortenEventTIme = 0.5f
             }],
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();

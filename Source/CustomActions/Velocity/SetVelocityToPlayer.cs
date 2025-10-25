@@ -12,18 +12,17 @@ public class SetVelocityToPlayer : FsmStateAction
     public override void OnEnter()
     {
         base.OnEnter();
-        var scale = Rb.gameObject.transform.localScale;
-        var xScale = scale.x;
-
-        var xDistance = HeroController.instance.transform.position.x - Rb.gameObject.transform.position.x;
-
-        if ((xDistance > 0f && xScale > 0f) || (xDistance < 0f && xScale < 0f))
+        if (HeroController.instance.transform.position.x > Rb.transform.position.x &&
+            Rb.transform.localScale.x > 0 ||
+            HeroController.instance.transform.position.x < Rb.transform.position.x &&
+            Rb.transform.localScale.x < 0)
         {
+            Vector3 scale = Rb.transform.localScale;
             scale.x *= -1f;
+            Rb.transform.localScale = scale;
         }
-
-        Rb.gameObject.transform.localScale = scale;
-        Rb.linearVelocityX = velocity * (Rb.gameObject.transform.localScale.x < 0 ? 1 : -1);
+        Rb.linearVelocityX = velocity * -Rb.gameObject.transform.localScale.normalized.x;  
         Rb.linearVelocityY = velocityY;
+        Finish();
     }
 }

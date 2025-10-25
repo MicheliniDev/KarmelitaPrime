@@ -11,16 +11,9 @@ namespace KarmelitaPrime;
 [HarmonyPatch]
 public class DamagePatches
 {
-    /*[HarmonyPrefix]
-    [HarmonyPatch(typeof(HeroController), "StartInvulnerable")]
-    private static void AlterIFrameDuration(ref HeroController __instance, ref float duration)
-    {
-        duration /= 2f;
-    }*/
-    
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
-    private static void ClawlineAuraPatch(ref HealthManager __instance, ref HitInstance hitInstance)
+    private static void AutoPhase3TriggerPatch(ref HealthManager __instance, ref HitInstance hitInstance)
     {
         if (SceneManager.GetActiveScene().name != Constants.KarmelitaSceneName
             || !KarmelitaPrimeMain.Instance.wrapper) return;
@@ -40,6 +33,16 @@ public class DamagePatches
         {
             damageAmount = 0;
             return;
+        }
+    }
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
+    private static void BoostDamageFromSource(ref HeroController __instance, ref GameObject go, ref int damageAmount)
+    {
+        if (go.name.Contains("Song Knight Projectile"))
+        {
+            damageAmount = 3;
         }
     }
     

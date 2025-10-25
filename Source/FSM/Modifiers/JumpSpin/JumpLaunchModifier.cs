@@ -12,6 +12,18 @@ public class JumpLaunchModifier(
     public override string BindState => "Jump Launch";
     public override void OnCreateModifier()
     {
+        for (int i = 0; i < BindFsmState.Actions.Length; i++)
+        {
+            if (BindFsmState.Actions[i] is SetVelocityByScale scale)
+            {
+                BindFsmState.Actions[i] = new SetVelocityToPlayer()
+                {
+                    Rb = wrapper.rb,
+                    velocity = -scale.speed.Value,
+                    velocityY = scale.ySpeed.Value
+                };
+            }
+        }
     }
 
     public override void SetupPhase1Modifiers()
@@ -36,9 +48,9 @@ public class JumpLaunchModifier(
                 wait.time = waitTime;
             }
 
-            if (action is SetVelocityByScale velocity)
+            if (action is SetVelocityToPlayer velocity)
             {
-                velocity.ySpeed = yspeed;
+                velocity.velocityY = yspeed;
             }
         }
     }

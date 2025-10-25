@@ -69,34 +69,25 @@ public class KarmelitaWrapper : MonoBehaviour
     public AudioClip CycloneClip;
     public AudioClip BossGenericDeathAudio;
     public AudioClip KarmelitaDeathAudio;
-    public void Awake()
+    
+    public GameObject SicklePrefab;
+
+    public IEnumerator Start()
     {
+        yield return StartCoroutine(PreloadManager.LoadAllAssets());
         GetComponents();
         ChangeHealth();
-        SetupFsmController();
         ChangeTextures();
+        SetupFsmController();
         SetVocalAudioSource(false);
         SetPhaseIndex(0);
         InitializeAnimationSpeedModifiers();
         SetupBlackScreen();
-        StartCoroutine(PreloadManager.LoadAllAssets());
         auraLevel = 0f;
         IsInHighlightMode = false;
         HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            GameObject swordPrefab = PreloadManager.Get<GameObject>("Song Knight Projectile", (projectile) =>
-            {
-                var instance = Instantiate(projectile, HeroController.instance.transform.position, Quaternion.identity);
-                instance.GetComponent<Rigidbody2D>().linearVelocityX = 20f;
-            });
-        }
-    }
-
+    
     private void GetComponents()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -146,6 +137,14 @@ public class KarmelitaWrapper : MonoBehaviour
             if (table.name.Contains("Karmelita-Attack-Long"))
             {
                 AttackLongTable = table;
+            }
+        }
+
+        foreach (var prefab in Resources.FindObjectsOfTypeAll<GameObject>())
+        {
+            if (prefab.name.Contains("Carmelita Sickle"))
+            {
+                SicklePrefab = prefab;
             }
         }
     }
@@ -341,6 +340,42 @@ public class KarmelitaWrapper : MonoBehaviour
     public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
     public void TriggerPhase3() => fsmController.DoPhase3();
     public void LoseAura(float amount) => auraLevel -= amount;
+    
+    public void OnPrefabSpawn(GameObject prefab, Transform spawnPoint)
+    {
+        var instance = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+        OnPrefabSpawn(instance);
+    }
+    
+    public void OnPrefabSpawn(GameObject prefab)
+    {
+        if (IsInHighlightMode)
+        {
+            if (!prefab.TryGetComponent<HighlightTracker>(out var tracker))
+                tracker = prefab.AddComponent<HighlightTracker>();
+            tracker.ApplyHighlightEffect();   
+        }
+        
+        if (prefab.name.Contains("Song Knight Projectile"))
+        {
+            var instance = prefab;
+            
+            var Rb = instance.GetComponent<Rigidbody2D>();
+            Vector3 scale = instance.transform.localScale;
+            Vector3 position = instance.transform.position;
+            
+            if (HeroController.instance.transform.position.x > instance.transform.position.x && instance.transform.localScale.x > 0 ||
+                HeroController.instance.transform.position.x < instance.transform.position.x && instance.transform.localScale.x < 0)
+                scale.x *= -1f;
+
+            scale.x *= 4f;
+            scale.y *= 1.5f;
+            position.y += 0.4f;
+            instance.transform.localScale = scale;
+            instance.transform.position = position;
+            Rb.linearVelocityX = 60f * -Rb.gameObject.transform.localScale.normalized.x;   
+        }
+    }
     
     private void OnDestroy()
     {

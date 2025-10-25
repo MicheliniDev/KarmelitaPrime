@@ -146,6 +146,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 
     public void ResetFlags()
     {
+        Logger.LogInfo("RESETTING FLAGS");
         foreach (var tracker in FindObjectsByType<HighlightTracker>(FindObjectsSortMode.None))
             tracker.ResetMaterial();
         GameManager.instance.gameSettings.backerCredits = backerCredits;

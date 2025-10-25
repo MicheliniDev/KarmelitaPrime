@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using HutongGames.PlayMaker.Actions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
@@ -22,35 +23,30 @@ public static class PreloadManager
         RuntimePlatform.LinuxPlayer => "StandaloneLinux64",
         _ => ""
     };
-    
+
+    public static bool AssetsLoaded;
     public static IEnumerator LoadAllAssets()
     {
+        AssetsLoaded = false;
         foreach (string bundleName in BundleNames)
         {
             var bundle = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(bundle => bundle.name == bundleName);
             if (bundle)
             {
                 KarmelitaPrimeMain.Instance.Log($"PreloadManager: {bundle.name} WAS ALREADY LOADED");
-                loadedBundles.Add(bundle.name, bundle);
+                loadedBundles.TryAdd(bundle.name, bundle);
                 yield return TryLoadAssets(bundle);
             }
             else
             {
                 string bundlePath = $"{Addressables.RuntimePath}/{platformPath}/{bundleName}.bundle";
-
-                if (!File.Exists(bundlePath))
-                {
-                    KarmelitaPrimeMain.Instance.Log($"PreloadManager: Bundle file not found: {bundleName}. Skipping.");
-                    continue;
-                }
-
                 var bundleLoadRequest = AssetBundle.LoadFromFileAsync(bundlePath);
                 yield return bundleLoadRequest;
 
                 var loadedBundle = bundleLoadRequest.assetBundle;
                 if (!loadedBundle)
                 {
-                    KarmelitaPrimeMain.Instance.Log($"PreloadManager: BUNDLE PATH: {bundlePath} IS NULL");
+                    KarmelitaPrimeMain.Instance.Log($"WHAT THE FUCK DO YOU MEAN THE BUNDLE IS NULL????????W");
                     continue; 
                 }
                 KarmelitaPrimeMain.Instance.Log($"PreloadManager: Successfully loaded bundle: {loadedBundle.name}");
@@ -59,6 +55,7 @@ public static class PreloadManager
             }
         }
         KarmelitaPrimeMain.Instance.Log("PreloadManager: Finished loading all specified assets.");
+        AssetsLoaded = true;
     }
 
     private static IEnumerator TryLoadAssets(AssetBundle assetBundle)
@@ -76,13 +73,13 @@ public static class PreloadManager
                     
                     var loadedAsset = assetLoadRequest.asset;
                     if (loadedAsset)
+                    {
                         KarmelitaPrimeMain.Instance.Log(preloadedAssets.TryAdd(loadedAsset.name, loadedAsset)
                             ? $"Preloaded Asset: {loadedAsset.name}"
-                            : $"Asset named '{loadedAsset.name}' already exists in the dictionary. Skipping.");   
-                    else
-                    {
-                        KarmelitaPrimeMain.Instance.Log($"FAILED to load asset at path: {assetPath}");
+                            : $"Asset named '{loadedAsset.name}' already exists in the dictionary. Skipping.");
                     }
+                    else
+                        KarmelitaPrimeMain.Instance.Log($"FAILED to load asset at path: {assetPath}");
                 }
             }
         } 
@@ -103,7 +100,7 @@ public static class PreloadManager
         KarmelitaPrimeMain.Instance.Log($"PreloadManager: Asset '{name}' not found in preloaded assets.");
         return null;
     }
-    
+
     public static void UnloadAll()
     {
         foreach (var bundle in loadedBundles)
@@ -112,5 +109,6 @@ public static class PreloadManager
             KarmelitaPrimeMain.Instance.Log($"Unloaded and destroyed assets from bundle: {bundle.Key}");
         }
         preloadedAssets.Clear();
+        loadedBundles.Clear();
     }
 }

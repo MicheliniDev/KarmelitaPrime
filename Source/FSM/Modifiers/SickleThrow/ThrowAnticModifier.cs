@@ -1,4 +1,5 @@
-﻿using HutongGames.PlayMaker;
+﻿using System.Linq;
+using HutongGames.PlayMaker;
 
 namespace KarmelitaPrime;
 
@@ -20,6 +21,11 @@ public class ThrowAnticModifier(
                 ToFsmState = fsm.Fsm.GetState("Throw Antic Transitioner"),
             }
         ];
+        BindFsmState.Actions = BindFsmState.Actions.Prepend(new FadeVelocityAction()
+        {
+            Rb = wrapper.rb,
+            Duration = 0.5f 
+        }).ToArray();
     }
 
     public override void SetupPhase1Modifiers()

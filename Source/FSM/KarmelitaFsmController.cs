@@ -29,6 +29,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     public void Initialize()
     {
         RerouteFirstRoarState();
+        ChangeToBigTitle();
         SubscribeStateChangedEvent();
         stateModifiers = [
             new CounterAttackState(fsm, stunFsm, wrapper, this),
@@ -58,6 +59,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new Teleport1State(fsm, stunFsm, wrapper, this),
             new Phase3RecoveringState(fsm, stunFsm, wrapper, this),
             new Phase3KnockedState(fsm, stunFsm, wrapper, this),
+            new Rethrow3ThrowState(fsm, stunFsm, wrapper, this),
             new Rethrow3State(fsm, stunFsm, wrapper, this),
             new ThrowAnticTransitionerState(fsm, stunFsm, wrapper, this),
             new ThrowAnticModifier(fsm, stunFsm, wrapper, this),
@@ -84,6 +86,19 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
                 transition.ToState = jumpInAnticState.Name;
             }
         }
+    }
+
+    private void ChangeToBigTitle()
+    {
+        var roarState = fsm.Fsm.States.FirstOrDefault(state => state.Name == "Roar");
+        var actionsList = roarState!.Actions.ToList();
+        var title = roarState.Actions.FirstOrDefault(action => action is DisplayBossTitle);
+        var actionToRemove = title;
+        actionsList.Remove(actionToRemove);
+        roarState.Actions = actionsList.ToArray();
+            
+        var landState = fsm.Fsm.States.FirstOrDefault(state => state.Name == "Entry Fall");
+        landState!.Actions = landState.Actions.Append(title).ToArray();
     }
     
     private void SubscribeStateChangedEvent() => fsm.Fsm.StateChanged += OnStateChanged;
@@ -161,6 +176,9 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         if (!fsm.Fsm.GetFsmBool("Phase 2").Value)
             ApplyPhase2Modifiers();
         wrapper.DoHighlightEffects();
+        var pos = wrapper.transform.position;
+        pos.y = 21.421f;
+        wrapper.transform.position = pos;
         fsm.SetState("Phase 3 Knocked");    
     }
 }

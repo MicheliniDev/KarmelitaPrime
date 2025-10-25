@@ -53,8 +53,8 @@ public class Rethrow2TransitionerState(
                 animEnd = new AnimEndSendRandomEventAction()
                 {
                     animator = wrapper.animator,
-                    events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK"), FsmEvent.GetFsmEvent("THROW")],
-                    weights = [0.3f, 0.3f, 0.4f],
+                    events = [FsmEvent.GetFsmEvent("ATTACK"), FsmEvent.GetFsmEvent("THROW")],
+                    weights = [0.5f, 0.5f],
                 };
                 BindFsmState.Actions[i] = animEnd;
             }

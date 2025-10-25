@@ -40,11 +40,16 @@ public class CycloneAnticTransitionerState(
         var bindState = new FsmState(fsm.Fsm)
         {
             Name = BindState,
-            Actions = [new WeightedRandomEventAction()
-            {
-                events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")],
-                weights = [.65f, .35f],
-            }],
+            Actions = 
+            [
+                new CheckHeroYAction()
+                {
+                    Target = wrapper.transform,
+                    Threshold = 2f,
+                    AboveEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                    BelowEvent = FsmEvent.GetFsmEvent("ATTACK"),
+                }
+            ],
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
 
