@@ -16,7 +16,7 @@ public class SpriteFlashPatch
     [HarmonyPatch(typeof(SpriteFlash),"SetParams")]
     private static void StopFlashRoutine(ref SpriteFlash __instance, ref float flashAmount, ref Color flashColour)
     {
-        if (ShouldBlock())
+        if (ShouldBlock() && __instance)
         {
             flashAmount = 1f;
             flashColour = Color.white;

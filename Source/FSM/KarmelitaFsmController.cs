@@ -21,12 +21,6 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     
     private List<StateModifierBase> stateModifiers;
     private Dictionary<string, StateModifierBase> stateModifierCollection = new();
-    
-    public string NextMove
-    {
-        get => fsm.FsmVariables.FindFsmString("Next Move").Value;
-        set => fsm.FsmVariables.FindFsmString("Next Move").Value = value;
-    }
 
     public void Initialize()
     {
@@ -66,7 +60,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new ThrowAnticTransitionerState(fsm, stunFsm, wrapper, this),
             new ThrowAnticModifier(fsm, stunFsm, wrapper, this),
             new Rethrow2TransitionerState(fsm, stunFsm, wrapper, this),
-            new SickleRethrow2Modifier(fsm, stunFsm, wrapper, this),
+            new Rethrow2Modifier(fsm, stunFsm, wrapper, this),
         ];
         foreach (var modifier in stateModifiers)
         {
@@ -74,6 +68,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             stateModifierCollection.Add(modifier!.BindState, modifier);
         }
         ApplyPhase1Modifiers();
+        SetIdleTime(0.25f, 0.5f);
     }
     
     private void RerouteFirstRoarState()
@@ -110,6 +105,12 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     
     private void SubscribeStateChangedEvent() => fsm.Fsm.StateChanged += OnStateChanged;
 
+    private void SetIdleTime(float min, float max)
+    {
+        fsm.Fsm.GetFsmFloat("Idle Min").Value = min;
+        fsm.Fsm.GetFsmFloat("Idle Max").Value = max;
+    }
+    
     private void OnStateChanged(FsmState state)
     {
         CheckStunState(state);
@@ -128,6 +129,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         if (state.Name != "P2 Roar Antic") return;
         wrapper.SetPhaseIndex(1);
         ApplyPhase2Modifiers();
+        SetIdleTime(0.20f, 0.25f);
     }
 
     private void CheckPhase3State(FsmState state)
@@ -238,12 +240,11 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     public void DoPhase3()
     {
         if (fsm.Fsm.GetFsmBool("Phase 3").Value || fsm.ActiveStateName == "BG Dance") return;
+        
         if (!fsm.Fsm.GetFsmBool("Phase 2").Value)
             ApplyPhase2Modifiers();
+        
         wrapper.DoHighlightEffects();
-        var pos = wrapper.transform.position;
-        pos.y = 21.421f;
-        wrapper.transform.position = pos;
         fsm.SetState("Phase 3 Knocked");    
     }
     

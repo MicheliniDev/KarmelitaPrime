@@ -9,6 +9,7 @@ public class TeleportAction : FsmStateAction
     public Transform Target;
     public Transform Base;
     public bool IsTeleportToBack;
+    public Vector2 OverrideDirection;
     public bool AllowY;
     public float MinX;
     public float MaxX;  
@@ -26,6 +27,10 @@ public class TeleportAction : FsmStateAction
             else if (Target.transform.localScale.x < 0f) // Facing Right
                 direction = Vector2.left; 
         }
+        else if (OverrideDirection != Vector2.zero)
+        {
+            direction = OverrideDirection;
+        }
         else
         {
             if (Target.transform.localScale.x > 0f) 
@@ -37,7 +42,7 @@ public class TeleportAction : FsmStateAction
         for (int i = 0; i < MaxAttempts; i++)
         {
             float offset = Random.Range(MinTeleportDistance, MaxTeleportDistance);
-            Vector2 candidatePosition = (Vector2)Target.position + (direction * offset);
+            Vector2 candidatePosition = (Vector2)Target.position + (offset * direction);
 
             if (candidatePosition.x < MinX || candidatePosition.x > MaxX)
                 continue;

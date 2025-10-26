@@ -14,7 +14,7 @@ public class Slash9Modifier(
     public override string BindState => "Slash 9";
     private FsmEvent toSlash2OnlyState => FsmEvent.GetFsmEvent("SLASH COMBO");
     private FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
-    
+    private FsmEvent toCycloneEvent => FsmEvent.GetFsmEvent("CYCLONE SPIN");
     public override void OnCreateModifier()
     {
     }
@@ -29,8 +29,8 @@ public class Slash9Modifier(
             new AnimEndSendRandomEventAction()
             {
                 animator = wrapper.animator,
-                events = [finishedEvent],
-                weights = [1f],
+                events = [finishedEvent, toCycloneEvent],
+                weights = [.5f, .5f],
                 shortenEventTIme = 0.25f
             },
             new FaceHeroAction()
@@ -46,6 +46,12 @@ public class Slash9Modifier(
                 FsmEvent = finishedEvent,
                 ToState = "Slash End",
                 ToFsmState = fsm.Fsm.GetState("Slash End"),
+            },
+            new FsmTransition()
+            {
+                FsmEvent = toCycloneEvent,
+                ToState = "Cyclone Antic",
+                ToFsmState = fsm.Fsm.GetState("Cyclone Antic"),
             }
         ];
     }
@@ -65,8 +71,8 @@ public class Slash9Modifier(
                 BindFsmState.Actions[i] = new AnimEndSendRandomEventAction()
                 {
                     animator = wrapper.animator,
-                    events = [toSlash2OnlyState, finishedEvent],
-                    weights = [.1f, .0f],
+                    events = [toSlash2OnlyState, toCycloneEvent],
+                    weights = [.5f, .5f],
                     shortenEventTIme = 0.25f
                 };
             }

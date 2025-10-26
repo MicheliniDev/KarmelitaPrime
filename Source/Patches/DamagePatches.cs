@@ -26,16 +26,15 @@ public class DamagePatches
     
     [HarmonyPrefix]
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
-    private static void CancelContactDamageOnKarmelita(ref HeroController __instance, ref GameObject go, ref int damageAmount)
+    private static bool CancelContactDamageOnKarmelita(ref HeroController __instance, ref GameObject go, ref int damageAmount)
     {
-        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
-            go.name == "Hunter Queen Boss" && go.layer == 11 && 
-            KarmelitaPrimeMain.Instance.wrapper &&
-            !KarmelitaPrimeMain.Instance.wrapper.ShouldDealContactDamage())
+        if (KarmelitaPrimeMain.Instance.wrapper &&
+            !KarmelitaPrimeMain.Instance.wrapper.ShouldDealContactDamage()
+            && go.name == "Hunter Queen Boss")
         {
-            damageAmount = 0;
-            return;
+            return false;
         }
+        return true;
     }
     
     [HarmonyPrefix]

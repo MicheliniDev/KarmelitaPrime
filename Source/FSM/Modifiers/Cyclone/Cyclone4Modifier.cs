@@ -43,12 +43,36 @@ public class Cyclone4Modifier(
                 FsmEvent = FsmEvent.GetFsmEvent("THROW"),
                 ToState = "Throw Antic",
                 ToFsmState = fsm.Fsm.GetState("Throw Antic")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                ToState = "Face Away",
+                ToFsmState = fsm.Fsm.GetState("Face Away")
             }
         ]);
         BindFsmState.Transitions = newTransitions.ToArray();
     }
 
     public override void SetupPhase2Modifiers()
+    {
+        for (int i = 0; i < BindFsmState.Actions.Length; i++)
+        {
+            if (BindFsmState.Actions[i] is AnimEndSendRandomEventAction animEnd)
+            {
+                animEnd = new AnimEndSendRandomEventAction()
+                {
+                    animator = wrapper.animator,
+                    events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
+                    weights = [.8f, .2f], 
+                    shortenEventTIme = 0.4f
+                };
+                BindFsmState.Actions[i] = animEnd;
+            }
+        }
+    }
+
+    public override void SetupPhase3Modifiers()
     {
         for (int i = 0; i < BindFsmState.Actions.Length; i++)
         {
@@ -64,9 +88,5 @@ public class Cyclone4Modifier(
                 BindFsmState.Actions[i] = animEnd;
             }
         }
-    }
-
-    public override void SetupPhase3Modifiers()
-    {
     }
 }
