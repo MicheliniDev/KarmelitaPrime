@@ -68,7 +68,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         yield return new WaitUntil(() => GameManager.instance);
         yield return null;
         GameManager.instance.OnFinishedSceneTransition += CheckKarmelitaSceneLoad;
-        StoreBackerCredits();
         GetResources();
         yield return null;
     }
@@ -149,7 +148,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         Logger.LogInfo("RESETTING FLAGS");
         foreach (var tracker in FindObjectsByType<HighlightTracker>(FindObjectsSortMode.None))
             tracker.ResetMaterial();
-        GameManager.instance.gameSettings.backerCredits = backerCredits;
         HeroController.instance.SpriteFlash.IsBlocked = false;
         HeroController.instance.SpriteFlash.CancelFlash();
         HeroController.instance.heroLight.Alpha = 1f;
@@ -160,7 +158,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     {
         DisableBackgroundGoons();
         AddWrapper();
-        ForceCredits();
         SetupHeroAwake();
     }
 
@@ -197,8 +194,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         GameManager.instance.BeginSceneTransition(karmelitaSceneInfo);
     }
     
-    private void StoreBackerCredits() => backerCredits = GameManager.instance.gameSettings.backerCredits;
-    private void ForceCredits() => GameManager.instance.gameSettings.backerCredits = 1;
     private void DisableBackgroundGoons() => GameObject.Find("Boss Scene/Battle Scene/Wave 4").SetActive(false);
 
     public void Log(object message)

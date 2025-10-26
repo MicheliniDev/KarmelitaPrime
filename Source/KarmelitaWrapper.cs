@@ -44,6 +44,7 @@ public class KarmelitaWrapper : MonoBehaviour
         "Stun Damage",
         "Damage Recover",
         "Stun Recover",
+        "Approach Block",
         "Jump Antic",
         "Spin Attack Land",
         "Throw Fall",
@@ -60,15 +61,20 @@ public class KarmelitaWrapper : MonoBehaviour
 
     public GameObject BlackScreen;
     public bool IsInHighlightMode;
+    public bool hasFakedP3;
 
     public RandomAudioClipTable StunTable;
     public RandomAudioClipTable AttackQuickTable;
     public RandomAudioClipTable AttackLongTable;
+    public AudioClip KarmelitaRoarFinal;
     public AudioClip SwordClip;
     public AudioClip LandClip;
     public AudioClip CycloneClip;
     public AudioClip BossGenericDeathAudio;
     public AudioClip KarmelitaDeathAudio;
+    
+    public GameObject KarmelitaTeleportEffect;
+    public AudioClip KarmelitaTeleportAudio;
     
     public GameObject SicklePrefab;
 
@@ -85,7 +91,29 @@ public class KarmelitaWrapper : MonoBehaviour
         SetupBlackScreen();
         auraLevel = 0f;
         IsInHighlightMode = false;
+        hasFakedP3 = false;
         HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
+    }
+
+    private void Update()
+    {
+        /*if (Input.GetKeyDown(KeyCode.G))
+        {
+            var source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value.GetComponent<AudioSource>();
+            var audioEvent = new AudioEvent()
+            {
+                Clip = KarmelitaTeleportAudio,
+                PitchMin = 1f,
+                PitchMax = 1f,
+                Volume = source.volume
+            };
+            audioEvent.SpawnAndPlayOneShot(transform.position);
+        }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            var obj = Instantiate(KarmelitaTeleportEffect, transform.position, Quaternion.identity);
+            obj.SetActive(true);
+        }*/
     }
     
     private void GetComponents()
@@ -122,6 +150,14 @@ public class KarmelitaWrapper : MonoBehaviour
             {
                 CycloneClip = audioClip;
             }
+            if (audioClip.name.Contains("bone_hunter_dive"))
+            {
+                KarmelitaTeleportAudio = audioClip;
+            }
+            if (audioClip.name.Contains("Karmelita-Roar-002_shortened"))
+            {
+                KarmelitaRoarFinal = audioClip;
+            }   
         }
         
         foreach (var table in Resources.FindObjectsOfTypeAll<RandomAudioClipTable>())
@@ -146,6 +182,10 @@ public class KarmelitaWrapper : MonoBehaviour
             {
                 SicklePrefab = prefab;
             }
+            if (prefab.name.Contains("Emerge Effect"))
+            {
+                KarmelitaTeleportEffect = prefab;
+            }
         }
     }
 
@@ -168,6 +208,42 @@ public class KarmelitaWrapper : MonoBehaviour
         collection.materials[1].mainTexture = KarmelitaPrimeMain.Instance.CurrentTextures[1];
     }
 
+    public void OnPrefabSpawn(GameObject prefab, Transform spawnPoint)
+    {
+        var instance = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+        OnPrefabSpawn(instance);
+    }
+    
+    public void OnPrefabSpawn(GameObject prefab)
+    {
+        if (IsInHighlightMode)
+        {
+            if (!prefab.TryGetComponent<HighlightTracker>(out var tracker))
+                tracker = prefab.AddComponent<HighlightTracker>();
+            tracker.ApplyHighlightEffect();   
+        }
+        
+        if (prefab.name.Contains("Song Knight Projectile"))
+        {
+            var instance = prefab;
+            
+            var Rb = instance.GetComponent<Rigidbody2D>();
+            Vector3 scale = instance.transform.localScale;
+            Vector3 position = instance.transform.position;
+            
+            if (HeroController.instance.transform.position.x > instance.transform.position.x && instance.transform.localScale.x > 0 ||
+                HeroController.instance.transform.position.x < instance.transform.position.x && instance.transform.localScale.x < 0)
+                scale.x *= -1f;
+
+            scale.x *= 4f;
+            scale.y *= 1.5f;
+            position.y += 0.4f;
+            instance.transform.localScale = scale;
+            instance.transform.position = position;
+            Rb.linearVelocityX = 60f * -Rb.gameObject.transform.localScale.normalized.x;   
+        }
+    }
+    
     public void SetPhaseIndex(int index)
     {
         PhaseIndex = index;
@@ -329,53 +405,24 @@ public class KarmelitaWrapper : MonoBehaviour
         yield return null;
     }
 
-    public void EnableInvincible(bool invincible)
-    {
-        health.IsInvincible = invincible;
-    }
+    public void EnableInvincible(bool invincible) => health.IsInvincible = invincible;
     
     private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
+    
     public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
     public float GetAnimationStartTime() => fsmController.GetStateStartTime();
     public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
+    
     public void TriggerPhase3() => fsmController.DoPhase3();
-    public void LoseAura(float amount) => auraLevel -= amount;
-    
-    public void OnPrefabSpawn(GameObject prefab, Transform spawnPoint)
-    {
-        var instance = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
-        OnPrefabSpawn(instance);
-    }
-    
-    public void OnPrefabSpawn(GameObject prefab)
-    {
-        if (IsInHighlightMode)
-        {
-            if (!prefab.TryGetComponent<HighlightTracker>(out var tracker))
-                tracker = prefab.AddComponent<HighlightTracker>();
-            tracker.ApplyHighlightEffect();   
-        }
-        
-        if (prefab.name.Contains("Song Knight Projectile"))
-        {
-            var instance = prefab;
-            
-            var Rb = instance.GetComponent<Rigidbody2D>();
-            Vector3 scale = instance.transform.localScale;
-            Vector3 position = instance.transform.position;
-            
-            if (HeroController.instance.transform.position.x > instance.transform.position.x && instance.transform.localScale.x > 0 ||
-                HeroController.instance.transform.position.x < instance.transform.position.x && instance.transform.localScale.x < 0)
-                scale.x *= -1f;
 
-            scale.x *= 4f;
-            scale.y *= 1.5f;
-            position.y += 0.4f;
-            instance.transform.localScale = scale;
-            instance.transform.position = position;
-            Rb.linearVelocityX = 60f * -Rb.gameObject.transform.localScale.normalized.x;   
-        }
+    public void FakeP3()
+    {
+        if (hasFakedP3) return;
+        fsmController.FakePhase3();
+        hasFakedP3 = true;
     }
+    
+    public void LoseAura(float amount) => auraLevel -= amount;
     
     private void OnDestroy()
     {

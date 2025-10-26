@@ -13,7 +13,27 @@ public class Rethrow2TransitionerState(
     public override string BindState => "Rethrow 2 Transitioner";
     public override void OnCreateModifier()
     {
-        CreateBindState();
+        var bindState = new FsmState(fsm.Fsm)
+        {
+            Name = BindState,
+            Actions = [new AnimEndSendRandomEventAction()
+            {
+                animator = wrapper.animator,
+                events = [FsmEvent.GetFsmEvent("FINISHED")],
+                weights = [1f],
+                shortenEventTIme = 0.3f
+            }],
+        };
+        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
+
+        BindFsmState.Transitions = [
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                ToState = "Start Idle",
+                ToFsmState = fsm.Fsm.GetState("Start Idle")
+            },
+        ];
     }
 
     public override void SetupPhase1Modifiers()
@@ -31,6 +51,7 @@ public class Rethrow2TransitionerState(
                     animator = wrapper.animator,
                     events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")],
                     weights = [0.5f, 0.5f],
+                    shortenEventTIme = 0.3f
                 };
                 BindFsmState.Actions[i] = animEnd;
             }
@@ -55,6 +76,7 @@ public class Rethrow2TransitionerState(
                     animator = wrapper.animator,
                     events = [FsmEvent.GetFsmEvent("ATTACK"), FsmEvent.GetFsmEvent("THROW")],
                     weights = [0.5f, 0.5f],
+                    shortenEventTIme = 0.3f
                 };
                 BindFsmState.Actions[i] = animEnd;
             }
@@ -66,29 +88,5 @@ public class Rethrow2TransitionerState(
             ToState = "Rethrow 3",
             ToFsmState = fsm.Fsm.GetState("Rethrow 3")
         }).ToArray();
-    }
-    
-    private void CreateBindState()
-    {
-        var bindState = new FsmState(fsm.Fsm)
-        {
-            Name = BindState,
-            Actions = [new AnimEndSendRandomEventAction()
-            {
-                animator = wrapper.animator,
-                events = [FsmEvent.GetFsmEvent("FINISHED")],
-                weights = [1f],
-            }],
-        };
-        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
-
-        BindFsmState.Transitions = [
-            new FsmTransition()
-            {
-                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                ToState = "Start Idle",
-                ToFsmState = fsm.Fsm.GetState("Start Idle")
-            },
-        ];
     }
 }

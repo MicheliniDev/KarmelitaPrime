@@ -27,7 +27,7 @@ public class Cyclone4Modifier(
             animator = wrapper.animator,
             events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
             weights = [0.5f, 0.5f],
-            shortenEventTIme = 0.4f
+            shortenEventTIme = 0.7f
         });
         BindFsmState.Actions = newActions.ToArray();
         var newTransitions = BindFsmState.Transitions.ToList();

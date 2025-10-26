@@ -73,7 +73,8 @@ public class NewSlash2State(
                 {
                     animator = wrapper.animator,
                     events = [finishedEvent],
-                    weights = [1f]
+                    weights = [1f],
+                    shortenEventTIme = 0.3f
                 },
                 new SetVelocityToPlayer()
                 {

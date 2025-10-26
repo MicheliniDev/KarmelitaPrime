@@ -16,10 +16,12 @@ public class DamagePatches
     private static void AutoPhase3TriggerPatch(ref HealthManager __instance, ref HitInstance hitInstance)
     {
         if (SceneManager.GetActiveScene().name != Constants.KarmelitaSceneName
-            || !KarmelitaPrimeMain.Instance.wrapper) return;
-
+            || !KarmelitaPrimeMain.Instance.wrapper) return; 
+        
         if (__instance.hp <= Constants.KarmelitaPhase3HpThreshold)
             KarmelitaPrimeMain.Instance.wrapper.TriggerPhase3();
+        else if (__instance.hp <= Constants.KarmelitaPhase2_5HpThreshold)
+            KarmelitaPrimeMain.Instance.wrapper.FakeP3();
     }
     
     [HarmonyPrefix]

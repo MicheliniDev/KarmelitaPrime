@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using GenericVariableExtension;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
@@ -98,7 +100,12 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         roarState.Actions = actionsList.ToArray();
             
         var landState = fsm.Fsm.States.FirstOrDefault(state => state.Name == "Entry Fall");
-        landState!.Actions = landState.Actions.Append(title).ToArray();
+        landState!.Actions = landState.Actions.Append(new DisplayBossTitle()
+        {
+            areaTitleObject = GameObject.Find("_GameCameras/HudCamera/In-game/Area Title"),
+            displayRight = false,
+            bossTitle = "HUNTER_QUEEN_BC"
+        }).ToArray();
     }
     
     private void SubscribeStateChangedEvent() => fsm.Fsm.StateChanged += OnStateChanged;
@@ -170,6 +177,64 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         return !stateModifierCollection.TryGetValue(fsm.ActiveStateName, out var value) ? 0f : value.AnimationStartTime;
     }
 
+    public void FakePhase3()
+    {
+        var bindState = new FsmState(fsm.Fsm)
+        {
+            Name = "Fake Phase 3",
+            Transitions = 
+            [
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                    ToState = "Set Dash Grind",
+                    ToFsmState = fsm.Fsm.GetState("Set Dash Grind")
+                }
+            ]
+        };
+        CloneActions(fsm.Fsm.GetState("P3 Roar Antic"), bindState);
+        var actionsList = bindState.Actions.ToList();
+        var actionToRemove = actionsList.FirstOrDefault(action => action is Tk2dPlayAnimationWithEvents);
+        actionsList.Remove(actionToRemove);
+        actionsList.AddRange(
+        [
+            new AnimationPlayerAction()
+            {
+                animator = wrapper.animator,
+                ClipName = "Roar",
+            },
+            new StartRoarEmitter()
+            {
+                spawnPoint = new FsmOwnerDefault()
+                {
+                    OwnerOption = OwnerDefaultOption.UseOwner,
+                    GameObject = wrapper.gameObject
+                },
+                delay = 0f,
+                stunHero = false,
+                roarBurst = false,
+                isSmall = false,
+                noVisualEffect = false,
+                forceThroughBind = false,
+                stopOnExit = true,
+            },
+            new Wait()
+            {
+                time = 1.6f,
+                finishEvent = FsmEvent.GetFsmEvent("FINISHED")
+            },
+            new FadeVelocityAction()
+            {
+                Rb = wrapper.rb,
+                Duration = 0.01f
+            },
+        ]);
+        bindState.Actions = actionsList.ToArray();
+        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
+        
+        fsm.SetState("Fake Phase 3");
+    }
+    
     public void DoPhase3()
     {
         if (fsm.Fsm.GetFsmBool("Phase 3").Value || fsm.ActiveStateName == "BG Dance") return;
@@ -180,5 +245,30 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         pos.y = 21.421f;
         wrapper.transform.position = pos;
         fsm.SetState("Phase 3 Knocked");    
+    }
+    
+    private void CloneActions(FsmState source, FsmState target)
+    {
+        //This is way too useful, why didn't I make it earlier? Am I stupid?
+        var originalActions = source.Actions;
+        target.Actions = new FsmStateAction[originalActions.Length];
+        for (int i = 0; i < originalActions.Length; i++)
+        {
+            var action = originalActions[i];
+            target.Actions[i] = CloneAction(action);
+        }
+    }
+
+   private FsmStateAction CloneAction(FsmStateAction originalActions)
+    {
+        var actionsType = originalActions.GetType();
+        var actionCopy = (FsmStateAction)Activator.CreateInstance(actionsType);
+
+        var actionFields = actionsType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        foreach (var field in actionFields)
+        {
+            field.SetValue(actionCopy, field.GetValue(originalActions));
+        }
+        return actionCopy;
     }
 }

@@ -55,7 +55,7 @@ public class AuraFarmPatches
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.NailParry))]
     private static void NailClashAuraPatch(ref HeroController __instance)
     {
-        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName)
+        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName && KarmelitaPrimeMain.Instance.wrapper)
         {
             KarmelitaPrimeMain.Instance.wrapper.FarmAura(5f);
         }
@@ -65,7 +65,7 @@ public class AuraFarmPatches
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.CrossStitchInvuln))]
     private static void CrossStitchAuraPatch(ref HeroController __instance)
     {
-        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName)
+        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName && KarmelitaPrimeMain.Instance.wrapper)
         {
             KarmelitaPrimeMain.Instance.wrapper.FarmAura(10f);
         }
