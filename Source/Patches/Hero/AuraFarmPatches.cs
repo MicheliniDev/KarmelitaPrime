@@ -1,14 +1,14 @@
 ﻿using HarmonyLib;
 using UnityEngine.SceneManagement;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches.Hero;
 
 [HarmonyPatch]
 public class AuraFarmPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
-    private static void ClawlineAuraPatch(ref HealthManager __instance, ref HitInstance hitInstance)
+    private static void GrappleHookAuraPatch(ref HealthManager __instance, ref HitInstance hitInstance)
     {
         if (SceneManager.GetActiveScene().name != Constants.KarmelitaSceneName
             || !KarmelitaPrimeMain.Instance.wrapper || 

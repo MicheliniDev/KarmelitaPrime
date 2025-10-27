@@ -6,7 +6,7 @@ using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches;
 
 [HarmonyPatch]
 public class DamagePatches

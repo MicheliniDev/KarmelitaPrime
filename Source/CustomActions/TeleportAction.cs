@@ -44,9 +44,15 @@ public class TeleportAction : FsmStateAction
             float offset = Random.Range(MinTeleportDistance, MaxTeleportDistance);
             Vector2 candidatePosition = (Vector2)Target.position + (offset * direction);
 
-            if (candidatePosition.x < MinX || candidatePosition.x > MaxX)
+            if (i == MaxAttempts - 1)
+                candidatePosition.x = Mathf.Clamp(candidatePosition.x, MinX, MaxX);
+            else if (candidatePosition.x < MinX || candidatePosition.x > MaxX)
                 continue;
             
+            if (AllowY && Target.transform.position.y <= Base.transform.position.y)
+            {
+                candidatePosition.y = Target.transform.position.y;
+            }
             Vector3 finalPosition = new Vector3(candidatePosition.x, 
                 AllowY ? candidatePosition.y : Base.position.y, 
                 Base.position.z);

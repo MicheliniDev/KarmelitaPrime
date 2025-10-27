@@ -28,9 +28,11 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         ChangeToBigTitle();
         SubscribeStateChangedEvent();
         stateModifiers = [
+            //PARRIES AND COUNTER
             new CounterAttackState(fsm, stunFsm, wrapper, this),
             new CounterAttackPreState(fsm, stunFsm, wrapper, this),
             new ApproachBlockModifier(fsm, stunFsm, wrapper, this),
+            //SLASHES
             new SlashAnticModifier(fsm, stunFsm, wrapper, this),
             new NewSlash1State(fsm, stunFsm, wrapper, this),
             new NewSlash2State(fsm, stunFsm, wrapper, this),
@@ -39,28 +41,69 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new Slash3Modifier(fsm, stunFsm, wrapper, this),
             new Slash4Modifier(fsm, stunFsm, wrapper, this),
             new Slash9Modifier(fsm, stunFsm, wrapper, this),
+            //CYCLONE
             new CycloneAnticTransitionerState(fsm, stunFsm, wrapper, this),
             new CycloneAnticModifier(fsm, stunFsm, wrapper, this),
             new Cyclone4Modifier(fsm, stunFsm, wrapper, this),
+            //SCREW ATTACK
             new JumpLaunchModifier(fsm, stunFsm, wrapper, this),
             new SpinAttackLandModifier(fsm, stunFsm, wrapper, this),
+            //DASH GRIND
             new DashGrindTransitionerState(fsm, stunFsm, wrapper, this),
             new DashGrindModifier(fsm, stunFsm, wrapper, this),
-            new TeleportFinalState(fsm, stunFsm, wrapper, this),
+            //TELEPORT COMBO P3
+            //7
+            new Teleport7DashGrindState(fsm, stunFsm, wrapper, this),
+            new Teleport7RecoveryState(fsm, stunFsm, wrapper, this),
+            new Teleport7State(fsm, stunFsm, wrapper, this),
+            new Teleport7PreState(fsm, stunFsm, wrapper, this),
+            //6
+            new Teleport6WindSlashState(fsm, stunFsm, wrapper, this),
+            new Teleport6RecoveryState(fsm, stunFsm, wrapper, this),
+            new Teleport6State(fsm, stunFsm, wrapper, this),
+            new Teleport6PreState(fsm, stunFsm, wrapper, this),
+            //5
+            new Teleport5SickleThrow(fsm, stunFsm, wrapper, this),
+            new Teleport5SickleThrowPrepareRightState(fsm, stunFsm, wrapper, this),
+            new Teleport5SickleThrowPrepareLeftState(fsm, stunFsm, wrapper, this),
+            new Teleport5SickleCheckDirectionState(fsm, stunFsm, wrapper, this),
+            new Teleport5RecoveryState(fsm, stunFsm, wrapper, this),
+            new Teleport5State(fsm, stunFsm, wrapper, this),
+            new Teleport5PreState(fsm, stunFsm, wrapper, this),
+            //4
+            new Teleport4WindSlash3State(fsm, stunFsm, wrapper, this),
+            new Teleport4WindSlash2State(fsm, stunFsm, wrapper, this),
+            new Teleport4WindSlash1State(fsm, stunFsm, wrapper, this),
+            new Teleport4CounterAttackState(fsm, stunFsm, wrapper, this),
+            new Teleport4RecoveryState(fsm, stunFsm, wrapper, this),
+            new Teleport4State(fsm, stunFsm, wrapper, this),
+            new Teleport4PreState(fsm, stunFsm, wrapper, this),
+            //3
             new TripleTeleportSlash3State(fsm, stunFsm, wrapper, this),
+            new Teleport3RecoveryState(fsm, stunFsm, wrapper, this),
             new Teleport3State(fsm, stunFsm, wrapper, this),
+            new Teleport3PreState(fsm, stunFsm, wrapper, this),
+            //2
             new TripleTeleportSlash2State(fsm, stunFsm, wrapper, this),
+            new Teleport2RecoveryState(fsm, stunFsm, wrapper, this),
             new Teleport2State(fsm, stunFsm, wrapper, this),
+            new Teleport2PreState(fsm, stunFsm, wrapper, this),
+            //1
             new TripleTeleportSlash1State(fsm, stunFsm, wrapper, this),
+            new Teleport1RecoveryState(fsm, stunFsm, wrapper, this),
             new Teleport1State(fsm, stunFsm, wrapper, this),
+            new Teleport1PreState(fsm, stunFsm, wrapper, this),
+            //PHASE 3 CHANGE
             new Phase3RecoveringState(fsm, stunFsm, wrapper, this),
             new Phase3KnockedState(fsm, stunFsm, wrapper, this),
+            //SICKLE THROW
             new Rethrow3ThrowState(fsm, stunFsm, wrapper, this),
             new Rethrow3State(fsm, stunFsm, wrapper, this),
             new ThrowAnticTransitionerState(fsm, stunFsm, wrapper, this),
             new ThrowAnticModifier(fsm, stunFsm, wrapper, this),
             new Rethrow2TransitionerState(fsm, stunFsm, wrapper, this),
             new Rethrow2Modifier(fsm, stunFsm, wrapper, this),
+            new DoubleThrowQuestionModifier(fsm, stunFsm, wrapper, this),
         ];
         foreach (var modifier in stateModifiers)
         {
@@ -245,10 +288,11 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             ApplyPhase2Modifiers();
         
         wrapper.DoHighlightEffects();
-        fsm.SetState("Phase 3 Knocked");    
+        fsm.SetState("Phase 3 Knocked");
+        SetTransitionToTeleportCombo();
     }
     
-    private void CloneActions(FsmState source, FsmState target)
+    public void CloneActions(FsmState source, FsmState target)
     {
         //This is way too useful, why didn't I make it earlier? Am I stupid?
         var originalActions = source.Actions;
@@ -271,5 +315,19 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             field.SetValue(actionCopy, field.GetValue(originalActions));
         }
         return actionCopy;
+    }
+
+    private void SetTransitionToTeleportCombo()
+    {
+        var roarState = fsm.Fsm.GetState("P3 Roar");
+        roarState.Transitions =
+        [
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                ToState = "Teleport 1 Pre",
+                ToFsmState = fsm.Fsm.GetState("Teleport 1 Pre")
+            }
+        ];
     }
 }

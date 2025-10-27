@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches.Effects;
 
 [HarmonyPatch]
 public class SpriteFlashPatch

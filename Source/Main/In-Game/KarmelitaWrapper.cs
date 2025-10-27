@@ -6,6 +6,7 @@ using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using KarmelitaPrime.Managers;
 using static KarmelitaPrime.Constants;
 
 namespace KarmelitaPrime;
@@ -49,6 +50,7 @@ public class KarmelitaWrapper : MonoBehaviour
     private Dictionary<string, float> animationSpeedCollection;
     private readonly string[] statesToCancelContactDamage =
     [
+        //This array is way bigger than I expected it would be :(
         "Start Idle",
         "Movement 1",
         "Movement 2",
@@ -70,6 +72,27 @@ public class KarmelitaWrapper : MonoBehaviour
         "Spin Attack Land",
         "Throw Fall",
         "Throw Land",
+        "Teleport 1 Pre",
+        "Teleport 1",
+        "Teleport 1 Recovery",
+        "Teleport 2 Pre",
+        "Teleport 2",
+        "Teleport 2 Recovery",
+        "Teleport 3 Pre",
+        "Teleport 3",
+        "Teleport 3 Recovery",
+        "Teleport 4 Pre",
+        "Teleport 4",
+        "Teleport 4 Recovery",
+        "Teleport 5 Pre",
+        "Teleport 5",
+        "Teleport 5 Recovery",
+        "Teleport 6 Pre",
+        "Teleport 6",
+        "Teleport 6 Recovery",
+        "Teleport 7 Pre",
+        "Teleport 7",
+        "Teleport 7 Recovery",
         "P2 Roar Antic",
         "Phase 3 Knocked",
         "Phase 3 Recovering State",
@@ -93,27 +116,6 @@ public class KarmelitaWrapper : MonoBehaviour
         IsInHighlightMode = false;
         hasFakedP3 = false;
         HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
-    }
-
-    private void Update()
-    {
-        /*if (Input.GetKeyDown(KeyCode.G))
-        {
-            var source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value.GetComponent<AudioSource>();
-            var audioEvent = new AudioEvent()
-            {
-                Clip = KarmelitaTeleportAudio,
-                PitchMin = 1f,
-                PitchMax = 1f,
-                Volume = source.volume
-            };
-            audioEvent.SpawnAndPlayOneShot(transform.position);
-        }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            var obj = Instantiate(KarmelitaTeleportEffect, transform.position, Quaternion.identity);
-            obj.SetActive(true);
-        }*/
     }
     
     private void GetComponents()
@@ -234,7 +236,7 @@ public class KarmelitaWrapper : MonoBehaviour
             position.y += 0.4f;
             instance.transform.localScale = scale;
             instance.transform.position = position;
-            Rb.linearVelocityX = 60f * -Rb.gameObject.transform.localScale.normalized.x;   
+            Rb.linearVelocityX = 40f * -Rb.gameObject.transform.localScale.normalized.x;   
         }
     }
     
@@ -401,17 +403,23 @@ public class KarmelitaWrapper : MonoBehaviour
     }
     
     private void SetVocalAudioSource(bool active) => vocalSource.gameObject.SetActive(active);
-    public float GetAnimationSpeedModifier(string clip) => animationSpeedCollection.GetValueOrDefault(clip, 1f);
+
+    public float GetAnimationSpeedModifier(string clip)
+    {
+        if (fsm.ActiveStateName.Contains("Teleport 4 Wind Slash"))
+            return 1f;
+        return animationSpeedCollection.GetValueOrDefault(clip, 1f);
+    }
     public float GetAnimationStartTime() => fsmController.GetStateStartTime();
     public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
     public void LoseAura(float amount) => auraLevel -= amount;
 
     public void TriggerPhase3()
     {
-        var pos = transform.position;
-        pos.y = 21.13f; //21.421f
-        transform.position = pos;
         fsmController.DoPhase3();
+        var pos = transform.position;
+        pos.y = 21.421f;
+        transform.position = pos;
     }
     
     public void FakeP3()

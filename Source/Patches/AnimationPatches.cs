@@ -2,7 +2,7 @@
 using HutongGames.PlayMaker.Actions;
 using UnityEngine.SceneManagement;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches;
 
 [HarmonyPatch]
 public class AnimationPatch

@@ -21,20 +21,6 @@ public class Slash1Modifier(
         {
             Transform = wrapper.transform
         }).ToArray();
-        /*
-         BindFsmState.Actions = BindFsmState.Actions.Prepend(new TeleportAction()
-        {
-            Target = HeroController.instance.transform,
-            Base = wrapper.transform,
-            IsTeleportToBack = true,
-            AllowY = true,
-            MinX = 135f,
-            MaxX = 163f,
-            MaxAttempts = 5,
-            MinTeleportDistance = -3f,
-            MaxTeleportDistance = -5f
-        }).ToArray();
-         */
     }
 
     public override void SetupPhase2Modifiers()

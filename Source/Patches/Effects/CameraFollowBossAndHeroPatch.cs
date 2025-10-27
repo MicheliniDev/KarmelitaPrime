@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches.Effects;
 
 [HarmonyPatch]
 public class CameraFollowBossAndHeroPatch
@@ -13,8 +13,8 @@ public class CameraFollowBossAndHeroPatch
     [HarmonyPatch(typeof(CameraTarget), nameof(CameraTarget.Update))]
     private static bool MakeCameraFollowBoss(ref CameraTarget __instance)
     {
-        if (!Constants.IsBlackWhiteHighlight)
-            return true;
+        //if (!Constants.IsBlackWhiteHighlight)
+          //  return true;
 
         float midpoint = (karmelitaTransform.position.x + heroTransform.position.x) / 2f;
         float midpointY = (karmelitaTransform.position.y + heroTransform.position.y) / 2f;

@@ -4,7 +4,7 @@ using HarmonyLib;
 using HutongGames.PlayMaker.Actions;
 using UnityEngine;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches.Effects;
 
 [HarmonyPatch]
 public class RecolorPoolObjectPatches

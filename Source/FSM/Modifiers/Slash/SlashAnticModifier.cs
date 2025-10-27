@@ -19,11 +19,6 @@ public class SlashAnticModifier(
 
     public override void SetupPhase1Modifiers()
     {
-        /*BindFsmState.Actions = BindFsmState.Actions.Append(new GetFromPreloadManagerAction()
-        {
-            PrefabName = "Song Knight Projectile",
-            SpawnPosition = fsm.Fsm.GetFsmGameObject("Throw Point").Value.transform,
-        }).ToArray();*/
     }
 
     public override void SetupPhase2Modifiers()

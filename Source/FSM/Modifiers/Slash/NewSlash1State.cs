@@ -14,6 +14,8 @@ public class NewSlash1State(
     public override string BindState => "New Slash 1 State";
     public override float AnimationStartTime => 0f;
     FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
+    FsmEvent longEvent => FsmEvent.GetFsmEvent("LONG");
+    FsmEvent regularEvent => FsmEvent.GetFsmEvent("ATTACK");
     
     public override void OnCreateModifier()
     {
@@ -29,6 +31,18 @@ public class NewSlash1State(
                 FsmEvent = finishedEvent,
                 ToState = "Set Air Throw",
                 ToFsmState = fsm.Fsm.GetState("Set Air Throw")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = longEvent,
+                ToState = "Cyclone Antic",
+                ToFsmState = fsm.Fsm.GetState("Cyclone Antic")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = regularEvent,
+                ToState = "New Slash 2 State",
+                ToFsmState = fsm.Fsm.GetState("New Slash 2 State")
             }
         ];
     }
@@ -51,7 +65,12 @@ public class NewSlash1State(
                 {
                     ClipName = "Slash 1",
                     animator = wrapper.animator,
-                    AnimationFinishedEvent = finishedEvent
+                },
+                new AnimEndSendRandomEventAction()
+                {
+                    animator = wrapper.animator,
+                    events = [longEvent, finishedEvent, regularEvent],
+                    weights = [.35f, .35f, .3f]
                 },
                 new SetVelocityToPlayer()
                 {

@@ -2,7 +2,7 @@
 using BepInEx.Configuration;
 using UnityEngine;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Drawers;
 
 public static class BossButtonDrawer
 {

@@ -16,6 +16,7 @@ public class CheckHeroTooCloseAction : FsmStateAction
             Fsm.Event(TrueEvent);
         else if (FalseEvent != null)
             Fsm.Event(FalseEvent);
+        Finish();
     }
 
     private float GetDistance() => Mathf.Abs(HeroController.instance.transform.position.x - Owner.transform.position.x);

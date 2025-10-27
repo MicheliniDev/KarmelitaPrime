@@ -9,7 +9,7 @@ using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
 using static KarmelitaPrime.Constants;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Managers;
 
 public static class PreloadManager
 {

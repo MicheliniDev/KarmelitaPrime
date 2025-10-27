@@ -2,9 +2,8 @@
 using HutongGames.PlayMaker;
 using UnityExplorer.CacheObject;
 using UnityExplorer.CacheObject.Views;
-using UniverseLib;
 
-namespace KarmelitaPrime.Source.Patches;
+namespace KarmelitaPrime.Patches;
 
 [HarmonyPatch]
 public class ShowFSMExplorerPatch
@@ -14,7 +13,7 @@ public class ShowFSMExplorerPatch
     [HarmonyPatch(typeof(CacheObjectBase), "SetValueState")]
     public static bool blehhh(CacheObjectBase __instance, CacheObjectCell cell, CacheObjectBase.ValueStateArgs args)
     {
-        if (cell is not CacheListEntryCell listEntry)
+        if (cell is not CacheListEntryCell)
                 return true;
 
         void Convert(string name)
@@ -24,7 +23,7 @@ public class ShowFSMExplorerPatch
                         __instance, 
                         UniverseLib.Utility.ToStringUtility.ToStringWithType(
                         __instance.Value, 
-                        __instance.FallbackType, 
+                        __instance.FallbackType,
                         true
                     )
                 + $" - <i><color=#b0edff>{name}</color></i>"

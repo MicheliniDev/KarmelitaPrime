@@ -5,7 +5,7 @@ using HutongGames.PlayMaker.Actions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches.Effects;
 
 [HarmonyPatch]
 public class BossTitlePatch

@@ -11,6 +11,9 @@ public class SpawnPrefabAction : FsmStateAction
     public override void OnEnter()
     {
         base.OnEnter();
-        Object.Instantiate(Prefab, Transform ? Transform.position : Position, Quaternion.identity);
+        var prefab = Object.Instantiate(Prefab, Transform ? Transform.position : Position, Quaternion.identity);
+        if (!prefab.activeInHierarchy || !prefab.activeSelf)
+            prefab.SetActive(true);
+        Finish();
     }
 }

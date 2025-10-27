@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using TeamCherry.Localization;
 
-namespace KarmelitaPrime;
+namespace KarmelitaPrime.Patches;
 
 [HarmonyPatch]
 public class LocalizationPatches
