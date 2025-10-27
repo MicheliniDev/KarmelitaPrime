@@ -13,7 +13,7 @@ public class CheckHeroYAction : FsmStateAction
     public override void OnEnter()
     {
         base.OnEnter();
-        if (HeroController.instance.transform.position.y > Target.position.y + Threshold)
+        if (HeroController.instance.transform.position.y > (Target.position.y + Threshold))
             Fsm.Event(AboveEvent);
         else 
             Fsm.Event(BelowEvent);

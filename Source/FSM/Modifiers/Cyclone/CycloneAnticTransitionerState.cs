@@ -14,7 +14,35 @@ public class CycloneAnticTransitionerState(
     public override string BindState => "Cyclone Antic Transitioner State";
     public override void OnCreateModifier()
     {
-        CreateBindState();
+        var bindState = new FsmState(fsm.Fsm)
+        {
+            Name = BindState,
+            Actions = 
+            [
+                new CheckHeroYAction()
+                {
+                    Target = wrapper.transform,
+                    Threshold = 1.5f,
+                    AboveEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                    BelowEvent = FsmEvent.GetFsmEvent("ATTACK"),
+                }
+            ],
+            Transitions = [
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                    ToState = "Jump Launch",
+                    ToFsmState = fsm.Fsm.GetState("Jump Launch")
+                },
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("ATTACK"),
+                    ToState = "Cyclone 1",
+                    ToFsmState = fsm.Fsm.GetState("Cyclone 1")
+                }
+            ]
+        };
+        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
     }
 
     public override void SetupPhase1Modifiers()
@@ -33,39 +61,5 @@ public class CycloneAnticTransitionerState(
 
     public override void SetupPhase3Modifiers()
     {
-    }
-
-    private void CreateBindState()
-    {
-        var bindState = new FsmState(fsm.Fsm)
-        {
-            Name = BindState,
-            Actions = 
-            [
-                new CheckHeroYAction()
-                {
-                    Target = wrapper.transform,
-                    Threshold = 2f,
-                    AboveEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                    BelowEvent = FsmEvent.GetFsmEvent("ATTACK"),
-                }
-            ],
-        };
-        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
-
-        BindFsmState.Transitions = [
-            new FsmTransition()
-            {
-                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                ToState = "Jump Launch",
-                ToFsmState = fsm.Fsm.GetState("Jump Launch")
-            },
-            new FsmTransition()
-            {
-                FsmEvent = FsmEvent.GetFsmEvent("ATTACK"),
-                ToState = "Cyclone 1",
-                ToFsmState = fsm.Fsm.GetState("Cyclone 1")
-            }
-        ];
     }
 }

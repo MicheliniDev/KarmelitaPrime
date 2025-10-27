@@ -136,6 +136,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         HeroController.instance.SpriteFlash.CancelFlash();
         HeroController.instance.heroLight.Alpha = 1f;
         GameCameras.instance.hudCamera.gameObject.SetActive(true);
+        HeroController.instance.transform.Find("Vignette").gameObject.SetActive(true);
         GameObject.Find("_GameCameras/CameraParent/tk2dCamera/SceneParticlesController").SetActive(true);
     }
     

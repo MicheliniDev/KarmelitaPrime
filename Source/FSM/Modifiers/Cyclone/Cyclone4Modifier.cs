@@ -25,7 +25,7 @@ public class Cyclone4Modifier(
         newActions.Add(new AnimEndSendRandomEventAction()
         {
             animator = wrapper.animator,
-            events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
+            events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")],
             weights = [0.5f, 0.5f],
             shortenEventTIme = 0.7f
         });
@@ -39,10 +39,10 @@ public class Cyclone4Modifier(
                 ToFsmState = fsm.Fsm.GetState("Set Dash Grind")
             },
             new FsmTransition()
-            {
-                FsmEvent = FsmEvent.GetFsmEvent("THROW"),
-                ToState = "Throw Antic",
-                ToFsmState = fsm.Fsm.GetState("Throw Antic")
+            {//CHANGE THIS FUCKING SHIT TRANSITION
+                FsmEvent = FsmEvent.GetFsmEvent("ATTACK"),
+                ToState = "Slash Antic",
+                ToFsmState = fsm.Fsm.GetState("Slash Antic")
             },
             new FsmTransition()
             {

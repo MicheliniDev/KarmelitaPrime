@@ -1,0 +1,31 @@
+﻿using System.Linq;
+using HutongGames.PlayMaker.Actions;
+
+namespace KarmelitaPrime;
+
+public class SpinAttackModifier(
+    PlayMakerFSM fsm,
+    PlayMakerFSM stunFsm,
+    KarmelitaWrapper wrapper,
+    KarmelitaFsmController fsmController)
+    : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
+{
+    public override string BindState => "Spin Attack";
+    public override void OnCreateModifier()
+    {
+    }
+
+    public override void SetupPhase1Modifiers()
+    {
+        var velocityAction = BindFsmState.Actions.FirstOrDefault(action => action is SetVelocityByScale) as SetVelocityByScale;
+        velocityAction.speed.Value *= 1.5f;
+    }
+
+    public override void SetupPhase2Modifiers()
+    {
+    }
+
+    public override void SetupPhase3Modifiers()
+    {
+    }
+}

@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
+using HutongGames.PlayMaker.Actions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace KarmelitaPrime.Patches.Effects;
 
@@ -13,19 +15,21 @@ public class CameraFollowBossAndHeroPatch
     [HarmonyPatch(typeof(CameraTarget), nameof(CameraTarget.Update))]
     private static bool MakeCameraFollowBoss(ref CameraTarget __instance)
     {
-        //if (!Constants.IsBlackWhiteHighlight)
-          //  return true;
+        /*if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
+            KarmelitaPrimeMain.Instance.wrapper)
+        {
+            float midpoint = (karmelitaTransform.position.x + heroTransform.position.x) / 2f;
+            float midpointY = (karmelitaTransform.position.y + heroTransform.position.y) / 2f;
 
-        float midpoint = (karmelitaTransform.position.x + heroTransform.position.x) / 2f;
-        float midpointY = (karmelitaTransform.position.y + heroTransform.position.y) / 2f;
-
-        Vector3 position = __instance.transform.position;
-        position = new Vector3(
-            Mathf.Clamp(midpoint, __instance.xLockMin, __instance.xLockMax), 
-            Mathf.Clamp(midpointY,  __instance.yLockMin, __instance.yLockMax), 
-            position.z);
-        __instance.transform.position = position;
+            Vector3 position = __instance.transform.position;
+            position = new Vector3(
+                Mathf.Clamp(midpoint, __instance.xLockMin, __instance.xLockMax), 
+                Mathf.Clamp(midpointY,  __instance.yLockMin, __instance.yLockMax), 
+                position.z);
+            __instance.transform.position = position;
         
-        return false;
+            return false;      
+        }*/
+        return true;
     }
 }

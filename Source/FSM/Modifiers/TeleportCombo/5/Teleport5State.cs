@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using UnityEngine;
 
 namespace KarmelitaPrime;
 
@@ -27,13 +28,13 @@ public class Teleport5State(
                 {
                     Target = HeroController.instance.transform,
                     Base = wrapper.transform,
-                    IsTeleportToBack = true,
-                    AllowY = true,
+                    TeleportToFacing = true,
+                    AllowY = false,
                     MinX = 135f,
                     MaxX = 163f,
                     MaxAttempts = 5,
-                    MinTeleportDistance = 10f,
-                    MaxTeleportDistance = 11f
+                    MinTeleportDistance = 15f,
+                    MaxTeleportDistance = 16f
                 },
                 new Wait()
                 {

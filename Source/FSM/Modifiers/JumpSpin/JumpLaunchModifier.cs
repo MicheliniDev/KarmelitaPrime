@@ -28,12 +28,12 @@ public class JumpLaunchModifier(
 
     public override void SetupPhase1Modifiers()
     {
-        ChangeActionValues(0.30f, 80f);
+        ChangeActionValues(0.27f, 80f);
     }
 
     public override void SetupPhase2Modifiers()
     {
-        ChangeActionValues(0.27f, 80f);
+        ChangeActionValues(0.25f, 80f);
     }
 
     public override void SetupPhase3Modifiers()

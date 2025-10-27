@@ -28,13 +28,13 @@ public class Teleport4State(
                 {
                     Target = HeroController.instance.transform,
                     Base = wrapper.transform,
-                    OverrideDirection = (Vector2)wrapper.transform.localScale.normalized,
+                    TeleportToFacing = true,
                     AllowY = true,
                     MinX = 135f,
                     MaxX = 163f,
                     MaxAttempts = 5,
-                    MinTeleportDistance = -6f,
-                    MaxTeleportDistance = -6.5f
+                    MinTeleportDistance = 3f,
+                    MaxTeleportDistance = 4f
                 },
                 new Wait()
                 {

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using UnityEngine;
 
 namespace KarmelitaPrime;
 
@@ -32,8 +33,8 @@ public class Teleport1State(
                     MinX = 135f,
                     MaxX = 163f,
                     MaxAttempts = 5,
-                    MinTeleportDistance = 5f,
-                    MaxTeleportDistance = 6f
+                    MinTeleportDistance = 3f,
+                    MaxTeleportDistance = 4f
                 },
                 new Wait()
                 {

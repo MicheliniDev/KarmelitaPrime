@@ -44,8 +44,8 @@ public class Teleport7RecoveryState(
                 new FsmTransition()
                 {
                     FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                    ToState = "Teleport 7 Dash Grind",
-                    ToFsmState = fsm.Fsm.GetState("Teleport 7 Dash Grind")
+                    ToState = "Jump Back Dir",
+                    ToFsmState = fsm.Fsm.GetState("Jump Back Dir")
                 },
             ]
         };

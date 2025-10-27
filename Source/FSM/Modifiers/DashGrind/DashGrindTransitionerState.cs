@@ -26,6 +26,14 @@ public class DashGrindTransitionerState(
 
     public override void SetupPhase3Modifiers()
     {
+        BindFsmState.Actions =
+        [
+            new WeightedRandomEventAction()
+            {
+                events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("CANCEL")],
+                weights = [.5f, .5f],
+            }
+        ];
     }
     
     private void CreateBindState()
@@ -36,7 +44,7 @@ public class DashGrindTransitionerState(
             Actions = [new WeightedRandomEventAction()
             {
                 events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
-                weights = [.5f, .5f],
+                weights = [1f, 0f],
             }],
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
@@ -50,10 +58,10 @@ public class DashGrindTransitionerState(
             },
             new FsmTransition()
             {
-                FsmEvent = FsmEvent.GetFsmEvent("THROW"),
-                ToState = "Throw Antic",
-                ToFsmState = fsm.Fsm.GetState("Throw Antic") 
-            }
+                FsmEvent = FsmEvent.GetFsmEvent("CANCEL"),
+                ToState = "Generic Teleport Pre",
+                ToFsmState = fsm.Fsm.GetState("Generic Teleport Pre")
+            },
         ];
     }
 }

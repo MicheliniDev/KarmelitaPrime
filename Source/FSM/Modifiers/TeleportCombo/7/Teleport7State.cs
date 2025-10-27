@@ -28,7 +28,7 @@ public class Teleport7State(
                 {
                     Target = HeroController.instance.transform,
                     Base = wrapper.transform,
-                    OverrideDirection = -(Vector2)wrapper.transform.localScale.normalized,
+                    TeleportToFacing = true,
                     AllowY = false,
                     MinX = 135f,
                     MaxX = 163f,

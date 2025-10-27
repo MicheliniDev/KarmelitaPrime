@@ -37,20 +37,10 @@ public class CounterAttackState(
         {
             Name = "Counter Attack",
             Actions = [
-                /*new SetVelocityToPlayer()
-                {
-                    Rb = wrapper.rb,
-                    velocity = 80f,
-                },*/
                 new StartCoroutineAction()
                 {
                     Coroutine = LerpVelocity
                 },
-                /*new DecelerateXY()
-                {
-                    decelerationX = 0.9f,
-                    decelerationY = 0.9f
-                },*/
                 new AnimationPlayerAction()
                 {
                     animator = wrapper.animator,
@@ -81,8 +71,8 @@ public class CounterAttackState(
                 new FsmTransition()
                 {
                     FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                    ToState = "Cyclone Recoil",
-                    ToFsmState = fsm.Fsm.GetState("Cyclone Recoil")
+                    ToState = "New Slash 2 State",
+                    ToFsmState = fsm.Fsm.GetState("New Slash 2 State")
                 }
             ]
         };

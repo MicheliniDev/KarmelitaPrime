@@ -121,7 +121,7 @@ public static class Constants
     #endregion
 
     #region Health
-    public static int KarmelitaMaxHp => 2000;
+    public static int KarmelitaMaxHp => 2500;
     public static float KarmelitaPhase2HpThreshold => KarmelitaMaxHp * 0.80f;
     public static float KarmelitaPhase2_5HpThreshold => KarmelitaMaxHp * 0.60f;
     public static float KarmelitaPhase3HpThreshold => KarmelitaMaxHp * 0.50f;

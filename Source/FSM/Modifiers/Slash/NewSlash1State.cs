@@ -75,10 +75,11 @@ public class NewSlash1State(
                 new SetVelocityToPlayer()
                 {
                     Rb = wrapper.rb,
-                    velocity = 45f
+                    velocity = 60f
                 },
                 new DecelerateXY()
                 {
+                    gameObject = new FsmOwnerDefault() {OwnerOption = OwnerDefaultOption.UseOwner},
                     decelerationX = 0.9f,
                     decelerationY = 0.9f
                 },

@@ -18,47 +18,6 @@ public class NewSlash2State(
     
     public override void OnCreateModifier()
     {
-        CreateBindState();
-    }
-
-    public override void SetupPhase1Modifiers()
-    {
-        BindFsmState.Transitions =
-        [
-            new FsmTransition()
-            {
-                FsmEvent = finishedEvent,
-                ToState = "Jump Antic",
-                ToFsmState = fsm.Fsm.GetState("Jump Antic")
-            },
-            new FsmTransition()
-            {
-                FsmEvent = throwEvent,
-                ToState = "Throw Antic",
-                ToFsmState = fsm.Fsm.GetState("Throw Antic")
-            }
-        ];
-    }
-
-    public override void SetupPhase2Modifiers()
-    {
-        for (int i = 0; i < BindFsmState.Actions.Length; i++)
-        {
-            if (BindFsmState.Actions[i] is AnimEndSendRandomEventAction animEnd)
-            {
-                animEnd.events = [finishedEvent, throwEvent];
-                animEnd.weights = [0.5f, 0.5f];
-                BindFsmState.Actions[i] = animEnd;
-            }
-        }
-    }
-
-    public override void SetupPhase3Modifiers()
-    {
-    }
-    
-    private void CreateBindState()
-    {
         FsmState bindState = new FsmState(fsm.Fsm)
         {
             Name = "New Slash 2 State",
@@ -103,7 +62,43 @@ public class NewSlash2State(
                     ResetOnExit = true
                 }
             ],
+            Transitions =
+            [
+                new FsmTransition()
+                {
+                    FsmEvent = finishedEvent,
+                    ToState = "Cyclone Antic",
+                    ToFsmState = fsm.Fsm.GetState("Cyclone Antic")
+                },
+                new FsmTransition()
+                {
+                    FsmEvent = throwEvent,
+                    ToState = "Slash 4",
+                    ToFsmState = fsm.Fsm.GetState("Slash 4")
+                }
+            ]
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
+    }
+
+    public override void SetupPhase1Modifiers()
+    {
+    }
+
+    public override void SetupPhase2Modifiers()
+    {
+        for (int i = 0; i < BindFsmState.Actions.Length; i++)
+        {
+            if (BindFsmState.Actions[i] is AnimEndSendRandomEventAction animEnd)
+            {
+                animEnd.events = [finishedEvent, throwEvent];
+                animEnd.weights = [0.5f, 0.5f];
+                BindFsmState.Actions[i] = animEnd;
+            }
+        }
+    }
+
+    public override void SetupPhase3Modifiers()
+    {
     }
 }

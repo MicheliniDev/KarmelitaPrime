@@ -7,13 +7,18 @@ public class CheckHeroTooCloseAction : FsmStateAction
 {
     public GameObject Owner;
     public float Threshold;
+    public bool IsTooFarCheck;
     public FsmEvent TrueEvent;
     public FsmEvent FalseEvent;
 
     public override void OnEnter()
     {
-        if (GetDistance() < Threshold && TrueEvent != null)
+        bool isTrue = IsTooFarCheck ? GetDistance() > Threshold : GetDistance() < Threshold;
+        
+        if (isTrue && TrueEvent != null)
+        {
             Fsm.Event(TrueEvent);
+        }
         else if (FalseEvent != null)
             Fsm.Event(FalseEvent);
         Finish();

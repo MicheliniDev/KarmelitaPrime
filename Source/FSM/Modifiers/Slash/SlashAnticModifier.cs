@@ -15,6 +15,11 @@ public class SlashAnticModifier(
     public override string BindState => "Slash Antic";
     public override void OnCreateModifier()
     {
+        BindFsmState.Actions = BindFsmState.Actions.Append(new FadeVelocityAction()
+        {
+            Rb = wrapper.rb,
+            Duration = 0.01f,
+        }).ToArray();
     }
 
     public override void SetupPhase1Modifiers()

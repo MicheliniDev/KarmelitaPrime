@@ -1,0 +1,79 @@
+﻿using System.Linq;
+using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
+
+namespace KarmelitaPrime;
+
+public class GenericTeleportPreState(
+    PlayMakerFSM fsm,
+    PlayMakerFSM stunFsm,
+    KarmelitaWrapper wrapper,
+    KarmelitaFsmController fsmController)
+    : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
+{
+    public override string BindState => "Generic Teleport Pre";
+    public override void OnCreateModifier()
+    {
+        FsmState bindState = new FsmState(fsm.Fsm)
+        {
+            Name = BindState,
+            Actions = 
+            [
+                new FadeVelocityAction()
+                {
+                    Rb = wrapper.rb,
+                    Duration = 0.1f
+                },
+                new SetGravity2dScale()
+                {
+                    gameObject = new FsmOwnerDefault()
+                    {
+                        OwnerOption = OwnerDefaultOption.UseOwner
+                    },
+                    gravityScale = 0f,
+                },
+                new AnimationPlayerAction()
+                {
+                    animator = wrapper.animator,
+                    ClipName = "Spin Attack Antic", 
+                },
+                /*new PlayClipAction()
+                {
+                    Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value,
+                    Clip = wrapper.KarmelitaTeleportAudio
+                },
+                new SpawnPrefabAction()
+                {
+                    Prefab = wrapper.KarmelitaTeleportEffect,
+                    Transform = wrapper.transform,
+                },*/
+                new Wait()
+                {
+                    time = 0.2f,
+                    finishEvent = FsmEvent.GetFsmEvent("FINISHED")
+                },
+            ],
+            Transitions = [
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                    ToState = "Generic Teleport",
+                    ToFsmState = fsm.Fsm.GetState("Generic Teleport")
+                },
+            ]
+        };
+        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
+    }
+
+    public override void SetupPhase1Modifiers()
+    {
+    }
+
+    public override void SetupPhase2Modifiers()
+    {
+    }
+
+    public override void SetupPhase3Modifiers()
+    {
+    }
+}

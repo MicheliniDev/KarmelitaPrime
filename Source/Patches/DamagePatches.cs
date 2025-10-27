@@ -11,17 +11,20 @@ namespace KarmelitaPrime.Patches;
 [HarmonyPatch]
 public class DamagePatches
 {
+    private static int crossStitchDamageCount = 0;
+    
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
     private static void AutoPhase3TriggerPatch(ref HealthManager __instance, ref HitInstance hitInstance)
     {
         if (SceneManager.GetActiveScene().name != Constants.KarmelitaSceneName
-            || !KarmelitaPrimeMain.Instance.wrapper) return; 
-        
+            || !KarmelitaPrimeMain.Instance.wrapper) return;
+
+        var wrapper = KarmelitaPrimeMain.Instance.wrapper;
         if (__instance.hp <= Constants.KarmelitaPhase3HpThreshold)
-            KarmelitaPrimeMain.Instance.wrapper.TriggerPhase3();
+            wrapper.TriggerPhase3();
         else if (__instance.hp <= Constants.KarmelitaPhase2_5HpThreshold)
-            KarmelitaPrimeMain.Instance.wrapper.FakeP3();
+            wrapper.FakeP3();
     }
     
     [HarmonyPrefix]

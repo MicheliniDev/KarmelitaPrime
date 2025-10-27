@@ -27,6 +27,7 @@ public class KarmelitaWrapper : MonoBehaviour
     
     public Shader FlashShader;
     
+    public int CrossStitchHitCount;
     public int PhaseIndex;
     private float auraLevel;
     public bool hasFakedP3;
@@ -117,7 +118,7 @@ public class KarmelitaWrapper : MonoBehaviour
         hasFakedP3 = false;
         HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
     }
-    
+
     private void GetComponents()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -336,6 +337,7 @@ public class KarmelitaWrapper : MonoBehaviour
         SetVocalAudioSource(true);
         
         GameCameras.instance.hudCamera.gameObject.SetActive(false);
+        HeroController.instance.transform.Find("Vignette").gameObject.SetActive(false);
         GameObject.Find("_GameCameras/CameraParent/tk2dCamera/SceneParticlesController").SetActive(false);
         
         transform.Find("HeroLight").gameObject.SetActive(false);
@@ -406,7 +408,7 @@ public class KarmelitaWrapper : MonoBehaviour
 
     public float GetAnimationSpeedModifier(string clip)
     {
-        if (fsm.ActiveStateName.Contains("Teleport 4 Wind Slash"))
+        if (fsm.ActiveStateName.Contains("Teleport 4 Wind Slash") || fsm.ActiveStateName.Contains("Wind Blade"))
             return 1f;
         return animationSpeedCollection.GetValueOrDefault(clip, 1f);
     }
@@ -418,7 +420,7 @@ public class KarmelitaWrapper : MonoBehaviour
     {
         fsmController.DoPhase3();
         var pos = transform.position;
-        pos.y = 21.421f;
+        pos.y = 21.4355f;
         transform.position = pos;
     }
     

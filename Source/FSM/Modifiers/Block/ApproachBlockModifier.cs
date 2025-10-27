@@ -25,5 +25,11 @@ public class ApproachBlockModifier(
 
     public override void SetupPhase3Modifiers()
     {
+        BindFsmState.Transitions = [new FsmTransition()
+        {
+            FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+            ToState = "Generic Teleport Pre",
+            ToFsmState = fsm.Fsm.GetState("Generic Teleport Pre")
+        }];
     }
 }

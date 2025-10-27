@@ -28,13 +28,13 @@ public class Teleport6State(
                 {
                     Target = HeroController.instance.transform,
                     Base = wrapper.transform,
-                    OverrideDirection = -(Vector2)wrapper.transform.localScale.normalized,
+                    TeleportToFacing = true,
                     AllowY = false,
                     MinX = 135f,
                     MaxX = 163f,
                     MaxAttempts = 5,
-                    MinTeleportDistance = -22f,
-                    MaxTeleportDistance = -23f
+                    MinTeleportDistance = 23f,
+                    MaxTeleportDistance = 25f
                 },
                 new Wait()
                 {
