@@ -15,7 +15,7 @@ public class CameraFollowBossAndHeroPatch
     [HarmonyPatch(typeof(CameraTarget), nameof(CameraTarget.Update))]
     private static bool MakeCameraFollowBoss(ref CameraTarget __instance)
     {
-        /*if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
+        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
             KarmelitaPrimeMain.Instance.wrapper)
         {
             float midpoint = (karmelitaTransform.position.x + heroTransform.position.x) / 2f;
@@ -29,7 +29,7 @@ public class CameraFollowBossAndHeroPatch
             __instance.transform.position = position;
         
             return false;      
-        }*/
+        }
         return true;
     }
 }

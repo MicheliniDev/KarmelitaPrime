@@ -12,7 +12,12 @@ public class ApproachBlockModifier(
     public override string BindState => "Approach Block";
     public override void OnCreateModifier()
     {
-        
+        BindFsmState.Transitions = [new FsmTransition()
+        {
+            FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+            ToState = "Approach Block Transitioner",
+            ToFsmState = fsm.Fsm.GetState("Approach Block Transitioner")
+        }];
     }
 
     public override void SetupPhase1Modifiers()
@@ -25,11 +30,5 @@ public class ApproachBlockModifier(
 
     public override void SetupPhase3Modifiers()
     {
-        BindFsmState.Transitions = [new FsmTransition()
-        {
-            FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-            ToState = "Generic Teleport Pre",
-            ToFsmState = fsm.Fsm.GetState("Generic Teleport Pre")
-        }];
     }
 }

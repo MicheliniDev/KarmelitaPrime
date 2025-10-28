@@ -36,8 +36,8 @@ public class ThrowAnticTransitionerState(
                 new FsmTransition()
                 {
                     FsmEvent = FsmEvent.GetFsmEvent("CANCEL"),
-                    ToState = "Jump Antic", //MAYBE REMOVE THIS?
-                    ToFsmState = fsm.Fsm.GetState("Jump Antic")
+                    ToState = "Slash Antic", 
+                    ToFsmState = fsm.Fsm.GetState("Slash Antic")
                 },
                 new FsmTransition()
                 {
@@ -61,7 +61,7 @@ public class ThrowAnticTransitionerState(
     public override void SetupPhase3Modifiers()
     {
         var anim = BindFsmState.Actions.FirstOrDefault(action => action is AnimEndSendRandomEventAction) as AnimEndSendRandomEventAction;
-        anim.events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("CANCEL"), FsmEvent.GetFsmEvent("ATTACK")];
-        anim.weights = [.3f, .3f, .4f];
+        anim.events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")];
+        anim.weights = [.5f, .5f];
     }
 }

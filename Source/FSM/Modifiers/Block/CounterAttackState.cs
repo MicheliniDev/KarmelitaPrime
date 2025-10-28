@@ -16,23 +16,6 @@ public class CounterAttackState(
     public override string BindState => "Counter Attack";
     public override void OnCreateModifier()
     {
-        CreateBindState();
-    }
-
-    public override void SetupPhase1Modifiers()
-    {
-    }
-
-    public override void SetupPhase2Modifiers()
-    {
-    }
-
-    public override void SetupPhase3Modifiers()
-    {
-    }
-
-    private void CreateBindState()
-    {
         var bindState = new FsmState(fsm.Fsm)
         {
             Name = "Counter Attack",
@@ -77,6 +60,18 @@ public class CounterAttackState(
             ]
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
+    }
+
+    public override void SetupPhase1Modifiers()
+    {
+    }
+
+    public override void SetupPhase2Modifiers()
+    {
+    }
+
+    public override void SetupPhase3Modifiers()
+    {
     }
     
     private IEnumerator LerpVelocity()

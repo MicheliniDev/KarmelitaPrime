@@ -1,4 +1,5 @@
-﻿using InControl.NativeDeviceProfiles;
+﻿using System.Collections.Generic;
+using InControl.NativeDeviceProfiles;
 using TeamCherry.Localization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -182,6 +183,94 @@ public static class Constants
         "Song Knight Projectile",
     ];
     #endregion
+    
+    public static readonly string[] StatesToCancelContactDamage =
+    [
+        //This array is way bigger than I expected it would be :(
+        "Start Idle",
+        "Movement 1",
+        "Movement 2",
+        "Movement 3",
+        "Movement 4",
+        "Movement 5",
+        "Evade",
+        "Approach",
+        "Long Evade",
+        "Long Approach",
+        "Dash",
+        "Stun Start",
+        "Stun Air",
+        "Stun Land",
+        "Stunned",
+        "Stun Damage",
+        "Damage Recover",
+        "Stun Recover",
+        "Approach Block",
+        "Approach Block Transitioner",
+        "Slash Antic",
+        "Jump Antic",
+        "Spin Attack Land",
+        "Throw Fall",
+        "Throw Land",
+        "Teleport 1 Pre",
+        "Teleport 1",
+        "Teleport 1 Recovery",
+        "Teleport 2 Pre",
+        "Teleport 2",
+        "Teleport 2 Recovery",
+        "Teleport 3 Pre",
+        "Teleport 3",
+        "Teleport 3 Recovery",
+        "Teleport 4 Pre",
+        "Teleport 4",
+        "Teleport 4 Recovery",
+        "Teleport 5 Pre",
+        "Teleport 5",
+        "Teleport 5 Recovery",
+        "Teleport 6 Pre",
+        "Teleport 6",
+        "Teleport 6 Recovery",
+        "Teleport 7 Pre",
+        "Teleport 7",
+        "Teleport 7 Recovery",
+        "Generic Teleport Pre",
+        "Generic Teleport",
+        "Generic Teleport Recovery",
+        "P2 Roar Antic",
+        "Phase 3 Knocked",
+        "Phase 3 Recovering State",
+        "P2 Roar Antic",
+        "P2 Roar",
+        "P3 Roar Antic",
+        "P3 Roar"
+    ];
+
+    public static Dictionary<string, float> AnimationSpeedCollection = new Dictionary<string, float>()
+    {
+        {"Slash Antic", SlashAnticSpeed}, 
+        {"Slash 1", Slash1Speed}, 
+        {"Slash 2", Slash2Speed},
+        {"Slash End", SlashEndSpeed},
+        {"Spin Attack Antic", SpinAttackAnticSpeed}, 
+        {"Spin Attack Recoil", SpinAttackRecoilSpeed},
+        {"Throw", ThrowSpeed}, 
+        {"Throw Antic", ThrowAnticSpeed}, 
+        {"Air Throw", AirThrowSpeed},
+        {"Air Rethrow", AirRethrowSpeed},
+        {"Rethrow Antic 1", RethrowAntic1Speed},
+        {"Rethrow Antic 2", RethrowAntic2Speed},
+        {"Launch Antic", LaunchAnticSpeed}, 
+        {"Launch", LaunchSpeed},
+        {"Jump Antic", JumpAnticSpeed},
+        {"Jump", JumpSpeed}, 
+        {"JumpSpin Antic", JumpSpinAnticSpeed}, 
+        {"JumpSpin", JumpSpinSpeed}, 
+        {"Jump Attack Land", JumpAttackLandSpeed},   
+        {"Wall Land", WallLandSpeed},  
+        {"Wall Dive", WallDiveSpeed},  
+        {"Dash Grind", DashGrindSpeed},  
+        {"Dash Grind Spin", DashGrindSpinSpeed},  
+    };
     
     public static bool IsBlackWhiteHighlight => SceneManager.GetActiveScene().name == KarmelitaSceneName 
                                                 && KarmelitaPrimeMain.Instance.wrapper &&

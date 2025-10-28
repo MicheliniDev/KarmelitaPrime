@@ -22,7 +22,7 @@ public class CycloneAnticTransitionerState(
                 new CheckHeroYAction()
                 {
                     Target = wrapper.transform,
-                    Threshold = 1.5f,
+                    Threshold = 3f,
                     AboveEvent = FsmEvent.GetFsmEvent("FINISHED"),
                     BelowEvent = FsmEvent.GetFsmEvent("ATTACK"),
                 }

@@ -334,6 +334,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 
             // 5. Independent State Modifiers
             new AirRethrowModifier(fsm, stunFsm, wrapper, this),
+            new ApproachBlockTransitionerState(fsm, stunFsm, wrapper, this),
             new ApproachBlockModifier(fsm, stunFsm, wrapper, this),
             new Cyclone1Modifier(fsm, stunFsm, wrapper, this),
             new Cyclone4Modifier(fsm, stunFsm, wrapper, this),

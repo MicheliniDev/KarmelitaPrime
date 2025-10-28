@@ -21,12 +21,12 @@ public class Slash1Modifier(
         {
             Transform = wrapper.transform
         }).ToArray();
+        var velocityAction = BindFsmState.Actions.FirstOrDefault(action => action is SetVelocityByScale) as SetVelocityByScale;
+        velocityAction!.speed.Value *= 1.45f;
     }
 
     public override void SetupPhase2Modifiers()
     {
-        var velocityAction = BindFsmState.Actions.FirstOrDefault(action => action is SetVelocityByScale) as SetVelocityByScale;
-        velocityAction!.speed.Value *= 1.35f;
     }
 
     public override void SetupPhase3Modifiers()

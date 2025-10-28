@@ -18,7 +18,7 @@ public class SpinAttackModifier(
     public override void SetupPhase1Modifiers()
     {
         var velocityAction = BindFsmState.Actions.FirstOrDefault(action => action is SetVelocityByScale) as SetVelocityByScale;
-        velocityAction.speed.Value *= 1.5f;
+        velocityAction.speed.Value *= 2f;
     }
 
     public override void SetupPhase2Modifiers()

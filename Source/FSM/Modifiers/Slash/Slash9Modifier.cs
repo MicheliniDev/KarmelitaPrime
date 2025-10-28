@@ -30,7 +30,7 @@ public class Slash9Modifier(
             {
                 animator = wrapper.animator,
                 events = [finishedEvent, toCycloneEvent],
-                weights = [.5f, .5f],
+                weights = [1f, 0f],
                 shortenEventTIme = 0.25f
             },
             new FaceHeroAction()

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using HutongGames.PlayMaker;
@@ -27,16 +26,13 @@ public class KarmelitaWrapper : MonoBehaviour
     
     public Shader FlashShader;
     
-    public int CrossStitchHitCount;
     public int PhaseIndex;
     private float auraLevel;
     public bool hasFakedP3;
     public bool IsInHighlightMode;
 
     public GameObject BlackScreen;
-    public GameObject SicklePrefab;
 
-    public RandomAudioClipTable StunTable;
     public RandomAudioClipTable AttackQuickTable;
     public RandomAudioClipTable AttackLongTable;
     public AudioClip SwordClip;
@@ -48,61 +44,6 @@ public class KarmelitaWrapper : MonoBehaviour
     public GameObject KarmelitaTeleportEffect;
     public AudioClip KarmelitaTeleportAudio;
     
-    private Dictionary<string, float> animationSpeedCollection;
-    private readonly string[] statesToCancelContactDamage =
-    [
-        //This array is way bigger than I expected it would be :(
-        "Start Idle",
-        "Movement 1",
-        "Movement 2",
-        "Movement 3",
-        "Movement 4",
-        "Movement 5",
-        "Evade",
-        "Long Evade",
-        "Dash",
-        "Stun Start",
-        "Stun Air",
-        "Stun Land",
-        "Stunned",
-        "Stun Damage",
-        "Damage Recover",
-        "Stun Recover",
-        "Approach Block",
-        "Jump Antic",
-        "Spin Attack Land",
-        "Throw Fall",
-        "Throw Land",
-        "Teleport 1 Pre",
-        "Teleport 1",
-        "Teleport 1 Recovery",
-        "Teleport 2 Pre",
-        "Teleport 2",
-        "Teleport 2 Recovery",
-        "Teleport 3 Pre",
-        "Teleport 3",
-        "Teleport 3 Recovery",
-        "Teleport 4 Pre",
-        "Teleport 4",
-        "Teleport 4 Recovery",
-        "Teleport 5 Pre",
-        "Teleport 5",
-        "Teleport 5 Recovery",
-        "Teleport 6 Pre",
-        "Teleport 6",
-        "Teleport 6 Recovery",
-        "Teleport 7 Pre",
-        "Teleport 7",
-        "Teleport 7 Recovery",
-        "P2 Roar Antic",
-        "Phase 3 Knocked",
-        "Phase 3 Recovering State",
-        "P2 Roar Antic",
-        "P2 Roar",
-        "P3 Roar Antic",
-        "P3 Roar"
-    ];
-    
     public IEnumerator Start()
     {
         yield return StartCoroutine(PreloadManager.LoadAllAssets());
@@ -111,7 +52,6 @@ public class KarmelitaWrapper : MonoBehaviour
         SetupChangers();
         SetVocalAudioSource(false);
         SetPhaseIndex(0);
-        InitializeAnimationSpeedModifiers();
         SetupBlackScreen();
         auraLevel = 0f;
         IsInHighlightMode = false;
@@ -164,10 +104,6 @@ public class KarmelitaWrapper : MonoBehaviour
         
         foreach (var table in Resources.FindObjectsOfTypeAll<RandomAudioClipTable>())
         {
-            if (table.name.Contains("Karmelita-Stun"))
-            {
-                StunTable = table;
-            }
             if (table.name.Contains("Karmelita-Attack-Quick"))
             {
                 AttackQuickTable = table;
@@ -180,10 +116,6 @@ public class KarmelitaWrapper : MonoBehaviour
 
         foreach (var prefab in Resources.FindObjectsOfTypeAll<GameObject>())
         {
-            if (prefab.name.Contains("Carmelita Sickle"))
-            {
-                SicklePrefab = prefab;
-            }
             if (prefab.name.Contains("Emerge Effect"))
             {
                 KarmelitaTeleportEffect = prefab;
@@ -257,36 +189,6 @@ public class KarmelitaWrapper : MonoBehaviour
                 RemoveDazedEffect();
                 break;
         }
-    }
-
-    private void InitializeAnimationSpeedModifiers()
-    {
-        animationSpeedCollection = new Dictionary<string, float>()
-        {
-            {"Slash Antic", SlashAnticSpeed}, //SLASH START
-            {"Slash 1", Slash1Speed}, //FIRST TWO SLASHES
-            {"Slash 2", Slash2Speed},
-            {"Slash End", SlashEndSpeed},
-            {"Spin Attack Antic", SpinAttackAnticSpeed}, //SPIN ATTACK
-            {"Spin Attack Recoil", SpinAttackRecoilSpeed},
-            {"Throw", ThrowSpeed}, //SICKLE THROW GROUND
-            {"Throw Antic", ThrowAnticSpeed}, //SICKLE THROW AIR
-            {"Air Throw", AirThrowSpeed},
-            {"Air Rethrow", AirRethrowSpeed},
-            {"Rethrow Antic 1", RethrowAntic1Speed},
-            {"Rethrow Antic 2", RethrowAntic2Speed},
-            {"Launch Antic", LaunchAnticSpeed}, //SCREW ATTACK
-            {"Launch", LaunchSpeed},
-            {"Jump Antic", JumpAnticSpeed},
-            {"Jump", JumpSpeed}, 
-            {"JumpSpin Antic", JumpSpinAnticSpeed}, 
-            {"JumpSpin", JumpSpinSpeed}, 
-            {"Jump Attack Land", JumpAttackLandSpeed},   
-            {"Wall Land", WallLandSpeed}, //DASH GRIND  
-            {"Wall Dive", WallDiveSpeed},  
-            {"Dash Grind", DashGrindSpeed},  
-            {"Dash Grind Spin", DashGrindSpinSpeed},  
-        };
     }
 
     private void SetupBlackScreen()
@@ -410,10 +312,10 @@ public class KarmelitaWrapper : MonoBehaviour
     {
         if (fsm.ActiveStateName.Contains("Teleport 4 Wind Slash") || fsm.ActiveStateName.Contains("Wind Blade"))
             return 1f;
-        return animationSpeedCollection.GetValueOrDefault(clip, 1f);
+        return AnimationSpeedCollection.GetValueOrDefault(clip, 1f);
     }
     public float GetAnimationStartTime() => fsmController.GetStateStartTime();
-    public bool ShouldDealContactDamage() => statesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
+    public bool ShouldDealContactDamage() => StatesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
     public void LoseAura(float amount) => auraLevel -= amount;
 
     public void TriggerPhase3()
