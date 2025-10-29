@@ -75,6 +75,8 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     private void OnStateChanged(FsmState state)
     {
         KarmelitaPrimeMain.Instance.Log($"CHANGED TO {state.Name}");
+        if (state.Name == "Entry Land") //Battle Start
+            wrapper.BattleStarted = true;
         CheckStunState(state);
         CheckPhase2State(state);
         CheckPhase3State(state);
@@ -209,7 +211,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         
         wrapper.DoHighlightEffects();
         fsm.SetState("Phase 3 Knocked");
-        SetTransitionToTeleportCombo();
+        SetP3TransitionToTeleportCombo();
     }
     
     public void CloneActions(FsmState source, FsmState target)
@@ -237,7 +239,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         return actionCopy;
     }
 
-    private void SetTransitionToTeleportCombo()
+    private void SetP3TransitionToTeleportCombo()
     {
         var roarState = fsm.Fsm.GetState("P3 Roar");
         roarState.Transitions =
@@ -254,9 +256,10 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     private void AddModifiers()
     {
         stateModifiers = [
-            // 1. Foundational State Creators //TELEPORT GENERIC | COUNTER ATTACK
+            // 1. Foundational State Creators
             new SpinAttackModifier(fsm, stunFsm, wrapper, this),
             new WindBladeState(fsm, stunFsm, wrapper, this),
+            new EvadeToWindBladeState(fsm, stunFsm, wrapper, this),
             new GenericTeleportRecoveryState(fsm, stunFsm, wrapper, this),
             new GenericTeleportState(fsm, stunFsm, wrapper, this),
             new GenericTeleportPreState(fsm, stunFsm, wrapper, this),
@@ -323,6 +326,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 
             // 3. Second-Level Dependent State Creators
             new Rethrow3CheckDirectionState(fsm, stunFsm, wrapper, this),
+            new Rethrow3AnticState(fsm, stunFsm, wrapper, this),
 
             // 4. Dependent State Modifiers 
             new Rethrow2Modifier(fsm, stunFsm, wrapper, this),

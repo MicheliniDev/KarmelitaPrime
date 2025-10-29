@@ -8,10 +8,10 @@ public class SetVelocityToPlayer : FsmStateAction
     public Rigidbody2D Rb;
     public float velocity;
     public float velocityY;
-
     public override void OnEnter()
     {
         base.OnEnter();
+        //SAME DIRECTION
         if (HeroController.instance.transform.position.x > Rb.transform.position.x &&
             Rb.transform.localScale.x > 0 ||
             HeroController.instance.transform.position.x < Rb.transform.position.x &&

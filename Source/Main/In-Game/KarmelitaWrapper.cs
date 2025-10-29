@@ -30,6 +30,7 @@ public class KarmelitaWrapper : MonoBehaviour
     private float auraLevel;
     public bool hasFakedP3;
     public bool IsInHighlightMode;
+    public bool BattleStarted;
 
     public GameObject BlackScreen;
 
@@ -56,6 +57,7 @@ public class KarmelitaWrapper : MonoBehaviour
         auraLevel = 0f;
         IsInHighlightMode = false;
         hasFakedP3 = false;
+        BattleStarted = false;
         HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
     }
 
@@ -238,7 +240,7 @@ public class KarmelitaWrapper : MonoBehaviour
     {
         SetVocalAudioSource(true);
         
-        GameCameras.instance.hudCamera.gameObject.SetActive(false);
+        HudGlobalHide.IsHidden = true;
         HeroController.instance.transform.Find("Vignette").gameObject.SetActive(false);
         GameObject.Find("_GameCameras/CameraParent/tk2dCamera/SceneParticlesController").SetActive(false);
         
@@ -337,6 +339,7 @@ public class KarmelitaWrapper : MonoBehaviour
     {
         SetVocalAudioSource(true);
         IsInHighlightMode = false;
+        BattleStarted = false;
         PreloadManager.UnloadAll();
     }
 }

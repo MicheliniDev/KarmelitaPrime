@@ -14,7 +14,7 @@ public class NewSlash2State(
     public override string BindState => "New Slash 2 State";
     public override float AnimationStartTime => 0f;
     private FsmEvent finishedEvent => FsmEvent.GetFsmEvent("FINISHED");
-    private FsmEvent throwEvent => FsmEvent.GetFsmEvent("THROW");
+    private FsmEvent evadeEvent => FsmEvent.GetFsmEvent("EVADE");
     
     public override void OnCreateModifier()
     {
@@ -26,7 +26,6 @@ public class NewSlash2State(
                 {
                     ClipName = "Slash 2",
                     animator = wrapper.animator,
-                    AnimationFinishedEvent = finishedEvent,
                 }, 
                 new AnimEndSendRandomEventAction()
                 {
@@ -66,15 +65,15 @@ public class NewSlash2State(
             [
                 new FsmTransition()
                 {
-                    FsmEvent = finishedEvent,
-                    ToState = "Cyclone Antic",
-                    ToFsmState = fsm.Fsm.GetState("Cyclone Antic")
+                    FsmEvent = evadeEvent,
+                    ToState = "Evade",
+                    ToFsmState = fsm.Fsm.GetState("Evade")
                 },
                 new FsmTransition()
                 {
-                    FsmEvent = throwEvent,
-                    ToState = "Slash 4",
-                    ToFsmState = fsm.Fsm.GetState("Slash 4")
+                    FsmEvent = finishedEvent,
+                    ToState = "Launch Antic",
+                    ToFsmState = fsm.Fsm.GetState("Launch Antic")
                 }
             ]
         };
@@ -91,7 +90,7 @@ public class NewSlash2State(
         {
             if (BindFsmState.Actions[i] is AnimEndSendRandomEventAction animEnd)
             {
-                animEnd.events = [finishedEvent, throwEvent];
+                animEnd.events = [finishedEvent, evadeEvent];
                 animEnd.weights = [0.5f, 0.5f];
                 BindFsmState.Actions[i] = animEnd;
             }

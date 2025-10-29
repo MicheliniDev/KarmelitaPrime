@@ -14,7 +14,7 @@ public class Cyclone1Modifier(
     public override void OnCreateModifier()
     {
         var moveAction = BindFsmState.Actions.FirstOrDefault(action => action is SetVelocityByScale) as SetVelocityByScale;
-        moveAction.speed.Value *= 1.5f;
+        moveAction.speed.Value *= 1.25f;
     }
 
     public override void SetupPhase1Modifiers()

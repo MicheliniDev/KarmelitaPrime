@@ -22,7 +22,7 @@ public class CycloneAnticTransitionerState(
                 new CheckHeroYAction()
                 {
                     Target = wrapper.transform,
-                    Threshold = 3f,
+                    Threshold = 4f,
                     AboveEvent = FsmEvent.GetFsmEvent("FINISHED"),
                     BelowEvent = FsmEvent.GetFsmEvent("ATTACK"),
                 }
@@ -39,6 +39,12 @@ public class CycloneAnticTransitionerState(
                     FsmEvent = FsmEvent.GetFsmEvent("ATTACK"),
                     ToState = "Cyclone 1",
                     ToFsmState = fsm.Fsm.GetState("Cyclone 1")
+                },
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("EVADE"),
+                    ToState = "Evade To Wind Blade",
+                    ToFsmState = fsm.Fsm.GetState("Evade To Wind Blade")
                 }
             ]
         };
@@ -51,15 +57,19 @@ public class CycloneAnticTransitionerState(
 
     public override void SetupPhase2Modifiers()
     {
-        var newWeights = new WeightedRandomEventAction()
+        BindFsmState.Actions[0] = new WeightedRandomEventAction()
         {
-            events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")],
-            weights = [.65f, .35f],//COULD BE A NICE INTRODUCTION TOT HE TELEPORT COMBO
+            events = [FsmEvent.GetFsmEvent("ATTACK"), FsmEvent.GetFsmEvent("EVADE")],
+            weights = [6f, .4f],
         };
-        BindFsmState.Actions[0] = newWeights;
     }
 
     public override void SetupPhase3Modifiers()
     {
+        BindFsmState.Actions[0] = new WeightedRandomEventAction()
+        {
+            events = [FsmEvent.GetFsmEvent("ATTACK")],
+            weights = [1f],
+        };
     }
 }

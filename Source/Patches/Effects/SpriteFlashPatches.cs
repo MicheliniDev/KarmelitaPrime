@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,5 +22,30 @@ public class SpriteFlashPatch
             flashAmount = 1f;
             flashColour = Color.white;
         }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(SpriteFlash), "Awake")]
+    private static void InitializeListsPatch(SpriteFlash __instance)
+    {
+        var parentsField = AccessTools.Field(typeof(SpriteFlash), "parents");
+        var childrenField = AccessTools.Field(typeof(SpriteFlash), "children");
+
+        if (parentsField.GetValue(__instance) == null)
+            parentsField.SetValue(__instance, new List<SpriteFlash>());
+
+        if (childrenField.GetValue(__instance) == null)
+            childrenField.SetValue(__instance, new List<SpriteFlash>());
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(SpriteFlash), "SetParamsChildrenRecursive")]
+    private static bool PreventNullReferencePatch(SpriteFlash __instance)
+    {
+        if (Constants.IsBlackWhiteHighlight)
+        { 
+            return false; 
+        }
+        return true; 
     }
 }

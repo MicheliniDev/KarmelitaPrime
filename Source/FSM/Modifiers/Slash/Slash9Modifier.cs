@@ -17,6 +17,20 @@ public class Slash9Modifier(
     private FsmEvent toCycloneEvent => FsmEvent.GetFsmEvent("CYCLONE SPIN");
     public override void OnCreateModifier()
     {
+        BindFsmState.Transitions = [
+            new FsmTransition()
+            {
+                FsmEvent = finishedEvent,
+                ToState = "Slash End",
+                ToFsmState = fsm.Fsm.GetState("Slash End"),
+            },
+            new FsmTransition()
+            {
+                FsmEvent = toCycloneEvent,
+                ToState = "Cyclone Antic",
+                ToFsmState = fsm.Fsm.GetState("Cyclone Antic"),
+            }
+        ];
     }
     
     public override void SetupPhase1Modifiers()
@@ -39,21 +53,6 @@ public class Slash9Modifier(
             }
         ]);
         BindFsmState.Actions = newActions.ToArray();
-        
-        BindFsmState.Transitions = [
-            new FsmTransition()
-            {
-                FsmEvent = finishedEvent,
-                ToState = "Slash End",
-                ToFsmState = fsm.Fsm.GetState("Slash End"),
-            },
-            new FsmTransition()
-            {
-                FsmEvent = toCycloneEvent,
-                ToState = "Cyclone Antic",
-                ToFsmState = fsm.Fsm.GetState("Cyclone Antic"),
-            }
-        ];
     }
 
     public override void SetupPhase2Modifiers()
@@ -72,7 +71,7 @@ public class Slash9Modifier(
                 {
                     animator = wrapper.animator,
                     events = [toSlash2OnlyState, toCycloneEvent],
-                    weights = [.5f, .5f],
+                    weights = [1f, 0f],
                     shortenEventTIme = 0.25f
                 };
             }

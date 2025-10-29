@@ -85,8 +85,8 @@ public class Rethrow2TransitionerState(
         BindFsmState.Transitions = BindFsmState.Transitions.Append(new FsmTransition()
         {
             FsmEvent = FsmEvent.GetFsmEvent("THROW"),
-            ToState = "Rethrow 3 Check Direction",
-            ToFsmState = fsm.Fsm.GetState("Rethrow 3 Check Direction")
+            ToState = "Rethrow 3 Antic",
+            ToFsmState = fsm.Fsm.GetState("Rethrow 3 Antic")
         }).ToArray();
     }
 }

@@ -16,7 +16,7 @@ public class CameraFollowBossAndHeroPatch
     private static bool MakeCameraFollowBoss(ref CameraTarget __instance)
     {
         if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName &&
-            KarmelitaPrimeMain.Instance.wrapper)
+            KarmelitaPrimeMain.Instance.wrapper && KarmelitaPrimeMain.Instance.wrapper.BattleStarted)
         {
             float midpoint = (karmelitaTransform.position.x + heroTransform.position.x) / 2f;
             float midpointY = (karmelitaTransform.position.y + heroTransform.position.y) / 2f;

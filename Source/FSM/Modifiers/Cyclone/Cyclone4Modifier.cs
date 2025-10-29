@@ -28,7 +28,7 @@ public class Cyclone4Modifier(
             {
                 Owner = wrapper.gameObject,
                 Threshold = 1f,
-                TrueEvent = FsmEvent.GetFsmEvent("EVADE")//ADD EVADE STATE IN CASE HERO TOO CLOSE 
+                TrueEvent = FsmEvent.GetFsmEvent("EVADE")
             },
             new AnimEndSendRandomEventAction()
                 {
@@ -49,15 +49,41 @@ public class Cyclone4Modifier(
             },
             new FsmTransition()
             {
+                FsmEvent = FsmEvent.GetFsmEvent("EVADE"),
+                ToState = "Long Approach", //Maybe change it to dash back?
+                ToFsmState = fsm.Fsm.GetState("Long Approach")
+            },
+            new FsmTransition()
+            {
                 FsmEvent = FsmEvent.GetFsmEvent("ATTACK"),
-                ToState = "Jump Launch",
-                ToFsmState = fsm.Fsm.GetState("Jump Launch")
+                ToState = "Slash Antic", //Jump Launch
+                ToFsmState = fsm.Fsm.GetState("Slash Antic")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("JUMP SPIN"),
+                ToState = "Jump Antic", 
+                ToFsmState = fsm.Fsm.GetState("Jump Antic")
             }
         ];
     }
 
     public override void SetupPhase2Modifiers()
     {
+        for (int i = 0; i < BindFsmState.Actions.Length; i++)
+        {
+            if (BindFsmState.Actions[i] is AnimEndSendRandomEventAction animEnd)
+            {
+                animEnd = new AnimEndSendRandomEventAction()
+                {
+                    animator = wrapper.animator,
+                    events = [FsmEvent.GetFsmEvent("JUMP SPIN")],
+                    weights = [1f],
+                    shortenEventTIme = 0.5f
+                };
+                BindFsmState.Actions[i] = animEnd;
+            }
+        }
     }
 
     public override void SetupPhase3Modifiers()

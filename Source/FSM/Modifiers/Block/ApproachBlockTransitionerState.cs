@@ -27,6 +27,12 @@ public class ApproachBlockTransitionerState(
             Transitions = [
                 new FsmTransition()
                 {
+                    FsmEvent = FsmEvent.GetFsmEvent("EVADE"),
+                    ToState = "Evade To Wind Blade",
+                    ToFsmState = fsm.Fsm.GetState("Evade To Wind Blade")
+                },
+                new FsmTransition()
+                {
                     FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
                     ToState = "Generic Teleport Pre",
                     ToFsmState = fsm.Fsm.GetState("Generic Teleport Pre")
@@ -60,6 +66,11 @@ public class ApproachBlockTransitionerState(
 
     public override void SetupPhase2Modifiers()
     {
+        BindFsmState.Actions[0] = new WeightedRandomEventAction()
+        {
+            events = [FsmEvent.GetFsmEvent("EVADE"), FsmEvent.GetFsmEvent("SLASH COMBO"), FsmEvent.GetFsmEvent("CYCLONE SPIN"), FsmEvent.GetFsmEvent("JUMP SPIN")],
+            weights = [.25f, .25f, .25f, .25f]
+        };
     }
 
     public override void SetupPhase3Modifiers()
