@@ -322,15 +322,20 @@ public class KarmelitaWrapper : MonoBehaviour
 
     public void TriggerPhase3()
     {
-        fsmController.DoPhase3();
         var pos = transform.position;
         pos.y = 21.4355f;
         transform.position = pos;
+        rb.linearVelocity = Vector2.zero;
+        fsmController.DoPhase3();
     }
     
     public void FakeP3()
     {
         if (hasFakedP3) return;
+        var pos = transform.position;
+        pos.y = 21.4355f;
+        transform.position = pos;
+        rb.linearVelocity = Vector2.zero;
         fsmController.FakePhase3();
         hasFakedP3 = true;
     }

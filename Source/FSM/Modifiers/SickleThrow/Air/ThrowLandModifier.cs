@@ -26,6 +26,12 @@ public class ThrowLandModifier(
 
     public override void SetupPhase2Modifiers()
     {
+        BindFsmState.Transitions = [new FsmTransition()
+        {
+            FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+            ToState = "Evade To Throw",
+            ToFsmState = fsm.Fsm.GetState("Evade To Throw")
+        }];
     }
 
     public override void SetupPhase3Modifiers()

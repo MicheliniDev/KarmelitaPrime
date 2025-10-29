@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using GlobalEnums;
-using HarmonyLib;
-using HutongGames.PlayMaker.Actions;
-using TeamCherry.Localization;
+﻿using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,8 +7,6 @@ namespace KarmelitaPrime.Patches;
 [HarmonyPatch]
 public class DamagePatches
 {
-    private static int crossStitchDamageCount = 0;
-    
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HealthManager), "TakeDamage")]
     private static void AutoPhase3TriggerPatch(ref HealthManager __instance, ref HitInstance hitInstance)

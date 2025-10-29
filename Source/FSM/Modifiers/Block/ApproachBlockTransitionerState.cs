@@ -68,8 +68,8 @@ public class ApproachBlockTransitionerState(
     {
         BindFsmState.Actions[0] = new WeightedRandomEventAction()
         {
-            events = [FsmEvent.GetFsmEvent("EVADE"), FsmEvent.GetFsmEvent("SLASH COMBO"), FsmEvent.GetFsmEvent("CYCLONE SPIN"), FsmEvent.GetFsmEvent("JUMP SPIN")],
-            weights = [.25f, .25f, .25f, .25f]
+            events = [FsmEvent.GetFsmEvent("SLASH COMBO"), FsmEvent.GetFsmEvent("CYCLONE SPIN"), FsmEvent.GetFsmEvent("JUMP SPIN")],
+            weights = [.3f, .4f, .3f]
         };
     }
 

@@ -13,7 +13,36 @@ public class DashGrindTransitionerState(
     public override string BindState => "Dash Grind Transitioner";
     public override void OnCreateModifier()
     {
-        CreateBindState();
+        FsmState bindState = new FsmState(fsm.Fsm)
+        {
+            Name = BindState,
+            Actions = [new WeightedRandomEventAction()
+            {
+                events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
+                weights = [1f, 0f],
+            }],
+            Transitions = [
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                    ToState = "Jump Launch",
+                    ToFsmState = fsm.Fsm.GetState("Jump Launch")
+                },
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("ATTACK"),
+                    ToState = "Evade To Wind Blade",
+                    ToFsmState = fsm.Fsm.GetState("Evade To Wind Blade")
+                },
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("CANCEL"),
+                    ToState = "Generic Teleport Pre",
+                    ToFsmState = fsm.Fsm.GetState("Generic Teleport Pre")
+                },
+            ]
+        };
+        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
     }
 
     public override void SetupPhase1Modifiers()
@@ -33,35 +62,6 @@ public class DashGrindTransitionerState(
                 events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("CANCEL")],
                 weights = [.5f, .5f],
             }
-        ];
-    }
-    
-    private void CreateBindState()
-    {
-        FsmState bindState = new FsmState(fsm.Fsm)
-        {
-            Name = BindState,
-            Actions = [new WeightedRandomEventAction()
-            {
-                events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")],
-                weights = [1f, 0f],
-            }],
-        };
-        fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
-
-        BindFsmState.Transitions = [
-            new FsmTransition()
-            {
-                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                ToState = "Jump Launch",
-                ToFsmState = fsm.Fsm.GetState("Jump Launch")
-            },
-            new FsmTransition()
-            {
-                FsmEvent = FsmEvent.GetFsmEvent("CANCEL"),
-                ToState = "Generic Teleport Pre",
-                ToFsmState = fsm.Fsm.GetState("Generic Teleport Pre")
-            },
         ];
     }
 }

@@ -27,7 +27,7 @@ public class ParryPatches
         if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName
             && KarmelitaPrimeMain.Instance.wrapper)
         {
-            KarmelitaPrimeMain.Instance.wrapper.health.hp -= 15;
+            KarmelitaPrimeMain.Instance.wrapper.health.hp -= 7; //USED TO BE 15
         }
     }
     

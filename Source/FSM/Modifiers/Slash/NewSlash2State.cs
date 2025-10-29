@@ -42,7 +42,7 @@ public class NewSlash2State(
                 new FadeVelocityAction()
                 {
                     Rb = wrapper.rb,
-                    Duration = .8f,
+                    Duration = .5f,
                 },
                 new PlayRandomClipAction()
                 {

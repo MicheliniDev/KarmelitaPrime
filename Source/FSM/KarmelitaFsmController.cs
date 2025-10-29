@@ -24,6 +24,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 
     public void Initialize()
     {
+        fsm.Fsm.GetFsmBool("Double Throws").Value = true;
         SetIdleTime();
         RerouteFirstRoarState();
         ChangeToBigTitle();
@@ -154,8 +155,8 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
                 new FsmTransition()
                 {
                     FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                    ToState = "Set Dash Grind",
-                    ToFsmState = fsm.Fsm.GetState("Set Dash Grind")
+                    ToState = "Evade To Wind Blade",
+                    ToFsmState = fsm.Fsm.GetState("Evade To Wind Blade")
                 }
             ]
         };
@@ -198,6 +199,19 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
         ]);
         bindState.Actions = actionsList.ToArray();
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
+        
+        var watchAnim = fsm.Fsm.GetState("Slash Antic").Actions.FirstOrDefault(action => action is AnimEndSendRandomEventAction) as AnimEndSendRandomEventAction;
+        watchAnim.events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("EVADE")];
+        watchAnim.weights = [.6f, .4f];
+        
+        fsm.Fsm.GetState("Dash Grind Transitioner").Actions =
+        [
+            new WeightedRandomEventAction()
+            {
+                events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK")],
+                weights = [.5f, .5f],
+            }
+        ];
         
         fsm.SetState("Fake Phase 3");
     }
@@ -260,6 +274,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
             new SpinAttackModifier(fsm, stunFsm, wrapper, this),
             new WindBladeState(fsm, stunFsm, wrapper, this),
             new EvadeToWindBladeState(fsm, stunFsm, wrapper, this),
+            new EvadeToThrowState(fsm, stunFsm, wrapper, this),
             new GenericTeleportRecoveryState(fsm, stunFsm, wrapper, this),
             new GenericTeleportState(fsm, stunFsm, wrapper, this),
             new GenericTeleportPreState(fsm, stunFsm, wrapper, this),

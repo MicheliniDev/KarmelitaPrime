@@ -30,8 +30,8 @@ public class SpinAttackLandModifier(
             new AnimEndSendRandomEventAction()
             {
                 animator = wrapper.animator,
-                events = [FsmEvent.GetFsmEvent("CANCEL")],
-                weights = [1f]
+                events = [FsmEvent.GetFsmEvent("CANCEL"), FsmEvent.GetFsmEvent("CYCLONE SPIN")],
+                weights = [.35f, .65f]
             }
         ]);
         BindFsmState.Actions = actionsList.ToArray();
@@ -48,12 +48,29 @@ public class SpinAttackLandModifier(
                 FsmEvent = FsmEvent.GetFsmEvent("CANCEL"),
                 ToState = "Launch Up",
                 ToFsmState = fsm.Fsm.GetState("Launch Up")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("CYCLONE SPIN"),
+                ToState = "Cyclone Antic",
+                ToFsmState = fsm.Fsm.GetState("Cyclone Antic")
+            },
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("EVADE"),
+                ToState = "Evade To Throw",
+                ToFsmState = fsm.Fsm.GetState("Evade To Throw")
             }
         ];
     }
 
     public override void SetupPhase2Modifiers()
     {
+        var weightEvent = BindFsmState.Actions.FirstOrDefault(
+                action => action is AnimEndSendRandomEventAction) as
+            AnimEndSendRandomEventAction;
+        weightEvent.events = [FsmEvent.GetFsmEvent("CANCEL"), FsmEvent.GetFsmEvent("CYCLONE SPIN"), FsmEvent.GetFsmEvent("EVADE")];
+        weightEvent.weights = [.35f, .35f, .3f];
     }
 
     public override void SetupPhase3Modifiers()
@@ -61,7 +78,7 @@ public class SpinAttackLandModifier(
         var weightEvent = BindFsmState.Actions.FirstOrDefault(
                 action => action is AnimEndSendRandomEventAction) as
                 AnimEndSendRandomEventAction;
-        weightEvent.events = [FsmEvent.GetFsmEvent("CANCEL"), FsmEvent.GetFsmEvent("FINISHED")];
-        weightEvent.weights = [.7f, .3f];
+        weightEvent.events = [FsmEvent.GetFsmEvent("CANCEL"), FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("CYCLONE SPIN"), FsmEvent.GetFsmEvent("EVADE")];
+        weightEvent.weights = [.25f, .25f, .25f, .25f];
     }
 }

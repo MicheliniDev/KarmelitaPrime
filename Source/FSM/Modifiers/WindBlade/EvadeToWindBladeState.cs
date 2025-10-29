@@ -61,8 +61,8 @@ public class EvadeToWindBladeState(
         var rb = wrapper.rb;
         var transform = rb.transform;
 
-        float dashSpeed = 60f;
-        float dashDuration = .5f;
+        float dashSpeed = 40f;
+        float dashDuration = .2f;
         
         Vector2 playerPos = HeroController.instance.transform.position;
         Vector2 enemyPos = transform.position;

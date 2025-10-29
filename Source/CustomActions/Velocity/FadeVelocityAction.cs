@@ -13,6 +13,7 @@ public class FadeVelocityAction : FsmStateAction
     {
         base.OnEnter();
         Fsm.Owner.StartCoroutine(LerpVelocity());
+        Finish();
     }
 
     public override void OnExit()

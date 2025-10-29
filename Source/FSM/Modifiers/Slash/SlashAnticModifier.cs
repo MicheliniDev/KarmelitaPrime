@@ -47,6 +47,12 @@ public class SlashAnticModifier(
             ToState = "Evade To Wind Blade",
             ToFsmState = fsm.Fsm.GetState("Evade To Wind Blade")
         }).ToArray();
+        BindFsmState.Transitions = BindFsmState.Transitions.Append( new FsmTransition()
+        {
+            FsmEvent = FsmEvent.GetFsmEvent("CHALLENGE"),
+            ToState = "Teleport 1 Pre",
+            ToFsmState = fsm.Fsm.GetState("Teleport 1 Pre")
+        }).ToArray();
     }
 
     public override void SetupPhase1Modifiers()
@@ -55,15 +61,12 @@ public class SlashAnticModifier(
 
     public override void SetupPhase2Modifiers()
     {
-        var watchAnim = BindFsmState.Actions.FirstOrDefault(action => action is AnimEndSendRandomEventAction) as AnimEndSendRandomEventAction;
-        watchAnim.events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("EVADE")];
-        watchAnim.weights = [.6f, .4f];
     }
 
     public override void SetupPhase3Modifiers()
     {
         var watchAnim = BindFsmState.Actions.FirstOrDefault(action => action is AnimEndSendRandomEventAction) as AnimEndSendRandomEventAction;
         watchAnim.events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("EVADE"), FsmEvent.GetFsmEvent("CHALLENGE")];
-        watchAnim.weights = [0.6f, 0.3f, 0.1f];
+        watchAnim.weights = [0.6f, 0.35f, 0.05f]; 
     }
 }

@@ -43,8 +43,14 @@ public class CycloneAnticTransitionerState(
                 new FsmTransition()
                 {
                     FsmEvent = FsmEvent.GetFsmEvent("EVADE"),
-                    ToState = "Evade To Wind Blade",
-                    ToFsmState = fsm.Fsm.GetState("Evade To Wind Blade")
+                    ToState = "Slash Antic", //Evade To Wind Blade
+                    ToFsmState = fsm.Fsm.GetState("Slash Antic")
+                },
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("DASH GRIND"),
+                    ToState = "Jump Back Dir", 
+                    ToFsmState = fsm.Fsm.GetState("Jump Back Dir")
                 }
             ]
         };
@@ -59,17 +65,22 @@ public class CycloneAnticTransitionerState(
     {
         BindFsmState.Actions[0] = new WeightedRandomEventAction()
         {
-            events = [FsmEvent.GetFsmEvent("ATTACK"), FsmEvent.GetFsmEvent("EVADE")],
-            weights = [6f, .4f],
+            events = [FsmEvent.GetFsmEvent("DASH GRIND"), FsmEvent.GetFsmEvent("ATTACK"), FsmEvent.GetFsmEvent("EVADE")],
+            weights = [.4f, .4f, .2f],
         };
     }
 
     public override void SetupPhase3Modifiers()
     {
-        BindFsmState.Actions[0] = new WeightedRandomEventAction()
+        /*BindFsmState.Actions[0] = new WeightedRandomEventAction()
         {
             events = [FsmEvent.GetFsmEvent("ATTACK")],
             weights = [1f],
+        };*/
+        BindFsmState.Actions[0] = new WeightedRandomEventAction()
+        {
+            events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("ATTACK"), FsmEvent.GetFsmEvent("EVADE")],
+            weights = [.3f, .3f, .4f],
         };
     }
 }

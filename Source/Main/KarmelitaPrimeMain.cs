@@ -7,7 +7,6 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using KarmelitaPrime.Patches;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using KarmelitaPrime.Drawers;
 
 namespace KarmelitaPrime;
@@ -33,7 +32,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     
     public void Awake()
     {
-        harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} is loaded");
 
         fightBoss = Config.Bind("", "Fight the Boss", false,
@@ -66,6 +64,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         yield return new WaitUntil(() => GameManager.instance);
         yield return null;
         GetResources();
+        harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
         yield return null;
     }
 

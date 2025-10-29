@@ -22,7 +22,7 @@ public class Slash4Modifier(
             Transform = wrapper.transform
         }).ToArray();
         var velocityAction = BindFsmState.Actions.FirstOrDefault(action => action is SetVelocityByScale) as SetVelocityByScale;
-        velocityAction!.speed.Value *= 1.25f;
+        velocityAction!.speed.Value *= 1.2f;
     }
 
     public override void SetupPhase2Modifiers()

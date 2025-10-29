@@ -45,6 +45,12 @@ public class ThrowAnticTransitionerState(
                     ToState = "Generic Teleport Pre", 
                     ToFsmState = fsm.Fsm.GetState("Generic Teleport Pre")
                 },
+                new FsmTransition()
+                {
+                    FsmEvent = FsmEvent.GetFsmEvent("THROW"),
+                    ToState = "Evade To Throw", 
+                    ToFsmState = fsm.Fsm.GetState("Evade To Throw")
+                },
             ]
         };
         fsm.Fsm.States = fsm.Fsm.States.Append(bindState).ToArray();
@@ -56,6 +62,9 @@ public class ThrowAnticTransitionerState(
 
     public override void SetupPhase2Modifiers()
     {
+        var anim = BindFsmState.Actions.FirstOrDefault(action => action is AnimEndSendRandomEventAction) as AnimEndSendRandomEventAction;
+        anim.events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")];
+        anim.weights = [.9f, .1f];
     }
 
     public override void SetupPhase3Modifiers()
