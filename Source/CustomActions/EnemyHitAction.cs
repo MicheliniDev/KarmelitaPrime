@@ -6,7 +6,7 @@ namespace KarmelitaPrime;
 
 public class EnemyHitAction : FsmStateAction
 {
-    public HealthManager Owner;
+    public new HealthManager Owner;
     public FsmEvent OnHitEvent;
     public bool isInvincibleOnEnter;
     public float IgnoreHitStartDuration;

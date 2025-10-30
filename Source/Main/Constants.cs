@@ -31,6 +31,30 @@ public static class Constants
                     case LanguageCode.PT:
                         value = "Karmelita Whatsapp";
                         break;
+                    case LanguageCode.DE:
+                        value = "Whatsapp Karmelita";
+                        break;
+                    case LanguageCode.ES:
+                        value = "Karmelita Whatsapp";
+                        break;
+                    case LanguageCode.FR:
+                        value = "Karmelita Whatsapp";
+                        break;
+                    case LanguageCode.IT:
+                        value = "Karmelita Whatsapp";
+                        break;
+                    case LanguageCode.JA:
+                        value = "Whatsapp カルメリタ";
+                        break;
+                    case LanguageCode.KO:
+                        value = "Whatsapp 카르멜리타";
+                        break;
+                    case LanguageCode.RU:
+                        value = "Whatsapp Кармелита";
+                        break;
+                    case LanguageCode.ZH:
+                        value = "Whatsapp 卡梅莉塔";
+                        break;
                 }
             }
             else
@@ -43,12 +67,36 @@ public static class Constants
                     case LanguageCode.PT:
                         value = "Karmelita Auge";
                         break;
+                    case LanguageCode.DE:
+                        value = "Karmelita in Höchstform";
+                        break;
+                    case LanguageCode.ES:
+                        value = "Karmelita en su Apogeo";
+                        break;
+                    case LanguageCode.FR:
+                        value = "Karmelita à son Apogée";
+                        break;
+                    case LanguageCode.IT:
+                        value = "Karmelita all'Apice";
+                        break;
+                    case LanguageCode.JA:
+                        value = "カルメリタ・プライム";
+                        break;
+                    case LanguageCode.KO:
+                        value = "카르멜리타 프라임";
+                        break;
+                    case LanguageCode.RU:
+                        value = "Кармелита Прайм";
+                        break;
+                    case LanguageCode.ZH:
+                        value = "卡梅莉塔 巅峰";
+                        break;
                 }
             }
             return value;
         }
     }
-    
+
     public static string KarmelitaDescription
     {
         get
@@ -57,10 +105,34 @@ public static class Constants
             switch (Language.CurrentLanguage())
             {
                 case LanguageCode.EN:
-                    value = $"The Skarr's most skilled warrior and singer, at the peak of her abilities.";
+                    value = "The Skarr's most skilled warrior and singer, at the peak of her abilities.";
                     break;
                 case LanguageCode.PT:
-                    value = $"A guerreira e cantora mais habilidosa dos Skarr, no auge de suas habilidades.";
+                    value = "A guerreira e cantora mais habilidosa dos Skarr, no auge de suas habilidades.";
+                    break;
+                case LanguageCode.DE:
+                    value = "Die geschickteste Kriegerin und Sängerin der Skarr, auf dem Höhepunkt ihrer Fähigkeiten.";
+                    break;
+                case LanguageCode.ES:
+                    value = "La guerrera y cantante más hábil de los Skarr, en el apogeo de sus habilidades.";
+                    break;
+                case LanguageCode.FR:
+                    value = "La guerrière et chanteuse la plus talentueuse des Skarr, à l'apogée de ses capacités.";
+                    break;
+                case LanguageCode.IT:
+                    value = "La guerriera e cantante più abile degli Skarr, all'apice delle sue capacità.";
+                    break;
+                case LanguageCode.JA:
+                    value = "スカー族で最も熟練した戦士であり歌手。まさに絶頂期。";
+                    break;
+                case LanguageCode.KO:
+                    value = "스카르 족 최고의 전사이자 가수, 능력의 정점에 서 있습니다.";
+                    break;
+                case LanguageCode.RU:
+                    value = "Самая умелая воительница и певица из племени Скарр, на пике своих способностей.";
+                    break;
+                case LanguageCode.ZH:
+                    value = "斯卡尔族最强的战士与歌手，正值巅峰。";
                     break;
             }
             return value;
@@ -82,6 +154,30 @@ public static class Constants
                     case LanguageCode.PT:
                         value = "Olha a mensagem";
                         break;
+                    case LanguageCode.DE:
+                        value = "Die Botin";
+                        break;
+                    case LanguageCode.ES:
+                        value = "La Mensajera";
+                        break;
+                    case LanguageCode.FR:
+                        value = "La Messagère";
+                        break;
+                    case LanguageCode.IT:
+                        value = "La Messaggera";
+                        break;
+                    case LanguageCode.JA:
+                        value = "使者";
+                        break;
+                    case LanguageCode.KO:
+                        value = "전령";
+                        break;
+                    case LanguageCode.RU:
+                        value = "Посланница";
+                        break;
+                    case LanguageCode.ZH:
+                        value = "信使";
+                        break;
                 }
             }
             else
@@ -94,14 +190,38 @@ public static class Constants
                     case LanguageCode.PT:
                         value = "A Caçadora Rainha";
                         break;
+                    case LanguageCode.DE:
+                        value = "Die Jägerkönigin";
+                        break;
+                    case LanguageCode.ES:
+                        value = "La Reina Cazadora";
+                        break;
+                    case LanguageCode.FR:
+                        value = "La Reine Chasseuse";
+                        break;
+                    case LanguageCode.IT:
+                        value = "La Regina Cacciatrice";
+                        break;
+                    case LanguageCode.JA:
+                        value = "狩人の女王";
+                        break;
+                    case LanguageCode.KO:
+                        value = "사냥꾼의 여왕";
+                        break;
+                    case LanguageCode.RU:
+                        value = "Королева-охотница";
+                        break;
+                    case LanguageCode.ZH:
+                        value = "猎人女王";
+                        break;
                 }
             }
             return value;
         }
     }
-    
+
     public static string KarmelitaBossTitleMain => KarmelitaDisplayName;
-    
+
     public static string KarmelitaBossTitleSub
     {
         get
@@ -114,6 +234,30 @@ public static class Constants
                     break;
                 case LanguageCode.PT:
                     value = "Por MicheliniDev";
+                    break;
+                case LanguageCode.DE:
+                    value = "Von MicheliniDev";
+                    break;
+                case LanguageCode.ES:
+                    value = "Por MicheliniDev";
+                    break;
+                case LanguageCode.FR:
+                    value = "Par MicheliniDev";
+                    break;
+                case LanguageCode.IT:
+                    value = "Di MicheliniDev";
+                    break;
+                case LanguageCode.JA:
+                    value = "MicheliniDev作";
+                    break;
+                case LanguageCode.KO:
+                    value = "제작: MicheliniDev";
+                    break;
+                case LanguageCode.RU:
+                    value = "От MicheliniDev";
+                    break;
+                case LanguageCode.ZH:
+                    value = "作者：MicheliniDev";
                     break;
             }
             return value;
@@ -209,6 +353,7 @@ public static class Constants
         "Approach Block Transitioner",
         "Slash Antic",
         "Jump Antic",
+        "Launch Antic",
         "Spin Attack Land",
         "Throw Fall",
         "Throw Land",
@@ -236,11 +381,11 @@ public static class Constants
         "Generic Teleport Pre",
         "Generic Teleport",
         "Generic Teleport Recovery",
-        "P2 Roar Antic",
         "Phase 3 Knocked",
         "Phase 3 Recovering State",
         "P2 Roar Antic",
         "P2 Roar",
+        "Fake Phase 3",
         "P3 Roar Antic",
         "P3 Roar"
     ];

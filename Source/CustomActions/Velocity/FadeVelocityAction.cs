@@ -13,7 +13,6 @@ public class FadeVelocityAction : FsmStateAction
     {
         base.OnEnter();
         Fsm.Owner.StartCoroutine(LerpVelocity());
-        Finish();
     }
 
     public override void OnExit()
@@ -35,5 +34,6 @@ public class FadeVelocityAction : FsmStateAction
             rb.linearVelocityX = Mathf.Lerp(Rb.linearVelocity.x, 0f, t);
             yield return null;
         }
+        Finish();
     }
 }

@@ -1,0 +1,8 @@
+﻿{
+  "namespace": "KarmelitaPrime",
+  "name": "KarmelitaPrime",
+  "version_number": "1.0.0",
+  "description": "A brutal rework for Skarrsinger Karmelita.",  
+  "website_url": "https://github.com/MicheliniDev/KarmelitaPrime",
+  "dependencies": ["BepInEx-BepInExPack_Silksong-5.4.2303", "jakobhellermann-BepInExConfigurationManager-18.4.1"]
+}

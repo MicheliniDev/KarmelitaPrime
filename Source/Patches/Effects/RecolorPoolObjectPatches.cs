@@ -15,11 +15,12 @@ public class RecolorPoolObjectPatches
     {
         //For some reason checking the UI layer isn't working so I gotta write all exceptions :D
         //AND IT STILL DOESN'T WORK??????????????????????????
+        
         if (!Constants.IsBlackWhiteHighlight 
             || __instance.storeObject.Value.layer == LayerMask.NameToLayer("UI")
-            || __instance.storeObject.Value.name.Contains("health")
+            || __instance.storeObject.Value.name.Contains("Health")
             || __instance.storeObject.Value.name.Contains("Silk Chunk")) return;
-
+        
         if (__instance.storeObject.Value.name.Contains("Sickle"))
         {
             HandleKarmelitaSickle(__instance.storeObject.Value);

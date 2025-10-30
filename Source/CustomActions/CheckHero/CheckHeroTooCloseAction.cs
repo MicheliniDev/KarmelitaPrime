@@ -5,7 +5,7 @@ namespace KarmelitaPrime;
 
 public class CheckHeroTooCloseAction : FsmStateAction
 {
-    public GameObject Owner;
+    public new GameObject Owner;
     public float Threshold;
     public bool IsTooFarCheck;
     public FsmEvent TrueEvent;

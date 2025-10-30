@@ -13,40 +13,11 @@ public class Teleport5SickleThrow(
     : StateModifierBase(fsm, stunFsm, wrapper, fsmController)
 {
     public override string BindState => "Teleport 5 Sickle Throw";
-    private GameObject spawnedSoTheConsoleWillShutUp;
     public override void OnCreateModifier()
     {
         FsmState bindState = new FsmState(fsm.Fsm)
         {
             Name = BindState,
-            /*Actions = 
-            [
-                new FaceHeroAction()
-                {
-                    Transform = wrapper.transform
-                },
-                new SpawnObjectFromGlobalPoolDelay()
-                {
-                    gameObject = wrapper.SicklePrefab,
-                    spawnPoint = fsm.Fsm.GetFsmGameObject("Throw Point"),
-                    position = Vector3.zero,
-                    rotation = Vector3.one,
-                    delayMin = 0.1f,
-                    delayMax = 0.1f,
-                    storeObject = spawnedSoTheConsoleWillShutUp
-                },
-                new AnimationPlayerAction()
-                {
-                    animator = wrapper.animator,
-                    ClipName = "Throw", 
-                    AnimationFinishedEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                },
-                new PlayRandomClipAction()
-                {
-                    Table = wrapper.AttackQuickTable,
-                    Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value
-                },
-            ],*/
             Transitions = [
                 new FsmTransition()
                 {

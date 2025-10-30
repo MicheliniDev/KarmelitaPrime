@@ -26,10 +26,9 @@ public class HighlightTracker : MonoBehaviour
         for (int i = 0; i < renderers.Length; i++)
         {
             var renderer = renderers[i];
-            originalMaterials[i] = renderer.sharedMaterial;
-
-            if (renderer.sharedMaterial != null && renderer.sharedMaterial.HasProperty("_Color"))
-                originalColors[i] = renderer.sharedMaterial.color;
+            originalMaterials[i] = renderer.material;
+            if (renderer.material != null && renderer.material.HasProperty("_Color"))
+                originalColors[i] = renderer.material.color;
 
             if (renderer is ParticleSystemRenderer psRenderer)
             {
@@ -47,6 +46,7 @@ public class HighlightTracker : MonoBehaviour
             foreach (var flasher in flashers)
             {
                 flasher.IsBlocked = false;
+                ResetMaterial();
             }
         }
         else

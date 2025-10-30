@@ -43,12 +43,4 @@ public class DamagePatches
             damageAmount = 3;
         }
     }
-    
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
-    private static void AutoHealOnDamageDebugPatch(ref HeroController __instance)
-    {
-        if (KarmelitaPrimeMain.Instance.IsDebug.Value)
-            __instance.MaxHealth();
-    }
 }

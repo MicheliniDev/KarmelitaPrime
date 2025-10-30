@@ -28,7 +28,8 @@ public class KarmelitaWrapper : MonoBehaviour
     
     public int PhaseIndex;
     private float auraLevel;
-    public bool hasFakedP3;
+    private bool hasFakedP3;
+    private bool hasTriggeredP3;
     public bool IsInHighlightMode;
     public bool BattleStarted;
 
@@ -57,6 +58,7 @@ public class KarmelitaWrapper : MonoBehaviour
         auraLevel = 0f;
         IsInHighlightMode = false;
         hasFakedP3 = false;
+        hasTriggeredP3 = false;
         BattleStarted = false;
         HeroController.instance.OnDeath += () => KarmelitaPrimeMain.Instance.ResetFlags();
     }
@@ -322,11 +324,15 @@ public class KarmelitaWrapper : MonoBehaviour
 
     public void TriggerPhase3()
     {
+        if (hasTriggeredP3) return;
+        
         var pos = transform.position;
         pos.y = 21.4355f;
         transform.position = pos;
         rb.linearVelocity = Vector2.zero;
+        health.IsInvincible = true;
         fsmController.DoPhase3();
+        hasTriggeredP3 = true;
     }
     
     public void FakeP3()
@@ -345,6 +351,7 @@ public class KarmelitaWrapper : MonoBehaviour
         SetVocalAudioSource(true);
         IsInHighlightMode = false;
         BattleStarted = false;
+        hasTriggeredP3 = false;
         PreloadManager.UnloadAll();
     }
 }

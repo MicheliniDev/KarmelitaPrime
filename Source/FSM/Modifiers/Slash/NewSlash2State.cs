@@ -32,7 +32,7 @@ public class NewSlash2State(
                     animator = wrapper.animator,
                     events = [finishedEvent],
                     weights = [1f],
-                    shortenEventTIme = 0.3f
+                    shortenEventTIme = 0.15f
                 },
                 new SetVelocityToPlayer()
                 {
@@ -42,7 +42,7 @@ public class NewSlash2State(
                 new FadeVelocityAction()
                 {
                     Rb = wrapper.rb,
-                    Duration = .5f,
+                    Duration = .35f,
                 },
                 new PlayRandomClipAction()
                 {

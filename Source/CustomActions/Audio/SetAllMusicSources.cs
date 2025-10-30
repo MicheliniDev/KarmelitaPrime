@@ -4,7 +4,7 @@ namespace KarmelitaPrime;
 
 public class SetAllMusicSources : FsmStateAction
 {
-    public bool Active;
+    public new bool Active;
     public bool IsOnExit;
     public override void OnEnter()
     {

@@ -75,8 +75,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     
     private void OnStateChanged(FsmState state)
     {
-        KarmelitaPrimeMain.Instance.Log($"CHANGED TO {state.Name}");
-        if (state.Name == "Entry Land") //Battle Start
+        if (state.Name == "Entry Land") 
             wrapper.BattleStarted = true;
         CheckStunState(state);
         CheckPhase2State(state);
@@ -333,7 +332,6 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 
             // 2. First-Level Dependent State Creators
             new CounterAttackPreState(fsm, stunFsm, wrapper, this),
-            new NewSlash1State(fsm, stunFsm, wrapper, this),
             new Phase3KnockedState(fsm, stunFsm, wrapper, this),
             new Rethrow3PrepareLeftState(fsm, stunFsm, wrapper, this),
             new Rethrow3PrepareRightState(fsm, stunFsm, wrapper, this),

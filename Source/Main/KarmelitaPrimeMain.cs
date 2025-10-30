@@ -46,7 +46,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
                     HideSettingName = true
                 }
             ));
-        IsDebug = Config.Bind("Settings", "IsDebug", false, "PLAY EDUARDO'S AWAKENING :D");
+        //IsDebug = Config.Bind("Settings", "IsDebug", false, "PLAY EDUARDO'S AWAKENING :D");
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
 
         StartCoroutine(WaitUntilGameManager());
@@ -128,7 +128,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 
     public void ResetFlags()
     {
-        Logger.LogInfo("RESETTING FLAGS");
         foreach (var tracker in FindObjectsByType<HighlightTracker>(FindObjectsSortMode.None))
             tracker.ResetMaterial();
         HeroController.instance.SpriteFlash.IsBlocked = false;
@@ -146,7 +145,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         AddWrapper();
         SetupHeroAwake();
     }
-
+    
     private void SetupHeroAwake()
     {
         HeroController.instance.transform.position = Constants.PlayerSpawnPosition;
@@ -184,6 +183,8 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 
     public void Log(object message)
     {
+        if (IsDebug == null) return;
+        
         if (IsDebug.Value)
             Logger.LogInfo(message);
     }
