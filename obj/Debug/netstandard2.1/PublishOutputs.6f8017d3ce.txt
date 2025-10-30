@@ -25,6 +25,7 @@ C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\publish\UniverseLib.Mono.dll
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\publish\TeamCherry.SharedUtils.dll
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\publish\UnityEngine.UI.dll
+C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\publish\Unity.ResourceManager.dll
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\publish\TeamCherry.NestedFadeGroup.dll
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\publish\TeamCherry.Cinematics.dll
 C:\_Stuff\Coding\Game Mods\Silksong mods\KarmelitaPrime\bin\Debug\netstandard2.1\publish\TeamCherry.Splines.dll
