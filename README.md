@@ -23,7 +23,7 @@ The mod can be downloaded via Thunderstore's Mod Manager and  or you can install
 # Configuration Manager
 
 <img src="https://github.com/MicheliniDev/KarmelitaPrime/blob/main/FightBossButton.png"/><br>
-Karmelita Prime can be fought normally by accessing her memories, or by getting BepInExConfigurationManager and use the button in the settings panel for it.
+Karmelita Prime can be fought normally by accessing her memories, or by getting BepInExConfigurationManager and using the button in the settings panel for it.
 
 # Showcase
 
