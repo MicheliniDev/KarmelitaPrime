@@ -26,7 +26,7 @@ Karmelita Prime can be fought normally by accessing her memories, or by getting 
 
 # Showcase
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/MzcDPsZwUcY?si=w8g8usdW2VJ8hHT6&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+- **YouTube Showcase**: [Karmelita Prime | Silksong Modded Boss Fight Showcase](https://youtu.be/MzcDPsZwUcY)
 
 # Bug reporting
 
