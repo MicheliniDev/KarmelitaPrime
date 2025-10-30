@@ -26,8 +26,7 @@ Karmelita Prime can be fought normally by accessing her memories, or by getting 
 
 # Showcase
 
-[![Mod Showcase](https://img.youtube.com/vi/MzcDPsZwUcY/0.jpg)](https://www.youtube.com/watch?v=MzcDPsZwUcY)
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MzcDPsZwUcY?si=w8g8usdW2VJ8hHT6&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 # Bug reporting
 
