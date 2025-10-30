@@ -144,8 +144,6 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
 
     public void FakePhase3()
     {
-        if (fsm.Fsm.GetFsmBool("Phase 3").Value) return;
-        
         var bindState = new FsmState(fsm.Fsm)
         {
             Name = "Fake Phase 3",
@@ -217,7 +215,7 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
     
     public void DoPhase3()
     {
-        if (fsm.Fsm.GetFsmBool("Phase 3").Value || fsm.ActiveStateName == "BG Dance") return;
+        if (fsm.ActiveStateName == "BG Dance") return;
         
         if (!fsm.Fsm.GetFsmBool("Phase 2").Value)
             ApplyPhase2Modifiers();

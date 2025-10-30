@@ -10,8 +10,9 @@ public class CheckSceneTransitionPatch
     [HarmonyPatch(typeof(GameManager), nameof(GameManager.OnNextLevelReady))]
     private static void CheckKarmelitaScenePatch(ref GameManager __instance)
     {
-        if (SceneManager.GetActiveScene().name != Constants.KarmelitaSceneName) return;
-        
-        KarmelitaPrimeMain.Instance.OnKarmelitaSceneLoad();
+        if (SceneManager.GetActiveScene().name == Constants.KarmelitaSceneName)
+            KarmelitaPrimeMain.Instance.OnKarmelitaSceneLoad();
+        else if (GameManager.instance.lastSceneName == Constants.KarmelitaSceneName)
+            KarmelitaPrimeMain.Instance.ResetFlags();
     }
 }

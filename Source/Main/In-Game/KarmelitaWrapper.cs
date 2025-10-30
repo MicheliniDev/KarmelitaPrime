@@ -294,7 +294,7 @@ public class KarmelitaWrapper : MonoBehaviour
         }
         else if (auraLevel >= 100f)
         {
-            TriggerPhase3();
+            TryTriggerPhase3();
         }    
         
         if (auraLevel >= 1000f)
@@ -306,7 +306,7 @@ public class KarmelitaWrapper : MonoBehaviour
     private IEnumerator WaitForForcePhase3(float duration)
     {
         yield return new WaitForSeconds(duration);
-        TriggerPhase3();
+        TryTriggerPhase3();
         yield return null;
     }
     
@@ -322,7 +322,7 @@ public class KarmelitaWrapper : MonoBehaviour
     public bool ShouldDealContactDamage() => StatesToCancelContactDamage.All(state => fsm.ActiveStateName != state);
     public void LoseAura(float amount) => auraLevel -= amount;
 
-    public void TriggerPhase3()
+    public void TryTriggerPhase3()
     {
         if (hasTriggeredP3) return;
         
@@ -335,9 +335,9 @@ public class KarmelitaWrapper : MonoBehaviour
         hasTriggeredP3 = true;
     }
     
-    public void FakeP3()
+    public void TryFakeP3()
     {
-        if (hasFakedP3) return;
+        if (hasFakedP3 || hasTriggeredP3) return;
         var pos = transform.position;
         pos.y = 21.4355f;
         transform.position = pos;

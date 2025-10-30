@@ -13,6 +13,7 @@ The mod can be downloaded via Thunderstore's Mod Manager and  or you can install
 
 # General Changes
 
+- The Enemy Arena before the fight is completely skipped.
 - Contact damage is disabled on Karmelita when she's not attacking.
 - Nail Clashes now give silk and do damage to the boss (even on the projectiles).
 - A full recoloring for her sprite.
@@ -21,7 +22,7 @@ The mod can be downloaded via Thunderstore's Mod Manager and  or you can install
 <strong>WARNING:</strong> Name translations for languages other than Portuguese and English were made by AI, more info can be found on the Bug Report section.
 # Configuration Manager
 
-<img src="FightBossButton.png"/><br>
+<img src="https://github.com/MicheliniDev/KarmelitaPrime/blob/main/FightBossButton.png"/><br>
 Karmelita Prime can be fought normally by accessing her memories, or by getting BepInExConfigurationManager and use the button in the settings panel for it.
 
 # Showcase

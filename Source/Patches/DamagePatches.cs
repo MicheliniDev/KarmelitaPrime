@@ -15,10 +15,12 @@ public class DamagePatches
             || !KarmelitaPrimeMain.Instance.wrapper) return;
 
         var wrapper = KarmelitaPrimeMain.Instance.wrapper;
+        
         if (__instance.hp <= Constants.KarmelitaPhase3HpThreshold)
-            wrapper.TriggerPhase3();
-        else if (__instance.hp <= Constants.KarmelitaPhase2_5HpThreshold)
-            wrapper.FakeP3();
+            wrapper.TryTriggerPhase3();
+        
+        if (__instance.hp <= Constants.KarmelitaPhase2_5HpThreshold)
+            wrapper.TryFakeP3();
     }
     
     [HarmonyPrefix]
