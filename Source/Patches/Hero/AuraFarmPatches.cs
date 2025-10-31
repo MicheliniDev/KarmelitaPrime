@@ -33,9 +33,10 @@ public class AuraFarmPatches
                 break;
             case "Taunt":
                 KarmelitaPrimeMain.Instance.wrapper.FarmAura(50f, true);
+                KarmelitaPrimeMain.Instance.Goodtimefrog.TrySetCanChasePlayer();
                 break;
             case "DownSpikeBounce":
-                KarmelitaPrimeMain.Instance.wrapper.FarmAura(7f, true);
+                KarmelitaPrimeMain.Instance.wrapper.FarmAura(7f);
                 break;
         }
     }

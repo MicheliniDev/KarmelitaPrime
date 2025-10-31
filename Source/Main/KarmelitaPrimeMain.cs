@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
+using BepInEx;
+using UnityEngine;
+using HarmonyLib;
 using System.IO;
 using System.Reflection;
-using BepInEx;
+using System.Collections;
 using BepInEx.Configuration;
-using HarmonyLib;
 using KarmelitaPrime.Patches;
-using UnityEngine;
 using KarmelitaPrime.Drawers;
 
 namespace KarmelitaPrime;
@@ -19,6 +19,9 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public Texture2D[] CurrentTextures = new Texture2D[2];
     public Texture2D[] WhatsappTextures = new Texture2D[2];
     public Texture2D[] KarmelitaTextures = new Texture2D[2];
+    private Texture2D goodTimeFrog;
+    
+    public goodtimefrog Goodtimefrog;
     
     private Harmony harmony;
     public KarmelitaWrapper wrapper;
@@ -54,7 +57,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         BossButtonDrawer.OnButtonPressed += TeleportToKarmelitaScene;
         isWhatsapp.SettingChanged += OnWhatsappSet;
         
-        LoadKarmelitaTextures();
+        LoadEmbeddedResources();
         
         Instance = this;
     }
@@ -85,7 +88,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         }
     }
     
-    private void LoadKarmelitaTextures() {
+    private void LoadEmbeddedResources() {
         //Code yoinked from Jngo :P
         var assembly = Assembly.GetExecutingAssembly();
         foreach (string resourceName in assembly.GetManifestResourceNames()) {
@@ -120,6 +123,13 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
                 atlasTex.LoadImage(buffer);
                 KarmelitaTextures[1] = atlasTex;
             }
+            else if (resourceName.Contains("goodtimefrog")) {
+                var buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                var goodtimefrogTexture = new Texture2D(2, 2);
+                goodtimefrogTexture.LoadImage(buffer);
+                goodTimeFrog = goodtimefrogTexture;
+            }
         }
         UpdateTextures();
     }
@@ -144,6 +154,26 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         DisableBackgroundGoons();
         AddWrapper();
         SetupHeroAwake();
+        AddGoodTimeFrog();
+    }
+
+    private void AddGoodTimeFrog()
+    {
+        GameObject frog = new GameObject(":goodtimefrog:", typeof(SpriteRenderer), typeof(BoxCollider2D), typeof(goodtimefrog));
+        var position = new Vector3(61.6385f, 21.5677f, 0.010f);
+        frog.transform.position = new Vector3(position.x, position.y, position.z);
+
+        Sprite frogSprite = Sprite.Create(
+            goodTimeFrog,
+            new Rect(0, 0, goodTimeFrog.width, goodTimeFrog.height),
+            new Vector2(0.5f, 0.5f), 
+            100f                     
+        );
+
+        SpriteRenderer sr = frog.GetComponent<SpriteRenderer>();
+        sr.sprite = frogSprite;
+
+        Goodtimefrog = frog.GetComponent<goodtimefrog>();
     }
     
     private void SetupHeroAwake()
