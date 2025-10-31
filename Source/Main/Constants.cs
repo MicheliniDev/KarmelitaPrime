@@ -266,13 +266,17 @@ public static class Constants
     #endregion
 
     #region Health
-    if (KarmelitaPrimeMain.Instance.isWhatsapp.Value)
+    public static int KarmelitaMaxHp
     {
-        public static int KarmelitaMaxHp => 2501;
-}
-    else 
-    {
-        public static int KarmelitaMaxHp => 2500;
+        get
+        {
+            int value = 2500;
+            if (KarmelitaPrimeMain.Instance.isWhatsapp.Value)
+            {
+                value = 2501;
+            }
+            return value;
+        }
     }
     public static float KarmelitaPhase2HpThreshold => KarmelitaMaxHp * 0.80f;
     public static float KarmelitaPhase2_5HpThreshold => KarmelitaMaxHp * 0.60f;
