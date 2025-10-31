@@ -326,10 +326,10 @@ public class KarmelitaWrapper : MonoBehaviour
     {
         if (hasTriggeredP3) return;
         
+        rb.linearVelocity = Vector2.zero;
         var pos = transform.position;
         pos.y = 21.4355f;
         transform.position = pos;
-        rb.linearVelocity = Vector2.zero;
         health.IsInvincible = true;
         fsmController.DoPhase3();
         hasTriggeredP3 = true;
@@ -338,10 +338,10 @@ public class KarmelitaWrapper : MonoBehaviour
     public void TryFakeP3()
     {
         if (hasFakedP3 || hasTriggeredP3) return;
+        rb.linearVelocity = Vector2.zero;
         var pos = transform.position;
         pos.y = 21.4355f;
         transform.position = pos;
-        rb.linearVelocity = Vector2.zero;
         fsmController.FakePhase3();
         hasFakedP3 = true;
     }

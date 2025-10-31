@@ -10,6 +10,15 @@ namespace KarmelitaPrime.Patches.Effects;
 public class RecolorPoolObjectPatches
 {
     [HarmonyPostfix]
+    [HarmonyPatch(typeof(HeroController), nameof(HeroController.Respawn))]
+    private static void SetHealthMasksToNormalPatch()
+    {
+        var healthContainer = GameObject.Find("_GameCameras/HudCamera/In-game/Anchor TL/Hud Canvas Offset/Hud Canvas/Health");
+        healthContainer.SetActive(false);
+        healthContainer.SetActive(true);
+    }
+    
+    [HarmonyPostfix]
     [HarmonyPatch(typeof(SpawnObjectFromGlobalPool), nameof(SpawnObjectFromGlobalPool.OnEnter))]
     private static void RecolorPoolObjects(ref SpawnObjectFromGlobalPool __instance)
     {

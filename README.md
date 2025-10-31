@@ -1,6 +1,6 @@
 # Karmelita Prime
 
-A brutal rework for Skarrsinger Karmelita, one the major bosses in Hollow Knight Silksong. Made for players who like the challenge that Karmelita brings. <br>
+A rework for Skarrsinger Karmelita, one the major bosses in Hollow Knight Silksong, that makes her extraordinarily more difficulty and aggressive. Made for players who like the challenge that Karmelita brings. <br>
 
 # Installation
 
@@ -20,6 +20,7 @@ The mod can be downloaded via Thunderstore's Mod Manager and  or you can install
 - Name change and translations for supported languages.
 
 <strong>WARNING:</strong> Name translations for languages other than Portuguese and English were made by AI, more info can be found on the Bug Report section.
+
 # Configuration Manager
 
 <img src="https://github.com/MicheliniDev/KarmelitaPrime/blob/main/FightBossButton.png"/><br>
@@ -28,6 +29,13 @@ Karmelita Prime can be fought normally by accessing her memories, or by getting 
 # Showcase
 
 - **YouTube Showcase**: [Karmelita Prime | Silksong Modded Boss Fight Showcase](https://youtu.be/MzcDPsZwUcY)
+
+# Changelog
+### Version 1.1.0
+- :goodtimefrog:
+- Changed Whatsapp Karmelita's HP from 2500 to 2501.
+- Fixed health masks turning white when respawning after dying in Phase 3.
+- (Hopefully) Fixed Karmelita flying into the roof during phase transitions.
 
 # Bug reporting
 
