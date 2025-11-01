@@ -36,7 +36,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public void Awake()
     {
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} is loaded");
-
         fightBoss = Config.Bind("", "Fight the Boss", false,
             new ConfigDescription(
                 "Click here to fight the boss.",

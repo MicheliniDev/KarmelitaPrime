@@ -74,6 +74,7 @@ public class KarmelitaWrapper : MonoBehaviour
         fsm = gameObject.LocateMyFSM("Control");
         stunFsm = gameObject.LocateMyFSM("Stun Control");
         vocalSource = AudioManager.Instance.MusicSources[3];
+        GetComponent<DamageHero>().damageDealt = 2;
     }
 
     private void GetResources()
@@ -166,14 +167,16 @@ public class KarmelitaWrapper : MonoBehaviour
             if (HeroController.instance.transform.position.x > transform.position.x && instance.transform.localScale.x > 0 ||
                 HeroController.instance.transform.position.x < transform.position.x && instance.transform.localScale.x < 0)
                 scale.x *= -1f;
-
+            
             //SETTING POSITION AND STUFF
             scale.x *= 4f;
             scale.y *= 1.5f;
             position.y += 0.4f;
             instance.transform.localScale = scale;
             instance.transform.position = position;
-            Rb.linearVelocityX = 40f * -Rb.gameObject.transform.localScale.normalized.x;   
+
+            var speed = 38f; //USED TO BE 40f
+            Rb.linearVelocityX = speed * -Rb.gameObject.transform.localScale.normalized.x;   
         }
     }
     
@@ -325,7 +328,7 @@ public class KarmelitaWrapper : MonoBehaviour
     public void TryTriggerPhase3()
     {
         if (hasTriggeredP3) return;
-        
+
         rb.linearVelocity = Vector2.zero;
         var pos = transform.position;
         pos.y = 21.4355f;
@@ -338,6 +341,7 @@ public class KarmelitaWrapper : MonoBehaviour
     public void TryFakeP3()
     {
         if (hasFakedP3 || hasTriggeredP3) return;
+        
         rb.linearVelocity = Vector2.zero;
         var pos = transform.position;
         pos.y = 21.4355f;

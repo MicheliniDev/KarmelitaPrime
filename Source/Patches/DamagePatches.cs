@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using GlobalSettings;
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

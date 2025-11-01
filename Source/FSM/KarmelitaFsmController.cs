@@ -209,6 +209,33 @@ public class KarmelitaFsmController(PlayMakerFSM fsm, PlayMakerFSM stunFsm, Karm
                 weights = [.5f, .5f],
             }
         ];
+            
+        var airRethrowState = fsm.Fsm.GetState("Air Rethrow");
+        airRethrowState.Actions = 
+        [
+            new EnableGameObjectAction()
+            {
+                GameObject = fsm.Fsm.GetFsmGameObject("Air Slash 2").Value,
+                Enable = true,
+                ResetOnExit = true,
+            },
+            new AnimEndSendRandomEventAction()
+            {
+                animator = wrapper.animator,
+                events = [FsmEvent.GetFsmEvent("FINISHED")],
+                weights = [1f],
+                shortenEventTIme = 0.73f
+            }
+        ];
+        airRethrowState.Transitions =
+        [
+            new FsmTransition()
+            {
+                FsmEvent = FsmEvent.GetFsmEvent("FINISHED"),
+                ToState = "Spin Aim",
+                ToFsmState = fsm.Fsm.GetState("Spin Aim")
+            },
+        ];
         
         fsm.SetState("Fake Phase 3");
     }

@@ -24,6 +24,14 @@ public class LocalizationPatches
     
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Language), nameof(Language.Get), typeof(string), typeof(string))]
+    private static void ChangeKarmelitaBossNote(string key, string sheetTitle, ref string __result)
+    {
+        if (key == Constants.KarmelitaNoteKey)
+            __result = Constants.KarmelitaNote;
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Language), nameof(Language.Get), typeof(string), typeof(string))]
     private static void ChangeKarmelitaBossTitleMain(string key, string sheetTitle, ref string __result)
     {
         if (key == Constants.KarmelitaBossTitleMainKey)

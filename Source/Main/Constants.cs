@@ -12,6 +12,7 @@ public static class Constants
     public static string KarmelitaSceneName => "Memory_Ant_Queen";
     public static string KarmelitaDisplayNameKey => "NAME_HUNTER_QUEEN";
     public static string KarmelitaDescriptionKey => "DESC_HUNTER_QUEEN";
+    public static string KarmelitaNoteKey => "NOTE_HUNTER_QUEEN";
     public static string KarmelitaBossTitleMainKey => "HUNTER_QUEEN_BC_MAIN";
     public static string KarmelitaBossTitleSuperKey => "HUNTER_QUEEN_BC_SUPER";
     public static string KarmelitaBossTitleSubKey => "HUNTER_QUEEN_BC_SUB";
@@ -105,38 +106,80 @@ public static class Constants
             switch (Language.CurrentLanguage())
             {
                 case LanguageCode.EN:
-                    value = "The Skarr's most skilled warrior and singer, at the peak of her abilities.";
+                    value = @"The Hunter Queen at her vibrant zenith.";
                     break;
                 case LanguageCode.PT:
-                    value = "A guerreira e cantora mais habilidosa dos Skarr, no auge de suas habilidades.";
+                    value = @"A Rainha Caçadora em seu zênite vibrante.";
                     break;
                 case LanguageCode.DE:
-                    value = "Die geschickteste Kriegerin und Sängerin der Skarr, auf dem Höhepunkt ihrer Fähigkeiten.";
+                    value = @"Die Jägerkönigin auf ihrem pulsierenden Zenit.";
                     break;
                 case LanguageCode.ES:
-                    value = "La guerrera y cantante más hábil de los Skarr, en el apogeo de sus habilidades.";
+                    value = @"La Reina Cazadora en su vibrante cénit.";
                     break;
                 case LanguageCode.FR:
-                    value = "La guerrière et chanteuse la plus talentueuse des Skarr, à l'apogée de ses capacités.";
+                    value = @"La Reine-chasseresse à son zénith éclatant.";
                     break;
                 case LanguageCode.IT:
-                    value = "La guerriera e cantante più abile degli Skarr, all'apice delle sue capacità.";
+                    value = @"La Regina Cacciatrice al suo vibrante zenith.";
                     break;
                 case LanguageCode.JA:
-                    value = "スカー族で最も熟練した戦士であり歌手。まさに絶頂期。";
+                    value = @"狩人の女王、その輝かしい絶頂にて。";
                     break;
                 case LanguageCode.KO:
-                    value = "스카르 족 최고의 전사이자 가수, 능력의 정점에 서 있습니다.";
+                    value = @"사냥꾼 여왕이 찬란한 정점에 섰습니다.";
                     break;
                 case LanguageCode.RU:
-                    value = "Самая умелая воительница и певица из племени Скарр, на пике своих способностей.";
+                    value = @"Королева-Охотница в своем блистательном зените.";
                     break;
                 case LanguageCode.ZH:
-                    value = "斯卡尔族最强的战士与歌手，正值巅峰。";
+                    value = @"猎手女王正值其辉煌的巅峰。";
                     break;
             }
             return value;
         }
+    }
+
+    public static string KarmelitaNote
+    {
+        get
+        {
+            string value = "";
+            switch (Language.CurrentLanguage())
+            {
+                case LanguageCode.EN:
+                    value = @"She is different from what I once envisioned. Her form, a vibrant pink unknown to her kin, marks the apex of her power. Her delicate determination honed to a point of pure, warlike aggression.";
+                    break;
+                case LanguageCode.PT:
+                    value = @"Ela é diferente do que eu imaginei outrora. Sua forma, um rosa vibrante desconhecido para sua espécie, marca o ápice de seu poder. Sua delicada determinação foi afiada a um ponto de pura agressão bélica.";
+                    break;
+                case LanguageCode.DE:
+                    value = @"Sie ist anders, als ich es mir einst vorgestellt hatte. Ihre Gestalt, ein leuchtendes Pink, das ihrem Volk unbekannt ist, markiert den Gipfel ihrer Macht. Ihre zarte Entschlossenheit, geschärft zu einem Punkt purer, kriegerischer Aggression und Entschlossenheit.";
+                    break;
+                case LanguageCode.ES:
+                    value = @"Es diferente de lo que una vez imaginé. Su forma, de un rosa vibrante desconocido para su estirpe, marca el ápice de su poder. Su delicada determinación, pulida hasta un punto de pura agresividad bélica y determinación.";
+                    break;
+                case LanguageCode.FR:
+                    value = @"Elle est différente de ce que j'avais imaginé. Sa forme, d'un rose vif inconnu des siens, marque l'apogée de sa puissance. Sa détermination délicate, affûtée jusqu'à devenir pure agression guerrière et détermination.";
+                    break;
+                case LanguageCode.IT:
+                    value = @"È diversa da come l'avevo immaginata. Le sue fattezze, di un rosa vibrante sconosciuto alla sua stirpe, segnano l'apice del suo potere. La sua delicata determinazione, affinata fino a un punto di pura aggressione bellica e determinazione.";
+                    break;
+                case LanguageCode.JA:
+                    value = @"彼女は、私がかつて思い描いた姿とは異なる。その姿は、同族には見られぬ鮮やかな桃色。力の頂点にあることの証。その繊細な決意は、純粋な戦意、そして決意の域まで研ぎ澄まされている。";
+                    break;
+                case LanguageCode.KO:
+                    value = @"제가 한때 상상했던 모습과는 다릅니다. 그녀의 모습은 동족에게는 없는 선명한 분홍빛을 띠며, 힘의 정점을 상징합니다. 그녀의 섬세한 결의는 순수한 호전적 공격성, 그리고 결의로 날카롭게 벼려져 있습니다.";
+                    break;
+                case LanguageCode.RU:
+                    value = @"Она отличается от той, что я некогда представляла. Ее облик, ярко-розовый, неведомый ее сородичам, знаменует собой вершину ее силы. Ее хрупкая решимость отточена до состояния чистой, воинственной агрессии и решимости.";
+                    break;
+                case LanguageCode.ZH:
+                    value = @"她与我曾经想象的样子截然不同。她的形态，一种族人所没有的鲜艳粉色，标志着她力量的顶点。她那微妙的决心被磨砺到了极致，化作纯粹的、好战的侵略性与决心。";
+                    break;
+            }
+            return value;
+        }  
     }
 
     public static string KarmelitaBossTitleSuper
@@ -269,7 +312,7 @@ public static class Constants
     public static int KarmelitaMaxHp => KarmelitaPrimeMain.Instance.isWhatsapp.Value ? 2501 : 2500;
     public static float KarmelitaPhase2HpThreshold => KarmelitaMaxHp * 0.80f;
     public static float KarmelitaPhase2_5HpThreshold => KarmelitaMaxHp * 0.60f;
-    public static float KarmelitaPhase3HpThreshold => KarmelitaMaxHp * 0.50f;
+    public static float KarmelitaPhase3HpThreshold => KarmelitaMaxHp * 0.40f;
     #endregion
 
     #region Attack Speed Multipliers

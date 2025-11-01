@@ -67,7 +67,8 @@ public class Phase3KnockedState(
                 {
                     Rb = wrapper.rb,
                     velocity = -10f,
-                    velocityY = 23f
+                    velocityY = 23f,
+                    ResetOnUpdate = true
                 },
                 new DecelerateXY()
                 {

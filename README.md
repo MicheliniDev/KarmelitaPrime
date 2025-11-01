@@ -19,26 +19,30 @@ The mod can be downloaded via Thunderstore's Mod Manager and  or you can install
 - A full recoloring for her sprite.
 - Name change and translations for supported languages.
 
-<strong>WARNING:</strong> Name translations for languages other than Portuguese and English were made by AI, more info can be found on the Bug Report section.
+<strong>WARNING:</strong> Translations for languages other than Portuguese and English were made by AI, more info can be found on the Bug Report section.
 
 # Configuration Manager
 
-<img src="https://github.com/MicheliniDev/KarmelitaPrime/blob/main/FightBossButton.png"/><br>
+<img src="https://raw.githubusercontent.com/MicheliniDev/KarmelitaPrime/refs/heads/main/FightBossButton.png"/><br>
 Karmelita Prime can be fought normally by accessing her memories, or by getting BepInExConfigurationManager and using the button in the settings panel for it.
 
 # Showcase
 
-- **YouTube Showcase**: [Karmelita Prime | Silksong Modded Boss Fight Showcase](https://youtu.be/MzcDPsZwUcY)
-
-# Changelog
-### Version 1.1.0
-- :goodtimefrog:
-- Changed Whatsapp Karmelita's HP from 2500 to 2501.
-- Fixed health masks turning white when respawning after dying in Phase 3.
-- (Hopefully) Fixed Karmelita flying into the roof during phase transitions.
+- **Video Showcase**: [Karmelita Prime | Silksong Modded Boss Fight Showcase](https://youtu.be/MzcDPsZwUcY)
 
 # Bug reporting
 
 If you find any bugs or mistranslation issues, there are two ways you can report them: <br>
 1 - Report them on github repository's <a href="https://github.com/MicheliniDev/KarmelitaPrime/issues">Issue Page</a>. <br>
 2 - Send a message on the HK Modding Server.
+
+# Changelog
+### Version 1.2.0
+- Slightly decreased Wind Slash's speed.
+- Added some extra lore on her hunter's journal description.
+- Karmelita's Contact Damage now deals two masks.
+- Fixed :goodtimefrog: not one-shotting the player.
+- Phase 3 threshold changed from 50% to 40% HP.
+- Fixed Karmelita flying up when entering Phase 3.
+- Added an healing indicator in Phase 3.
+- Fixed Plasmium not working in Phase 3.
