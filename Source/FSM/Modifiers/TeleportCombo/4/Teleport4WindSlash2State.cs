@@ -19,6 +19,14 @@ public class Teleport4WindSlash2State(
             Name = BindState,
             Actions = 
             [
+                new PlayClipDelayedAction()
+                {
+                    Clip = KarmelitaPrimeMain.Instance.WindBladeCueSound,
+                    Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value,
+                    Delay = 0.3f,
+                    PitchMax = 1f,
+                    PitchMin = 1f
+                },
                 new AnimationPlayerAction()
                 {
                     animator = wrapper.animator,

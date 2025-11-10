@@ -21,9 +21,17 @@ public class EvadeToWindBladeState(
             Name = BindState,
             Actions = 
             [
+                new PlayClipDelayedAction()
+                {
+                    Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value,
+                    Clip = KarmelitaPrimeMain.Instance.WindBladeCueSound,
+                    Delay = .15f,
+                    PitchMin = 1f,
+                    PitchMax = 1f,
+                },
                 new StartCoroutineAction()
                 {
-                    Coroutine = DoDashVelocity
+                    Coroutine = DashRoutine
                 },
                 new AnimationPlayerAction()
                 {
@@ -56,7 +64,7 @@ public class EvadeToWindBladeState(
     {
     }
 
-    private IEnumerator DoDashVelocity()
+    private IEnumerator DashRoutine()
     {
         var rb = wrapper.rb;
         var transform = rb.transform;

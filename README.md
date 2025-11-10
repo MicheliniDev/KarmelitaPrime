@@ -37,12 +37,7 @@ If you find any bugs or mistranslation issues, there are two ways you can report
 2 - Send a message on the HK Modding Server.
 
 # Changelog
-### Version 1.2.0
-- Slightly decreased Wind Slash's speed.
-- Added some extra lore on her hunter's journal description.
-- Karmelita's Contact Damage now deals two masks.
-- Fixed :goodtimefrog: not one-shotting the player.
-- Phase 3 threshold changed from 50% to 40% HP.
-- Fixed Karmelita flying up when entering Phase 3.
-- Added an healing indicator in Phase 3.
-- Fixed Plasmium not working in Phase 3.
+### Version 1.3.0
+- Whatsapp Mode now makes Karmelita roar the Whatsapp notification sound
+- Added a sound cue before Wind Blade
+- Added Hitless challenge

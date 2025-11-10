@@ -28,7 +28,6 @@ public class WindBladeState(
                     animator = wrapper.animator,
                     ClipName = "Slash 1",
                     AnimationFinishedEvent = FsmEvent.GetFsmEvent("FINISHED"),
-                    //shortenEventTIme = 0.1f POSSIBLY CHANGE TO WAIT
                 },
                 new GetFromPreloadManagerAction()
                 {

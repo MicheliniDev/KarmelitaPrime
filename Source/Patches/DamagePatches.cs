@@ -39,11 +39,9 @@ public class DamagePatches
     
     [HarmonyPrefix]
     [HarmonyPatch(typeof(HeroController), nameof(HeroController.TakeDamage))]
-    private static void BoostDamageFromSource(ref HeroController __instance, ref GameObject go, ref int damageAmount)
+    private static void BoostDamageOnHitless(ref HeroController __instance, ref GameObject go, ref int damageAmount)
     {
-        if (go.name.Contains("Song Knight Projectile"))
-        {
-            damageAmount = 3;
-        }
+        if (KarmelitaPrimeMain.Instance.IsHitless.Value)
+            damageAmount *= 100;
     }
 }

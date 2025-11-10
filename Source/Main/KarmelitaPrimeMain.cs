@@ -8,6 +8,7 @@ using System.Collections;
 using BepInEx.Configuration;
 using KarmelitaPrime.Patches;
 using KarmelitaPrime.Drawers;
+using UnityEngine.Networking;
 
 namespace KarmelitaPrime;
 
@@ -19,6 +20,8 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public Texture2D[] CurrentTextures = new Texture2D[2];
     public Texture2D[] WhatsappTextures = new Texture2D[2];
     public Texture2D[] KarmelitaTextures = new Texture2D[2];
+    public AudioClip WindBladeCueSound;
+    public AudioClip WhatsappSound;
     private Texture2D goodTimeFrog;
     
     public goodtimefrog Goodtimefrog;
@@ -28,6 +31,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     
     private ConfigEntry<bool> fightBoss;
     public ConfigEntry<bool> IsDebug;
+    public ConfigEntry<bool> IsHitless;
     public ConfigEntry<bool> isWhatsapp;
 
     public Font MenuFont;
@@ -36,6 +40,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     public void Awake()
     {
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} is loaded");
+        //harmony = Harmony.CreateAndPatchAll(typeof(KarmelitaPrimeMain).Assembly);
         fightBoss = Config.Bind("", "Fight the Boss", false,
             new ConfigDescription(
                 "Click here to fight the boss.",
@@ -50,6 +55,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
             ));
         //IsDebug = Config.Bind("Settings", "IsDebug", false, "PLAY EDUARDO'S AWAKENING :D");
         isWhatsapp = Config.Bind("Whatsapp", "Whatsapp", false, "Whatsapp");
+        IsHitless = Config.Bind("Challenges", "Hitless", false, "If enabled, any hit taken will instantly kill Hornet");
 
         StartCoroutine(WaitUntilGameManager());
         
@@ -72,7 +78,6 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
 
     private void GetResources()
     {
-        //GETTING RESOURCES
         foreach (var font in Resources.FindObjectsOfTypeAll<Font>())
         {
             if (!font.name.Contains("Trajan")) continue;
@@ -88,49 +93,71 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
     }
     
     private void LoadEmbeddedResources() {
-        //Code yoinked from Jngo :P
         var assembly = Assembly.GetExecutingAssembly();
         foreach (string resourceName in assembly.GetManifestResourceNames()) {
             using Stream stream = assembly.GetManifestResourceStream(resourceName);
             if (stream == null) continue;
 
-            if (resourceName.Contains("atlas0_whatsapp")) {
-                var buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-                var atlasTex = new Texture2D(2, 2);
-                atlasTex.LoadImage(buffer);
-                WhatsappTextures[0] = atlasTex;
-            } 
-            else if (resourceName.Contains("atlas1_whatsapp")) {
-                var buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-                var atlasTex = new Texture2D(2, 2);
-                atlasTex.LoadImage(buffer);
-                WhatsappTextures[1] = atlasTex;
-            }
-            else if (resourceName.Contains("atlas0_modified")) {
-                var buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-                var atlasTex = new Texture2D(2, 2);
-                atlasTex.LoadImage(buffer);
-                KarmelitaTextures[0] = atlasTex;
-            } 
-            else if (resourceName.Contains("atlas1_modified")) {
-                var buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-                var atlasTex = new Texture2D(2, 2);
-                atlasTex.LoadImage(buffer);
-                KarmelitaTextures[1] = atlasTex;
-            }
-            else if (resourceName.Contains("goodtimefrog")) {
-                var buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-                var goodtimefrogTexture = new Texture2D(2, 2);
-                goodtimefrogTexture.LoadImage(buffer);
-                goodTimeFrog = goodtimefrogTexture;
-            }
+            if (resourceName.Contains("atlas0_whatsapp")) 
+                SetEmbeddedTextureToArray(stream, WhatsappTextures, 0);
+            else if (resourceName.Contains("atlas1_whatsapp"))
+                SetEmbeddedTextureToArray(stream, WhatsappTextures, 1);
+            else if (resourceName.Contains("atlas0_modified"))
+                SetEmbeddedTextureToArray(stream, KarmelitaTextures, 0);
+            else if (resourceName.Contains("atlas1_modified")) 
+                SetEmbeddedTextureToArray(stream, KarmelitaTextures, 1);
+            else if (resourceName.Contains("goodtimefrog"))
+                GetGoodTimeFrogTexture(stream);
+            else if (resourceName.Contains("WindBladeCueNoDelay"))
+                GetEmbeddedClip(stream, ref WindBladeCueSound, AudioType.WAV);
+            else if (resourceName.Contains("whatsapp.mp3"))
+                GetEmbeddedClip(stream, ref WhatsappSound, AudioType.MPEG);
         }
         UpdateTextures();
+    }
+
+    private void SetEmbeddedTextureToArray(Stream stream, Texture2D[] textures, int index)
+    {
+        var buffer = new byte[stream.Length];
+        stream.Read(buffer, 0, buffer.Length);
+        var atlasTex = new Texture2D(2, 2);
+        atlasTex.LoadImage(buffer);
+        textures[index] = atlasTex;
+    }
+
+    private void GetGoodTimeFrogTexture(Stream stream)
+    {
+        var buffer = new byte[stream.Length];
+        stream.Read(buffer, 0, buffer.Length);
+        var goodtimefrogTexture = new Texture2D(2, 2);
+        goodtimefrogTexture.LoadImage(buffer);
+        goodTimeFrog = goodtimefrogTexture;
+    }
+    
+    private void GetEmbeddedClip(Stream stream, ref AudioClip clipToSet, AudioType audioType)
+    {
+        byte[] buffer;
+        using (var ms = new MemoryStream())
+        {
+            stream.CopyTo(ms);
+            buffer = ms.ToArray();
+        }
+
+        var tempPath = Path.Combine(Application.temporaryCachePath, $"temp_mod_audio_{Guid.NewGuid()}.wav");
+        File.WriteAllBytes(tempPath, buffer);
+
+        string fileUrl = $"file:///{tempPath}"; 
+
+        using (var uwr = UnityWebRequestMultimedia.GetAudioClip(fileUrl, audioType))
+        {
+            uwr.SendWebRequest();
+
+            while (!uwr.isDone) { }
+
+            if (uwr.result == UnityWebRequest.Result.Success)
+                clipToSet = DownloadHandlerAudioClip.GetContent(uwr);
+        }
+        File.Delete(tempPath);
     }
     
     private void UpdateTextures() => CurrentTextures = isWhatsapp.Value ? WhatsappTextures : KarmelitaTextures; 
@@ -205,6 +232,7 @@ public class KarmelitaPrimeMain : BaseUnityPlugin
         };
         AudioManager.Instance.StopAndClearMusic();
         AudioManager.Instance.StopAndClearAtmos();
+        HeroController.instance.transform.Find("crest_reaper_effects(Clone)").gameObject.SetActive(false);
         GameManager.instance.BeginSceneTransition(karmelitaSceneInfo);
     }
     

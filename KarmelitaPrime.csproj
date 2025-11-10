@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Product>Karmelita Prime</Product>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
@@ -29,6 +29,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Assets/*.png"/>
+    <EmbeddedResource Include="Assets/WindBladeCueNoDelay.wav"/>
+    <EmbeddedResource Include="Assets/whatsapp.mp3"/>
   </ItemGroup>
     
   <ItemGroup>

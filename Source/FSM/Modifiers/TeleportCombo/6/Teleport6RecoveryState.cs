@@ -19,6 +19,14 @@ public class Teleport6RecoveryState(
             Name = BindState,
             Actions = 
             [
+                new PlayClipDelayedAction()
+                {
+                    Clip = KarmelitaPrimeMain.Instance.WindBladeCueSound,
+                    Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value,
+                    Delay = .15f,
+                    PitchMax = 1f,
+                    PitchMin = 1f
+                },
                 new FaceHeroAction()
                 {
                     Transform = wrapper.transform

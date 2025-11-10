@@ -29,10 +29,13 @@ public class GenericTeleportRecoveryState(
                 },
                 new AnimEndSendRandomEventAction()
                 {
-                    //ADD WIND BLADE, PROJECTILE AND OTHER TELEPORT
                     animator = wrapper.animator,
                     events = [FsmEvent.GetFsmEvent("FINISHED"), FsmEvent.GetFsmEvent("THROW")], 
-                    weights = [0.5f, 0.5f]
+                    weights = [0.5f, 0.5f],
+                    PlayClipOnEventIndex = true,
+                    EventIndex = 0,
+                    EventClip = KarmelitaPrimeMain.Instance.WindBladeCueSound,
+                    ClipDelay = 0.24f,
                 },
                 new PlayClipAction()
                 {

@@ -158,6 +158,8 @@ public class KarmelitaWrapper : MonoBehaviour
         if (prefab.name.Contains("Song Knight Projectile"))
         {
             var instance = prefab;
+
+            instance.GetComponent<DamageHero>().damageDealt = 3;
             
             var Rb = instance.GetComponent<Rigidbody2D>();
             Vector3 scale = instance.transform.localScale;

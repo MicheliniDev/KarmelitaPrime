@@ -36,6 +36,14 @@ public class Teleport4CounterAttackState(
             finishEvent = FsmEvent.GetFsmEvent("FINISHED"),
             time = 0.5f
         });
+        actionsList.Add(new PlayClipDelayedAction()
+        {
+            Clip = KarmelitaPrimeMain.Instance.WindBladeCueSound,
+            Source = fsm.Fsm.GetFsmGameObject("Audio Loop Voice").Value,
+            Delay = 0.25f,
+            PitchMax = 1f,
+            PitchMin = 1f,
+        });
         BindFsmState.Actions = actionsList.ToArray();
     }
 
